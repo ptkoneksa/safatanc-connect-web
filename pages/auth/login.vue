@@ -1,11 +1,104 @@
-<script setup>
+<script setup lang="ts">
+import { useAuthStore } from '~/stores/auth';
+import { Icon } from '@iconify/vue';
+import { useForm } from 'vee-validate';
+import { toTypedSchema } from '@vee-validate/zod';
+import * as z from 'zod';
+
 definePageMeta({
   layout: 'account'
+});
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+// Form values
+const email = ref('');
+const password = ref('');
+
+// Define validation schema
+const validationSchema = toTypedSchema(z.object({
+  email: z.string().email('Please enter a valid email').min(1, 'Email is required'),
+  password: z.string().min(1, 'Password is required'),
+}));
+
+// Initialize form with vee-validate
+const { handleSubmit, isSubmitting, errors } = useForm({
+  validationSchema,
+  initialValues: {
+    email: '',
+    password: ''
+  }
+});
+
+const apiError = ref<string>('');
+const loginSuccess = ref<boolean>(false);
+
+const onSubmit = handleSubmit(async (values) => {
+  apiError.value = '';
+
+  try {
+    await authStore.login({
+      email: values.email,
+      password: values.password
+    });
+
+    loginSuccess.value = true;
+
+    // Redirect to dashboard after a short delay for animation
+    setTimeout(() => {
+      router.push('/account');
+    }, 800);
+  } catch (err: any) {
+    apiError.value = err.message || 'Login failed. Please check your credentials.';
+  }
 });
 </script>
 
 <template>
-  <div>
-    <h1>Login</h1>
+  <div class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
+    <h2 class="text-2xl font-bold mb-8 text-center text-white">Login</h2>
+
+    <form @submit.prevent="onSubmit" class="space-y-6">
+      <transition name="fade">
+        <div v-if="apiError"
+          class="p-4 rounded-3xl bg-red-900/30 border border-red-500 text-red-200 text-sm mb-4 shake">
+          {{ apiError }}
+        </div>
+      </transition>
+
+      <transition name="fade">
+        <div v-if="loginSuccess"
+          class="p-4 rounded-3xl bg-green-900/30 border border-green-500 text-green-200 text-sm mb-4">
+          Login successful! Redirecting to your account...
+        </div>
+      </transition>
+
+      <div class="form-field">
+        <InputField name="email" type="email" label="Email" icon="tabler:mail" autocomplete="email"
+          placeholder="Enter your email" rules="required|email" v-model="email" />
+      </div>
+
+      <div class="form-field">
+        <InputField name="password" type="password" label="Password" icon="tabler:lock" autocomplete="current-password"
+          placeholder="Enter your password" rules="required" v-model="password" />
+      </div>
+
+      <div>
+        <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">
+          <template #icon>
+            <Icon icon="tabler:login" width="20" height="20" />
+          </template>
+          <template #text>
+            <span class="relative">
+              <transition name="fade" mode="out-in">
+                <span v-if="isSubmitting" key="loading">Logging in...</span>
+                <span v-else key="default">Login</span>
+              </transition>
+            </span>
+          </template>
+        </Button>
+      </div>
+    </form>
   </div>
 </template>

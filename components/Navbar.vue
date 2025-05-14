@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useAuthStore } from '~/stores/auth';
+
+const authStore = useAuthStore();
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+const user = computed(() => authStore.getUser);
 
 const isMenuOpen = ref(false);
 
@@ -18,6 +23,16 @@ const scrollToSection = (sectionId: string) => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   }, 100);
+};
+
+const handleLogout = async () => {
+  try {
+    await authStore.logout();
+    // Navigate to home after logout
+    navigateTo('/');
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
 };
 </script>
 
@@ -44,17 +59,43 @@ const scrollToSection = (sectionId: string) => {
         </div>
 
         <!-- Auth Buttons -->
-        <div class="hidden md:flex items-center gap-4">
-          <NuxtLink to="/auth" class="text-white">
-            <Button bg="bg-brand" color="text-black">
-              <template #icon>
-                <Icon icon="tabler:arrow-autofit-right-filled" width="24" height="24" />
-              </template>
-              <template #text>
-                Sign In
-              </template>
-            </Button>
-          </NuxtLink>
+        <div class="hidden md:flex items-center gap-4" v-auto-animate>
+          <!-- Show Account button when logged in -->
+          <template v-if="isAuthenticated">
+            <div class="flex items-center gap-4">
+              <NuxtLink to="/account" class="text-white">
+                <Button bg="bg-brand" color="text-black">
+                  <template #icon>
+                    <Icon icon="tabler:user-circle" width="24" height="24" />
+                  </template>
+                  <template #text>
+                    My Account
+                  </template>
+                </Button>
+              </NuxtLink>
+              <Button @click="handleLogout" bg="bg-dark-2" color="text-white">
+                <template #icon>
+                  <Icon icon="tabler:logout" width="24" height="24" />
+                </template>
+                <template #text>
+                  Logout
+                </template>
+              </Button>
+            </div>
+          </template>
+          <!-- Show Sign In button when logged out -->
+          <template v-else>
+            <NuxtLink to="/auth/login" class="text-white">
+              <Button bg="bg-brand" color="text-black">
+                <template #icon>
+                  <Icon icon="tabler:arrow-autofit-right-filled" width="24" height="24" />
+                </template>
+                <template #text>
+                  Sign In
+                </template>
+              </Button>
+            </NuxtLink>
+          </template>
         </div>
 
         <!-- Mobile Menu Toggle -->
@@ -66,7 +107,7 @@ const scrollToSection = (sectionId: string) => {
       </div>
 
       <!-- Mobile Menu -->
-      <div v-if="isMenuOpen" class="md:hidden mt-4 py-4 border-t border-dark animate-slide-down">
+      <div v-if="isMenuOpen" class="md:hidden mt-4 py-4 border-t border-dark animate-slide-down" v-auto-animate>
         <div class="flex flex-col gap-4">
           <NuxtLink @click="scrollToSection('home')" to="#home"
             class="text-white hover:text-brand transition-colors duration-200 py-2 cursor-pointer">Home</NuxtLink>
@@ -74,16 +115,42 @@ const scrollToSection = (sectionId: string) => {
             class="text-white hover:text-brand transition-colors duration-200 py-2 cursor-pointer">Features</NuxtLink>
           <NuxtLink @click="scrollToSection('about')" to="#about"
             class="text-white hover:text-brand transition-colors duration-200 py-2 cursor-pointer">GSalt</NuxtLink>
-          <NuxtLink to="/auth" class="text-white py-2">
-            <Button bg="bg-brand" color="text-black">
-              <template #icon>
-                <Icon icon="tabler:arrow-autofit-right-filled" width="24" height="24" />
-              </template>
-              <template #text>
-                Sign In
-              </template>
-            </Button>
-          </NuxtLink>
+
+          <!-- Mobile Auth Buttons -->
+          <template v-if="isAuthenticated">
+            <NuxtLink to="/account" class="text-white py-2">
+              <Button bg="bg-brand" color="text-black">
+                <template #icon>
+                  <Icon icon="tabler:user-circle" width="24" height="24" />
+                </template>
+                <template #text>
+                  My Account
+                </template>
+              </Button>
+            </NuxtLink>
+            <div class="py-2">
+              <Button @click="handleLogout" bg="bg-dark-2" color="text-white">
+                <template #icon>
+                  <Icon icon="tabler:logout" width="24" height="24" />
+                </template>
+                <template #text>
+                  Logout
+                </template>
+              </Button>
+            </div>
+          </template>
+          <template v-else>
+            <NuxtLink to="/auth/login" class="text-white py-2">
+              <Button bg="bg-brand" color="text-black">
+                <template #icon>
+                  <Icon icon="tabler:arrow-autofit-right-filled" width="24" height="24" />
+                </template>
+                <template #text>
+                  Sign In
+                </template>
+              </Button>
+            </NuxtLink>
+          </template>
         </div>
       </div>
     </div>

@@ -4,13 +4,17 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
-  css: ["~/assets/css/tailwind.css"],
+  css: ["~/assets/css/tailwind.css", "~/assets/css/animations.css"],
 
   vite: {
     plugins: [tailwindcss()],
   },
 
   app: {
+    pageTransition: {
+      name: "page",
+      mode: "out-in",
+    },
     head: {
       link: [
         {
@@ -21,5 +25,11 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxt/image", "@nuxt/icon"],
+  modules: ["@nuxt/image", "@nuxt/icon", "@pinia/nuxt"],
+
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: "https://connect-core.safatanc.com",
+    },
+  },
 });
