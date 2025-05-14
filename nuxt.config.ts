@@ -32,4 +32,8 @@ export default defineNuxtConfig({
       apiBaseUrl: "https://connect-core.safatanc.com",
     },
   },
+
+  nitro: {
+    preset: "bun",
+  },
 });
