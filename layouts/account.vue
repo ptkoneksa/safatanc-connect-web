@@ -22,11 +22,22 @@ watch(() => route.path, (newPath) => {
   <div class="min-h-screen bg-dark-1 grid grid-cols-1 md:grid-cols-3">
     <!-- Left panel - Brand panel (hidden on mobile) -->
     <div class="hidden md:block md:col-span-1 bg-brand relative overflow-hidden p-12">
-      <div class="absolute inset-0 pattern-grid-white/[0.15] opacity-50"></div>
+      <!-- Textured background pattern - larger and more prominent -->
+      <div class="absolute inset-0 bg-brand"
+        style="background-image: radial-gradient(circle, rgba(255,255,255,0.2) 2px, transparent 2px); background-size: 20px 20px;">
+      </div>
 
-      <!-- Design elements -->
-      <div class="absolute top-10 left-10 w-64 h-64 rounded-full bg-yellow-400 opacity-20 blur-3xl"></div>
-      <div class="absolute bottom-10 right-10 w-80 h-80 rounded-full bg-red-500 opacity-20 blur-3xl"></div>
+      <!-- More prominent decorative shapes -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-yellow-500/30 rounded-bl-full"></div>
+      <div class="absolute bottom-0 left-0 w-80 h-80 bg-red-600/30 rounded-tr-full"></div>
+
+      <!-- Additional decorative elements -->
+      <div class="absolute right-40 top-40 w-24 h-24 rounded-full border-4 border-white/20"></div>
+      <div class="absolute left-20 bottom-60 w-16 h-16 bg-white/10 rotate-45"></div>
+
+      <!-- Larger, more visible blob decorations -->
+      <div class="absolute top-10 left-10 w-96 h-96 rounded-full bg-yellow-400 opacity-40 blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-red-500 opacity-40 blur-3xl"></div>
 
       <!-- Empty container for SVG content -->
       <div class="relative z-10 w-full h-full flex items-center justify-center">
@@ -70,12 +81,7 @@ watch(() => route.path, (newPath) => {
                   Register
                 </NuxtLink>
               </p>
-              <p class="text-sm text-white/70">
-                Forgot your password?
-                <NuxtLink to="/auth/password-reset-request" class="text-brand hover:text-opacity-80 transition-opacity">
-                  Reset it
-                </NuxtLink>
-              </p>
+
             </div>
 
             <div v-else-if="showRegister" key="register-links">

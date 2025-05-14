@@ -82,7 +82,16 @@ const onSubmit = handleSubmit(async (values) => {
       <div class="form-field">
         <InputField name="password" type="password" label="Password" icon="tabler:lock" autocomplete="current-password"
           placeholder="Enter your password" rules="required" v-model="password" />
+        <div>
+          <p class="text-sm text-white/70">
+            Forgot your password?
+            <NuxtLink to="/auth/password-reset-request" class="text-brand hover:text-opacity-80 transition-opacity">
+              Reset it
+            </NuxtLink>
+          </p>
+        </div>
       </div>
+
 
       <div>
         <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">

@@ -79,13 +79,6 @@ const onSubmit = handleSubmit(async (values) => {
           </template>
         </Button>
       </div>
-
-      <div class="text-center text-sm text-gray-300">
-        Remember your password?
-        <NuxtLink to="/auth/login" class="font-medium text-brand hover:text-opacity-80">
-          Back to Login
-        </NuxtLink>
-      </div>
     </form>
   </div>
 </template>
