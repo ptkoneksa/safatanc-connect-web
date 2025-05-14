@@ -25,7 +25,12 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxt/image", "@nuxt/icon", "@pinia/nuxt"],
+  modules: [
+    "@nuxt/image",
+    "@nuxt/icon",
+    "@pinia/nuxt",
+    "@formkit/auto-animate/nuxt",
+  ],
 
   runtimeConfig: {
     public: {

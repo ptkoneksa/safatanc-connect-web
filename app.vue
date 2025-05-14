@@ -4,7 +4,7 @@ import { useAuthStore } from '~/stores/auth';
 
 // Initialize auth on client side
 onMounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     const authStore = useAuthStore();
     authStore.initAuth();
   }

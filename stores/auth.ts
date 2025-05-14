@@ -59,7 +59,7 @@ export const useAuthStore = defineStore("auth", {
       this.refreshToken = refreshToken;
 
       // Store tokens in local storage for persistence
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.setItem("authToken", token);
         if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
       }
@@ -70,7 +70,7 @@ export const useAuthStore = defineStore("auth", {
       this.refreshToken = null;
 
       // Remove tokens from local storage
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
       }
@@ -329,7 +329,7 @@ export const useAuthStore = defineStore("auth", {
 
     // Initialize auth from localStorage (call this in a plugin)
     initAuth(): void {
-      if (!process.client) return;
+      if (!import.meta.client) return;
 
       const token = localStorage.getItem("authToken");
       const refreshToken = localStorage.getItem("refreshToken");

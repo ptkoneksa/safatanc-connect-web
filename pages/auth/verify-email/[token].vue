@@ -6,6 +6,27 @@ definePageMeta({
   layout: 'account'
 });
 
+// SEO Meta Tags
+useHead({
+  title: 'Email Verification - Safatanc Connect',
+  meta: [
+    { name: 'description', content: 'Verify your email address to complete your Safatanc Connect account registration.' },
+    // Open Graph
+    { property: 'og:title', content: 'Email Verification - Safatanc Connect' },
+    { property: 'og:description', content: 'Verify your email address to complete your Safatanc Connect account registration.' },
+    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:url', content: 'https://connect.safatanc.com/auth/verify-email' },
+    { property: 'og:type', content: 'website' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: 'Email Verification - Safatanc Connect' },
+    { name: 'twitter:description', content: 'Verify your email address to complete your Safatanc Connect account registration.' },
+    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    // Theme Color
+    { name: 'theme-color', content: '#ff5724' } // Using brand color
+  ],
+}, { mode: 'server' });
+
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();

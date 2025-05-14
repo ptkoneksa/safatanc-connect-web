@@ -9,6 +9,27 @@ definePageMeta({
   layout: 'account'
 });
 
+// SEO Meta Tags
+useHead({
+  title: 'Reset Password - Safatanc Connect',
+  meta: [
+    { name: 'description', content: 'Reset your Safatanc Connect account password. We will send you instructions to regain access to your account.' },
+    // Open Graph
+    { property: 'og:title', content: 'Reset Password - Safatanc Connect' },
+    { property: 'og:description', content: 'Reset your Safatanc Connect account password. We will send you instructions to regain access to your account.' },
+    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:url', content: 'https://connect.safatanc.com/auth/password-reset-request' },
+    { property: 'og:type', content: 'website' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: 'Reset Password - Safatanc Connect' },
+    { name: 'twitter:description', content: 'Reset your Safatanc Connect account password. We will send you instructions to regain access to your account.' },
+    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    // Theme Color
+    { name: 'theme-color', content: '#ff5724' } // Using brand color
+  ],
+}, { mode: 'server' });
+
 const router = useRouter();
 const authStore = useAuthStore();
 

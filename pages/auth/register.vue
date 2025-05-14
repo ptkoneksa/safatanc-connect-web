@@ -9,6 +9,27 @@ definePageMeta({
   layout: 'account'
 });
 
+// SEO Meta Tags
+useHead({
+  title: 'Create Account - Safatanc Connect',
+  meta: [
+    { name: 'description', content: 'Register for a Safatanc Connect account to access all Safatanc services in one place. Join our community today.' },
+    // Open Graph
+    { property: 'og:title', content: 'Create Account - Safatanc Connect' },
+    { property: 'og:description', content: 'Register for a Safatanc Connect account to access all Safatanc services in one place. Join our community today.' },
+    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:url', content: 'https://connect.safatanc.com/auth/register' },
+    { property: 'og:type', content: 'website' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: 'Create Account - Safatanc Connect' },
+    { name: 'twitter:description', content: 'Register for a Safatanc Connect account to access all Safatanc services in one place. Join our community today.' },
+    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    // Theme Color
+    { name: 'theme-color', content: '#ff5724' } // Using brand color
+  ],
+}, { mode: 'server' });
+
 const router = useRouter();
 const authStore = useAuthStore();
 

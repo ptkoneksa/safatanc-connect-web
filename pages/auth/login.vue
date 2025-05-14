@@ -9,6 +9,27 @@ definePageMeta({
   layout: 'account'
 });
 
+// SEO Meta Tags
+useHead({
+  title: 'Login - Safatanc Connect',
+  meta: [
+    { name: 'description', content: 'Log in to Safatanc Connect to access your account. Seamless connectivity for all your Safatanc services.' },
+    // Open Graph
+    { property: 'og:title', content: 'Login to Safatanc Connect' },
+    { property: 'og:description', content: 'Log in to Safatanc Connect to access your account. Seamless connectivity for all your Safatanc services.' },
+    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:url', content: 'https://connect.safatanc.com/auth/login' },
+    { property: 'og:type', content: 'website' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: 'Login to Safatanc Connect' },
+    { name: 'twitter:description', content: 'Log in to Safatanc Connect to access your account. Seamless connectivity for all your Safatanc services.' },
+    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    // Theme Color
+    { name: 'theme-color', content: '#ff5724' } // Using brand color
+  ],
+}, { mode: 'server' });
+
 const router = useRouter();
 const authStore = useAuthStore();
 

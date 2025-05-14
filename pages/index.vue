@@ -1,9 +1,69 @@
-<script setup>
+<script setup lang="ts">
 import { Icon } from '@iconify/vue';
 
 definePageMeta({
   layout: 'default'
 });
+
+// SEO Meta Tags
+useHead({
+  title: 'Safatanc Connect - Together, Made Simple',
+  meta: [
+    { name: 'description', content: 'Safatanc Connect is your all-in-one platform for Salatiga Technology services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    // Open Graph
+    { property: 'og:title', content: 'Safatanc Connect - Together, Made Simple' },
+    { property: 'og:description', content: 'Safatanc Connect is your all-in-one platform for Salatiga Technology services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:url', content: 'https://connect.safatanc.com' },
+    { property: 'og:type', content: 'website' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Safatanc Connect - Together, Made Simple' },
+    { name: 'twitter:description', content: 'Safatanc Connect is your all-in-one platform for Salatiga Technology services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    // Theme Color
+    { name: 'theme-color', content: '#ff5724' } // Using brand color
+  ],
+}, { mode: 'server' });
+
+const features = [
+  {
+    id: 1,
+    title: 'Unified Access',
+    description: 'One account for all Safatanc services. Streamlined and secure.',
+    icon: 'tabler:key',
+  },
+  {
+    id: 2,
+    title: 'Smart Collaboration',
+    description: 'Work together efficiently with integrated communication tools.',
+    icon: 'tabler:users',
+  },
+  {
+    id: 3,
+    title: 'Real-time Updates',
+    description: 'Stay informed with immediate notifications for all your services.',
+    icon: 'tabler:bell',
+  },
+  {
+    id: 4,
+    title: 'Data Synchronization',
+    description: 'Seamless data flow between all your Safatanc applications.',
+    icon: 'tabler:refresh',
+  },
+  {
+    id: 5,
+    title: 'Enhanced Security',
+    description: 'Advanced protection with multi-factor authentication options.',
+    icon: 'tabler:shield',
+  },
+  {
+    id: 6,
+    title: 'Personalized Dashboard',
+    description: 'Customize your experience with the tools you use most.',
+    icon: 'tabler:dashboard',
+  },
+];
 </script>
 
 <template>

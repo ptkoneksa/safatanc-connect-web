@@ -2,7 +2,7 @@ import { useAuthStore } from "~/stores/auth";
 
 export default defineNuxtRouteMiddleware((to, from) => {
   // Skip middleware on server side
-  if (process.server) return;
+  if (import.meta.server) return;
 
   const authStore = useAuthStore();
 

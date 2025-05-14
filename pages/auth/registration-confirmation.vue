@@ -5,6 +5,27 @@ definePageMeta({
   layout: 'account'
 });
 
+// SEO Meta Tags
+useHead({
+  title: 'Registration Successful - Safatanc Connect',
+  meta: [
+    { name: 'description', content: 'Thank you for registering with Safatanc Connect. Please check your email to verify your account and complete the registration process.' },
+    // Open Graph
+    { property: 'og:title', content: 'Registration Successful - Safatanc Connect' },
+    { property: 'og:description', content: 'Thank you for registering with Safatanc Connect. Please check your email to verify your account and complete the registration process.' },
+    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:url', content: 'https://connect.safatanc.com/auth/registration-confirmation' },
+    { property: 'og:type', content: 'website' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: 'Registration Successful - Safatanc Connect' },
+    { name: 'twitter:description', content: 'Thank you for registering with Safatanc Connect. Please check your email to verify your account and complete the registration process.' },
+    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    // Theme Color
+    { name: 'theme-color', content: '#ff5724' } // Using brand color
+  ],
+}, { mode: 'server' });
+
 const router = useRouter();
 
 const goToLogin = (): void => {

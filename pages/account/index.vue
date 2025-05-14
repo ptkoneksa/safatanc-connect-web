@@ -1,10 +1,32 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
+import { Icon } from '@iconify/vue';
 
 definePageMeta({
   middleware: 'auth',
   layout: 'default'
 });
+
+// SEO Meta Tags
+useHead({
+  title: 'Account Dashboard - Safatanc Connect',
+  meta: [
+    { name: 'description', content: 'Manage your Safatanc Connect account, view activity, and access all Safatanc services from your personalized dashboard.' },
+    // Open Graph
+    { property: 'og:title', content: 'Account Dashboard - Safatanc Connect' },
+    { property: 'og:description', content: 'Manage your Safatanc Connect account, view activity, and access all Safatanc services from your personalized dashboard.' },
+    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:url', content: 'https://connect.safatanc.com/account' },
+    { property: 'og:type', content: 'website' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: 'Account Dashboard - Safatanc Connect' },
+    { name: 'twitter:description', content: 'Manage your Safatanc Connect account, view activity, and access all Safatanc services from your personalized dashboard.' },
+    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    // Theme Color
+    { name: 'theme-color', content: '#ff5724' } // Using brand color
+  ],
+}, { mode: 'server' });
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.getUser);
