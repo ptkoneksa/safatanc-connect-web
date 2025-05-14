@@ -26,7 +26,7 @@ useHead({
     { name: 'twitter:description', content: 'Log in to Safatanc Connect to access your account. Seamless connectivity for all your Safatanc services.' },
     { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ff5724' } // Using brand color
+    { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],
 }, { mode: 'server' });
 

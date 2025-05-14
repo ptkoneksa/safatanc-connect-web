@@ -26,7 +26,7 @@ useHead({
     { name: 'twitter:description', content: 'Reset your Safatanc Connect account password. We will send you instructions to regain access to your account.' },
     { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ff5724' } // Using brand color
+    { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],
 }, { mode: 'server' });
 

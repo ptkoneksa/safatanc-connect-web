@@ -9,20 +9,20 @@ definePageMeta({
 useHead({
   title: 'Safatanc Connect - Together, Made Simple',
   meta: [
-    { name: 'description', content: 'Safatanc Connect is your all-in-one platform for Salatiga Technology services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { name: 'description', content: 'Safatanc Connect is your all-in-one platform for Safatanc Group services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
     // Open Graph
     { property: 'og:title', content: 'Safatanc Connect - Together, Made Simple' },
-    { property: 'og:description', content: 'Safatanc Connect is your all-in-one platform for Salatiga Technology services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { property: 'og:description', content: 'Safatanc Connect is your all-in-one platform for Safatanc Group services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
     { property: 'og:image', content: '/images/stech_logo_gradient.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
-    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:card', content: 'summary' },
     { name: 'twitter:title', content: 'Safatanc Connect - Together, Made Simple' },
-    { name: 'twitter:description', content: 'Safatanc Connect is your all-in-one platform for Salatiga Technology services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { name: 'twitter:description', content: 'Safatanc Connect is your all-in-one platform for Safatanc Group services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
     { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ff5724' } // Using brand color
+    { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],
 }, { mode: 'server' });
 

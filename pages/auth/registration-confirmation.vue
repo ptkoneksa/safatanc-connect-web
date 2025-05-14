@@ -22,7 +22,7 @@ useHead({
     { name: 'twitter:description', content: 'Thank you for registering with Safatanc Connect. Please check your email to verify your account and complete the registration process.' },
     { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ff5724' } // Using brand color
+    { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],
 }, { mode: 'server' });
 
