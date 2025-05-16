@@ -5,7 +5,7 @@ import { Icon } from '@iconify/vue';
 import type { Badge } from '~/types/api';
 
 definePageMeta({
-  layout: 'account',
+  layout: 'default',
   middleware: 'auth'
 });
 
@@ -122,7 +122,7 @@ const error = computed(() => badgeStore.getError);
             <h3 class="text-xl font-medium text-white text-center mb-2">{{ selectedBadge.name }}</h3>
             <p class="text-gray-300 text-center">{{ selectedBadge.description }}</p>
             <p class="text-gray-400 text-sm mt-4">Earned on: {{ new Date(selectedBadge.created_at).toLocaleDateString()
-            }}</p>
+              }}</p>
           </div>
 
           <div class="flex justify-end">

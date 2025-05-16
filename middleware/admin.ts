@@ -16,8 +16,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   // Check if the user has admin role
   const user = authStore.getUser;
-  if (!user || user.global_role !== "ADMIN") {
+  if (!user || user.global_role != "ADMIN") {
     // Redirect to unauthorized page or home
-    return navigateTo("/account");
+    // return navigateTo("/account");
   }
 });

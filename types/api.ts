@@ -43,3 +43,19 @@ export interface PaginatedResponse<T> {
   limit: number;
   total_pages: number;
 }
+
+// OAuth Provider types
+export type OAuthProvider = "google" | "github" | "facebook";
+
+// OAuth login response
+export interface OAuthResponse {
+  user: User;
+  token: string;
+  refresh_token: string;
+}
+
+// OAuth state data
+export interface OAuthState {
+  provider: OAuthProvider;
+  redirectUrl: string;
+}

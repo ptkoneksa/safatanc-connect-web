@@ -4,6 +4,7 @@ import { Icon } from '@iconify/vue';
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import * as z from 'zod';
+import type { OAuthProvider } from '~/types/api';
 
 definePageMeta({
   layout: 'account'
@@ -54,6 +55,7 @@ const { handleSubmit, isSubmitting, errors } = useForm({
 
 const apiError = ref<string>('');
 const loginSuccess = ref<boolean>(false);
+const oauthLoading = ref<OAuthProvider | null>(null);
 
 const onSubmit = handleSubmit(async (values) => {
   apiError.value = '';
@@ -74,6 +76,19 @@ const onSubmit = handleSubmit(async (values) => {
     apiError.value = err.message || 'Login failed. Please check your credentials.';
   }
 });
+
+// Handle OAuth login
+const loginWithOAuth = (provider: OAuthProvider) => {
+  apiError.value = '';
+  oauthLoading.value = provider;
+
+  try {
+    authStore.initiateOAuthLogin(provider);
+  } catch (err: any) {
+    oauthLoading.value = null;
+    apiError.value = err.message || `Failed to initiate ${provider} login`;
+  }
+};
 </script>
 
 <template>
@@ -113,7 +128,6 @@ const onSubmit = handleSubmit(async (values) => {
         </div>
       </div>
 
-
       <div>
         <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">
           <template #icon>
@@ -128,6 +142,60 @@ const onSubmit = handleSubmit(async (values) => {
             </span>
           </template>
         </Button>
+      </div>
+
+      <!-- OAuth Buttons -->
+      <div class="relative mt-8 mb-4">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-dark"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-dark-2 text-gray-400">Or continue with</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <!-- Google -->
+        <button type="button" @click="loginWithOAuth('google')" :class="{
+          'opacity-70': oauthLoading && oauthLoading !== 'google',
+          'animate-pulse': oauthLoading === 'google'
+        }"
+          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
+          <span v-if="oauthLoading === 'google'">
+            <Icon icon="tabler:loader" class="text-red-500 animate-spin" width="24" height="24" />
+          </span>
+          <span v-else>
+            <Icon icon="tabler:brand-google" class="text-red-500" width="24" height="24" />
+          </span>
+        </button>
+
+        <!-- GitHub -->
+        <button type="button" @click="loginWithOAuth('github')" :class="{
+          'opacity-70': oauthLoading && oauthLoading !== 'github',
+          'animate-pulse': oauthLoading === 'github'
+        }"
+          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
+          <span v-if="oauthLoading === 'github'">
+            <Icon icon="tabler:loader" class="text-white animate-spin" width="24" height="24" />
+          </span>
+          <span v-else>
+            <Icon icon="tabler:brand-github" class="text-white" width="24" height="24" />
+          </span>
+        </button>
+
+        <!-- Facebook -->
+        <button type="button" @click="loginWithOAuth('facebook')" :class="{
+          'opacity-70': oauthLoading && oauthLoading !== 'facebook',
+          'animate-pulse': oauthLoading === 'facebook'
+        }"
+          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
+          <span v-if="oauthLoading === 'facebook'">
+            <Icon icon="tabler:loader" class="text-blue-500 animate-spin" width="24" height="24" />
+          </span>
+          <span v-else>
+            <Icon icon="tabler:brand-facebook" class="text-blue-500" width="24" height="24" />
+          </span>
+        </button>
       </div>
     </form>
   </div>

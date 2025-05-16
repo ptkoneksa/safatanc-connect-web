@@ -39,6 +39,7 @@ export const useBadgeStore = defineStore("badge", {
           ApiResponse<PaginatedResponse<Badge>>
         >(`${config.public.apiBaseUrl}/badges?page=${page}&limit=${limit}`, {
           method: "GET",
+          server: false,
         });
 
         if (error.value) {

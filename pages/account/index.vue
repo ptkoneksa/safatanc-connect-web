@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
+import { useBadgeStore } from '~/stores/badge';
 import { Icon } from '@iconify/vue';
 
 definePageMeta({
@@ -29,7 +30,17 @@ useHead({
 }, { mode: 'server' });
 
 const authStore = useAuthStore();
+const badgeStore = useBadgeStore();
 const user = computed(() => authStore.getUser);
+const userBadges = computed(() => user.value?.id ? badgeStore.getUserBadges(user.value.id) : []);
+const isLoadingBadges = computed(() => badgeStore.isLoading);
+
+// Fetch user badges on mount
+onMounted(async () => {
+  if (user.value?.id) {
+    await badgeStore.fetchUserBadges(user.value.id);
+  }
+});
 
 // Sample dashboard stats for demo
 const stats = ref([
@@ -67,6 +78,35 @@ const activities = ref([
             <div>
               <h2 class="text-2xl text-brand mb-2">Welcome, {{ user.name || user.username || 'User' }}!</h2>
               <p class="text-gray-300">{{ user.email || 'Your account dashboard' }}</p>
+
+              <!-- User Badges Display -->
+              <div class="mt-3">
+                <div v-if="isLoadingBadges" class="flex items-center gap-2">
+                  <div class="w-5 h-5 rounded-full border-2 border-brand border-t-transparent animate-spin"></div>
+                  <span class="text-gray-400 text-sm">Loading badges...</span>
+                </div>
+                <div v-else-if="userBadges.length > 0" class="flex items-center gap-2">
+                  <div class="flex -space-x-2 overflow-hidden">
+                    <img v-for="badge in userBadges.slice(0, 5)" :key="badge.id" :src="badge.image_url"
+                      :alt="badge.name"
+                      class="inline-block h-8 w-8 rounded-lg object-cover border border-dark-3 ring-1 ring-brand/20"
+                      :title="badge.name" />
+                  </div>
+                  <span v-if="userBadges.length > 5" class="text-brand text-sm bg-dark-3 rounded-full px-2 py-0.5">
+                    +{{ userBadges.length - 5 }} more
+                  </span>
+                  <NuxtLink to="/account/badges" class="text-brand text-sm hover:underline ml-2">
+                    View all
+                  </NuxtLink>
+                </div>
+                <div v-else class="text-gray-400 text-sm flex items-center gap-2">
+                  <Icon icon="tabler:award" class="w-4 h-4" />
+                  <span>No badges earned yet</span>
+                  <NuxtLink to="/badges" class="text-brand text-sm hover:underline ml-1">
+                    Browse badges
+                  </NuxtLink>
+                </div>
+              </div>
             </div>
           </div>
         </div>

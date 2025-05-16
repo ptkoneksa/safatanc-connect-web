@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import type { ApiResponse, User } from "~/types/api";
+import type {
+  ApiResponse,
+  User,
+  OAuthProvider,
+  OAuthResponse,
+} from "~/types/api";
 
 interface AuthState {
   user: User | null;
@@ -104,51 +109,20 @@ export const useAuthStore = defineStore("auth", {
 
     // Helper method to extract more detailed error information
     getErrorDetail(error: any): string | null {
-      // Check for various error formats
+      if (!error) return null;
+
+      // Try to parse responseText if it exists and looks like JSON
       try {
-        // Check for API specification format
-        if (error.data && !error.data.success && error.data.message) {
-          return error.data.message;
-        }
-
-        if (error.data && typeof error.data === "string") {
-          return error.data;
-        }
-
-        if (error.data && error.data.message) {
-          return error.data.message;
-        }
-
         if (error.data && typeof error.data === "object") {
-          // Some APIs return validation errors in different formats
-          const errorData = error.data;
-
-          // Try to extract field validation errors
-          if (errorData.errors && typeof errorData.errors === "object") {
-            const errorMessages = [];
-            for (const field in errorData.errors) {
-              const fieldErrors = errorData.errors[field];
-              if (Array.isArray(fieldErrors)) {
-                errorMessages.push(`${field}: ${fieldErrors.join(", ")}`);
-              } else if (typeof fieldErrors === "string") {
-                errorMessages.push(`${field}: ${fieldErrors}`);
-              }
-            }
-            if (errorMessages.length) {
-              return errorMessages.join("; ");
-            }
-          }
-
-          // Return any other message property
-          if (errorData.message) {
-            return errorData.message;
-          }
-
-          // Last resort - stringify the error
-          return JSON.stringify(errorData);
+          return error.data.message || null;
         }
-      } catch (e) {
-        console.error("Error parsing API error:", e);
+
+        // For useFetch errors
+        if (error.message) {
+          return error.message;
+        }
+      } catch (parseError) {
+        console.error("Error parsing error response:", parseError);
       }
 
       return null;
@@ -188,6 +162,74 @@ export const useAuthStore = defineStore("auth", {
       }
 
       throw new Error(data.value?.message || "Invalid response from server");
+    },
+
+    // Updated OAuth login methods
+    async initiateOAuthLogin(provider: OAuthProvider): Promise<void> {
+      if (!import.meta.client) return;
+
+      const config = useRuntimeConfig();
+
+      try {
+        // Get the OAuth URL from the backend
+        const { data, error } = await useFetch<ApiResponse<{ url: string }>>(
+          `${config.public.apiBaseUrl}/auth/oauth/${provider}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (error.value) {
+          const errorDetail = this.getErrorDetail(error.value);
+          throw new Error(
+            errorDetail ||
+              error.value?.message ||
+              `Failed to initiate ${provider} login`
+          );
+        }
+
+        if (data.value?.success && data.value?.data?.url) {
+          // Store current path for redirecting back after login
+          localStorage.setItem("oauthRedirect", window.location.pathname);
+
+          // Redirect to OAuth provider
+          window.location.href = data.value.data.url;
+        } else {
+          throw new Error(
+            data.value?.message || "Invalid response from server"
+          );
+        }
+      } catch (err) {
+        console.error("OAuth initiation error:", err);
+        throw err;
+      }
+    },
+
+    // Process OAuth callback tokens
+    processOAuthCallback(token: string, refreshToken: string): void {
+      if (!token) {
+        throw new Error("No token received from OAuth provider");
+      }
+
+      // Set tokens in store and localStorage
+      this.setTokens(token, refreshToken);
+
+      // Fetch user data with the new token
+      this.fetchCurrentUser().catch((err) => {
+        console.error("Error fetching user after OAuth:", err);
+        this.clearTokens();
+        throw new Error("Failed to get user information after authentication");
+      });
+
+      // Get redirect path
+      const redirect = localStorage.getItem("oauthRedirect") || "/account";
+      localStorage.removeItem("oauthRedirect");
+
+      // Navigate to redirect path
+      navigateTo(redirect);
     },
 
     async fetchCurrentUser(): Promise<User | null> {
