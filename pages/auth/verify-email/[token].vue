@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 import { Icon } from '@iconify/vue';
+import type { ApiResponse } from '~/types/api';
 
 definePageMeta({
   layout: 'account'
@@ -48,12 +49,19 @@ onMounted(async () => {
 
   try {
     const config = useRuntimeConfig();
-    const { error: apiError } = await useFetch(`${config.public.apiBaseUrl}/auth/verify-email/${token}`, {
-      method: 'GET',
-    });
+    const { data, error: apiError } = await useFetch<ApiResponse>(
+      `${config.public.apiBaseUrl}/auth/verify-email/${token}`,
+      {
+        method: 'GET',
+      }
+    );
 
     if (apiError.value) {
       throw new Error(apiError.value.message || 'Email verification failed');
+    }
+
+    if (!data.value?.success) {
+      throw new Error(data.value?.message || 'Email verification failed');
     }
 
     success.value = 'Your email has been successfully verified! You can now login to your account.';

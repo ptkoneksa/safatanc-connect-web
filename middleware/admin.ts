@@ -14,12 +14,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
     });
   }
 
-  // Redirect authenticated users away from auth pages
-  if (
-    to.path.startsWith("/auth/") &&
-    to.name !== "auth-logout" &&
-    authStore.isAuthenticated
-  ) {
-    return navigateTo("/");
+  // Check if the user has admin role
+  const user = authStore.getUser;
+  if (!user || user.global_role !== "ADMIN") {
+    // Redirect to unauthorized page or home
+    return navigateTo("/account");
   }
 });

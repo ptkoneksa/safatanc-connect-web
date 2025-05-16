@@ -52,7 +52,7 @@ const resetPassword = async (): Promise<void> => {
   try {
     await authStore.resetPassword({
       token: form.token,
-      newPassword: form.newPassword
+      new_password: form.newPassword
     });
 
     success.value = 'Your password has been reset successfully. You can now login with your new password.';

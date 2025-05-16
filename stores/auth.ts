@@ -1,11 +1,5 @@
 import { defineStore } from "pinia";
-
-interface User {
-  id?: string;
-  name?: string;
-  email?: string;
-  [key: string]: any;
-}
+import type { ApiResponse, User } from "~/types/api";
 
 interface AuthState {
   user: User | null;
@@ -22,19 +16,14 @@ interface RegisterData {
   username: string;
   email: string;
   password: string;
+  full_name?: string;
+  avatar_url?: string;
   [key: string]: any;
 }
 
 interface PasswordResetData {
   token: string;
-  newPassword: string;
-}
-
-interface ApiResponse<T = any> {
-  data?: T;
-  message?: string;
-  status?: number;
-  [key: string]: any;
+  new_password: string;
 }
 
 export const useAuthStore = defineStore("auth", {
@@ -76,12 +65,12 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async register(userData: RegisterData): Promise<ApiResponse> {
+    async register(userData: RegisterData): Promise<ApiResponse<User>> {
       const config = useRuntimeConfig();
       console.log("Auth store register with data:", userData);
 
       try {
-        const { data, error } = await useFetch<ApiResponse>(
+        const { data, error } = await useFetch<ApiResponse<User>>(
           `${config.public.apiBaseUrl}/auth/register`,
           {
             method: "POST",
@@ -106,7 +95,7 @@ export const useAuthStore = defineStore("auth", {
           );
         }
 
-        return data.value as ApiResponse;
+        return data.value as ApiResponse<User>;
       } catch (err) {
         console.error("Register exception:", err);
         throw err;
@@ -117,6 +106,11 @@ export const useAuthStore = defineStore("auth", {
     getErrorDetail(error: any): string | null {
       // Check for various error formats
       try {
+        // Check for API specification format
+        if (error.data && !error.data.success && error.data.message) {
+          return error.data.message;
+        }
+
         if (error.data && typeof error.data === "string") {
           return error.data;
         }
@@ -160,19 +154,23 @@ export const useAuthStore = defineStore("auth", {
       return null;
     },
 
-    async login({ email, password }: LoginCredentials): Promise<ApiResponse> {
+    async login({
+      email,
+      password,
+    }: LoginCredentials): Promise<
+      ApiResponse<{ user: User; token: string; refresh_token: string }>
+    > {
       const config = useRuntimeConfig();
 
-      const { data, error } = await useFetch<ApiResponse>(
-        `${config.public.apiBaseUrl}/auth/login`,
-        {
-          method: "POST",
-          body: { email, password },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const { data, error } = await useFetch<
+        ApiResponse<{ user: User; token: string; refresh_token: string }>
+      >(`${config.public.apiBaseUrl}/auth/login`, {
+        method: "POST",
+        body: { email, password },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (error.value) {
         // Try to extract more detailed error message if available
@@ -180,16 +178,16 @@ export const useAuthStore = defineStore("auth", {
         throw new Error(errorDetail || error.value?.message || "Login failed");
       }
 
-      if (data.value?.data?.token) {
+      if (data.value?.success && data.value?.data) {
         this.setTokens(
           data.value.data.token,
           data.value.data.refresh_token || null
         );
-        await this.fetchCurrentUser();
-        return data.value as ApiResponse;
+        this.setUser(data.value.data.user);
+        return data.value;
       }
 
-      throw new Error("Invalid response from server");
+      throw new Error(data.value?.message || "Invalid response from server");
     },
 
     async fetchCurrentUser(): Promise<User | null> {
@@ -221,7 +219,7 @@ export const useAuthStore = defineStore("auth", {
         throw new Error(error.value?.message || "Failed to fetch user data");
       }
 
-      if (data.value?.data) {
+      if (data.value?.success && data.value?.data) {
         this.setUser(data.value.data);
         return data.value.data;
       }
@@ -229,17 +227,20 @@ export const useAuthStore = defineStore("auth", {
       return null;
     },
 
-    async refreshAccessToken(): Promise<ApiResponse> {
+    async refreshAccessToken(): Promise<ApiResponse<{ token: string }>> {
       if (!this.refreshToken) throw new Error("No refresh token available");
 
       const config = useRuntimeConfig();
 
-      const { data, error } = await useFetch<ApiResponse>(
+      const { data, error } = await useFetch<ApiResponse<{ token: string }>>(
         `${config.public.apiBaseUrl}/auth/refresh`,
         {
           method: "POST",
+          body: {
+            refresh_token: this.refreshToken,
+          },
           headers: {
-            Authorization: `Bearer ${this.refreshToken}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -249,26 +250,33 @@ export const useAuthStore = defineStore("auth", {
         throw new Error(error.value?.message || "Token refresh failed");
       }
 
-      if (data.value?.data?.token) {
+      if (data.value?.success && data.value?.data?.token) {
         this.setTokens(data.value.data.token, this.refreshToken);
-        return data.value as ApiResponse;
+        return data.value;
       }
 
-      throw new Error("Invalid response from server");
+      throw new Error(data.value?.message || "Invalid response from server");
     },
 
     async logout(): Promise<void> {
-      if (!this.token) return;
+      if (!this.token || !this.refreshToken) return;
 
       try {
         const config = useRuntimeConfig();
 
-        await useFetch(`${config.public.apiBaseUrl}/auth/logout`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
-        });
+        await useFetch<ApiResponse<string>>(
+          `${config.public.apiBaseUrl}/auth/logout`,
+          {
+            method: "POST",
+            body: {
+              refresh_token: this.refreshToken,
+            },
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
       } catch (error) {
         console.error("Logout API error:", error);
       } finally {
@@ -277,11 +285,11 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async requestPasswordReset(email: string): Promise<ApiResponse> {
+    async requestPasswordReset(email: string): Promise<ApiResponse<string>> {
       const config = useRuntimeConfig();
 
-      const { data, error } = await useFetch<ApiResponse>(
-        `${config.public.apiBaseUrl}/auth/password-reset-request`,
+      const { data, error } = await useFetch<ApiResponse<string>>(
+        `${config.public.apiBaseUrl}/auth/request-password-reset`,
         {
           method: "POST",
           body: { email },
@@ -297,22 +305,22 @@ export const useAuthStore = defineStore("auth", {
         );
       }
 
-      return data.value as ApiResponse;
+      return data.value as ApiResponse<string>;
     },
 
     async resetPassword({
       token,
-      newPassword,
-    }: PasswordResetData): Promise<ApiResponse> {
+      new_password,
+    }: PasswordResetData): Promise<ApiResponse<User>> {
       const config = useRuntimeConfig();
 
-      const { data, error } = await useFetch<ApiResponse>(
-        `${config.public.apiBaseUrl}/auth/password-reset`,
+      const { data, error } = await useFetch<ApiResponse<User>>(
+        `${config.public.apiBaseUrl}/auth/reset-password`,
         {
           method: "POST",
           body: {
             token,
-            new_password: newPassword,
+            new_password,
           },
           headers: {
             "Content-Type": "application/json",
@@ -324,7 +332,33 @@ export const useAuthStore = defineStore("auth", {
         throw new Error(error.value?.message || "Password reset failed");
       }
 
-      return data.value as ApiResponse;
+      return data.value as ApiResponse<User>;
+    },
+
+    // Implement missing resend verification email endpoint
+    async resendVerificationEmail(): Promise<ApiResponse<string>> {
+      if (!this.token) throw new Error("You must be logged in");
+
+      const config = useRuntimeConfig();
+
+      const { data, error } = await useFetch<ApiResponse<string>>(
+        `${config.public.apiBaseUrl}/auth/resend-verification-email`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (error.value) {
+        throw new Error(
+          error.value?.message || "Failed to resend verification email"
+        );
+      }
+
+      return data.value as ApiResponse<string>;
     },
 
     // Initialize auth from localStorage (call this in a plugin)
