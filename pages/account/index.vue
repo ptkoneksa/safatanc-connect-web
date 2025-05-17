@@ -46,8 +46,6 @@ const { data: userBadges, error: userBadgesError, pending: isLoadingBadges } = u
 
 // Sample dashboard stats for demo
 const stats = ref([
-  { id: 1, name: 'Profile Completion', value: '75%', icon: 'tabler:user-check' },
-  { id: 2, name: 'Projects', value: '3', icon: 'tabler:folder' },
   { id: 3, name: 'Connections', value: '12', icon: 'tabler:users' },
   { id: 4, name: 'Last Login', value: 'Today', icon: 'tabler:calendar' },
 ]);
@@ -57,6 +55,13 @@ const activities = ref([
   { id: 1, title: 'Profile Updated', date: '2 hours ago', icon: 'tabler:edit' },
   { id: 2, title: 'New Project Created', date: 'Yesterday', icon: 'tabler:plus' },
   { id: 3, title: 'Joined Community Forum', date: '3 days ago', icon: 'tabler:users' },
+]);
+
+// Account & Security Settings
+const accountSettings = ref([
+  { id: 1, title: 'Profile Settings', icon: 'tabler:user', route: '/account/profile' },
+  { id: 2, title: 'Security Settings', icon: 'tabler:lock', route: '/account/settings/security' },
+  { id: 3, title: 'Notification Settings', icon: 'tabler:bell', route: '/account/settings/notifications' },
 ]);
 </script>
 
@@ -158,6 +163,23 @@ const activities = ref([
             </div>
             <Icon icon="tabler:chevron-right" class="text-gray-400 w-5 h-5" />
           </div>
+        </div>
+      </div>
+
+      <!-- Account & Security Settings -->
+      <div class="mb-8" v-auto-animate>
+        <h2 class="text-xl font-bold mb-6 text-white">Account & Security Settings</h2>
+        <div class="bg-dark-2 rounded-3xl p-6 border border-dark" v-auto-animate>
+          <NuxtLink :to="setting.route" v-for="setting in accountSettings" :key="setting.id"
+            class="flex items-center gap-4 py-4 border-b border-dark last:border-0">
+            <div class="bg-dark-3 rounded-full p-3">
+              <Icon :icon="setting.icon" class="text-brand w-5 h-5" />
+            </div>
+            <div class="flex-grow">
+              <div class="text-white">{{ setting.title }}</div>
+            </div>
+            <Icon icon="tabler:chevron-right" class="text-gray-400 w-5 h-5" />
+          </NuxtLink>
         </div>
       </div>
 
