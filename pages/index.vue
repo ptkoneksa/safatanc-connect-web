@@ -64,6 +64,9 @@ const features = [
     icon: 'tabler:dashboard',
   },
 ];
+
+const authStore = useAuthStore();
+const user = computed(() => authStore.getUser);
 </script>
 
 <template>
@@ -85,7 +88,7 @@ const features = [
           <p class="max-w-lg">The central hub for all Safatanc Group users. Manage your unified account,
             access all Safatanc services, and control your GSalt balance in one place.</p>
 
-          <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+          <div v-if="!user" class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
             <NuxtLink to="/auth">
               <Button bg="bg-brand" color="text-black">
                 <template #text>Sign In</template>
@@ -97,13 +100,24 @@ const features = [
               </Button>
             </NuxtLink>
           </div>
+          <div v-else>
+            <NuxtLink to="/account">
+              <Button bg="bg-brand" color="text-black">
+                <template #icon>
+                  <Icon icon="tabler:arrow-right" width="24" height="24" />
+                </template>
+                <template #text>Go to Dashboard</template>
+              </Button>
+            </NuxtLink>
+          </div>
         </div>
 
         <!-- Hero Visual -->
         <div class="relative hidden md:block">
           <!-- Decorative elements -->
           <div class="absolute right-24 w-48 h-48 rounded-full bg-brand/30 blur-md animate-pulse-slow"></div>
-          <div class="absolute -bottom-4 left-24 w-16 h-16 rounded-full bg-accent/30 blur-md animate-bounce-slow"></div>
+          <div class="absolute -bottom-4 left-24 w-16 h-16 rounded-full bg-accent/30 blur-md animate-bounce-slow">
+          </div>
         </div>
       </div>
     </div>
@@ -227,13 +241,23 @@ const features = [
           <p class="text-gray-400 mb-8">Manage your Safatanc accounts, access all services, and enjoy a seamless
             experience.
           </p>
-          <NuxtLink to="/auth">
+          <NuxtLink v-if="!user" to="/auth">
             <Button bg="bg-brand" color="text-black">
               <template #icon>
                 <Icon icon="tabler:arrow-right" width="24" height="24" />
               </template>
               <template #text>
                 Sign In Now
+              </template>
+            </Button>
+          </NuxtLink>
+          <NuxtLink v-else to="/account">
+            <Button bg="bg-brand" color="text-black">
+              <template #icon>
+                <Icon icon="tabler:arrow-right" width="24" height="24" />
+              </template>
+              <template #text>
+                Go to Dashboard
               </template>
             </Button>
           </NuxtLink>

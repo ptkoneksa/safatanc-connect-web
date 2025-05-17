@@ -40,7 +40,7 @@ const token = route.query.token as string;
 const refreshToken = route.query.refresh_token as string;
 
 // Process tokens on mount
-onMounted(() => {
+onMounted(async () => {
   try {
     if (!token) {
       error.value = 'Authentication failed: No token received';
@@ -50,7 +50,11 @@ onMounted(() => {
 
     // Process the OAuth authentication
     authStore.processOAuthCallback(token, refreshToken || '');
-    // Note: the navigation happens in the store method
+
+    // Clean the URL (remove query parameters) using Nuxt's router
+    await router.replace({ path: route.path, query: {} });
+
+    // Note: the navigation to final destination happens in the store method
   } catch (err: any) {
     console.error('Authentication error:', err);
     error.value = err.message || 'Failed to complete authentication';

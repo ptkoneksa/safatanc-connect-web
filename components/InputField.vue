@@ -84,7 +84,7 @@ const onBlur = () => {
     <label :for="name" class="block text-sm font-medium text-gray-300 mb-1">{{ label }}</label>
     <div class="relative">
       <span v-if="icon" class="absolute inset-y-0 left-0 flex items-center pl-4">
-        <Icon :icon="icon" class="text-gray-400" width="20" height="20" />
+        <Icon :icon="icon" class="text-gray-400" width="24" height="24" />
       </span>
       <input :id="name" :name="name" :type="type" :placeholder="placeholder" :required="required"
         :autocomplete="autocomplete" v-model="value" @blur="onBlur"

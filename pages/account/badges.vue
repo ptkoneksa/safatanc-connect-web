@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
-import { useBadgeStore } from '~/stores/badge';
 import { Icon } from '@iconify/vue';
-import type { Badge } from '~/types/api';
+import type { Badge, User, ApiResponse } from '~/types/api';
 
 definePageMeta({
   layout: 'default',
@@ -31,23 +30,78 @@ useHead({
 }, { mode: 'server' });
 
 const authStore = useAuthStore();
-const badgeStore = useBadgeStore();
-const currentUser = ref(authStore.getUser);
-
-// Pagination
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const config = useRuntimeConfig();
+const currentUser = computed(() => authStore.getUser);
 
 // Badge details modal
 const showBadgeDetails = ref(false);
 const selectedBadge = ref<Badge | null>(null);
 
-// Load badges on mounted
-onMounted(async () => {
+// Fetch user badges directly if user is logged in
+const userBadgeData = useState<Badge[]>('userBadges', () => []);
+const isPending = ref(false);
+const fetchError = ref<string | null>(null);
+
+// Function to fetch user badges
+const fetchUserBadges = async () => {
   if (!currentUser.value?.id) return;
 
-  await badgeStore.fetchUserBadges(currentUser.value.id);
+  isPending.value = true;
+  fetchError.value = null;
+
+  try {
+    const { data } = await useFetch<ApiResponse<{ user: User; badges: Badge[] }>>(
+      `${config.public.apiBaseUrl}/badges/users/${currentUser.value.id}`,
+      {
+        key: `user-badges-${currentUser.value.id}`,
+        server: false,
+        headers: {
+          Authorization: `Bearer ${authStore.token}`
+        },
+        onRequest({ options }) {
+          options.timeout = 10000;
+        },
+        retry: 1,
+      }
+    );
+
+    if (!data.value) {
+      throw new Error('Failed to fetch user badges');
+    }
+
+    if (!data.value.success) {
+      throw new Error(data.value.message || 'Failed to fetch user badges');
+    }
+
+    userBadgeData.value = data.value.data?.badges || [];
+  } catch (err: any) {
+    console.error('Error fetching user badges:', err);
+    fetchError.value = err.message || 'Failed to fetch user badges';
+  } finally {
+    isPending.value = false;
+  }
+};
+
+// Load badges when component is mounted and user is available
+onMounted(() => {
+  if (currentUser.value?.id) {
+    fetchUserBadges();
+  }
 });
+
+// Watch for user changes to reload badges
+watch(() => currentUser.value?.id, (newId) => {
+  if (newId) {
+    fetchUserBadges();
+  } else {
+    userBadgeData.value = [];
+  }
+});
+
+// For template references
+const userBadges = computed(() => userBadgeData.value);
+const pending = isPending;
+const error = fetchError;
 
 const openBadgeDetails = (badge: Badge) => {
   selectedBadge.value = badge;
@@ -60,15 +114,6 @@ const closeBadgeDetails = () => {
     selectedBadge.value = null;
   }, 300); // Wait for animation to complete
 };
-
-// Computed properties
-const userBadges = computed(() => {
-  if (!currentUser.value?.id) return [];
-  return badgeStore.getUserBadges(currentUser.value.id);
-});
-
-const isLoading = computed(() => badgeStore.isLoading);
-const error = computed(() => badgeStore.getError);
 </script>
 
 <template>
@@ -77,7 +122,7 @@ const error = computed(() => badgeStore.getError);
       <h1 class="text-2xl font-bold text-white mb-6">My Badges</h1>
 
       <!-- Loading state -->
-      <div v-if="isLoading" class="flex justify-center py-8">
+      <div v-if="pending" class="flex justify-center py-8">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"></div>
       </div>
 

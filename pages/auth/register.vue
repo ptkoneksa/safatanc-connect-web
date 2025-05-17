@@ -31,8 +31,12 @@ useHead({
   ],
 }, { mode: 'server' });
 
+const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
+
+// Check for redirect_uri in query parameters
+const redirectUri = route.query.redirect_uri ? String(route.query.redirect_uri) : undefined;
 
 // Form values
 const name = ref('');
@@ -94,7 +98,11 @@ const onSubmit = handleSubmit(async (values) => {
 
     // Redirect to registration confirmation page after a short delay
     setTimeout(() => {
-      router.push('/auth/registration-confirmation');
+      if (redirectUri) {
+        router.push(redirectUri);
+      } else {
+        router.push('/auth/registration-confirmation');
+      }
     }, 2000);
   } catch (err: any) {
     apiError.value = err.message || 'Registration failed. Please try again.';
@@ -107,7 +115,7 @@ const signupWithOAuth = (provider: OAuthProvider) => {
   oauthLoading.value = provider;
 
   try {
-    authStore.initiateOAuthLogin(provider);
+    authStore.initiateOAuthLogin(provider, redirectUri);
   } catch (err: any) {
     oauthLoading.value = null;
     apiError.value = err.message || `Failed to initiate ${provider} signup`;
@@ -135,48 +143,32 @@ const signupWithOAuth = (provider: OAuthProvider) => {
       </transition>
 
       <!-- OAuth Sign Up -->
-      <div class="grid grid-cols-3 gap-3">
+      <div class="grid grid-cols-2 gap-3">
         <!-- Google -->
-        <button type="button" @click="signupWithOAuth('google')" :class="{
-          'opacity-70': oauthLoading && oauthLoading !== 'google',
-          'animate-pulse': oauthLoading === 'google'
-        }"
-          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
-          <span v-if="oauthLoading === 'google'">
-            <Icon icon="tabler:loader" class="text-red-500 animate-spin" width="24" height="24" />
-          </span>
-          <span v-else>
-            <Icon icon="tabler:brand-google" class="text-red-500" width="24" height="24" />
-          </span>
-        </button>
+        <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="signupWithOAuth('google')">
+          <template #icon>
+            <Icon v-if="oauthLoading === 'google'" icon="tabler:loader" class="text-white animate-spin" width="24"
+              height="24" />
+            <Icon v-else icon="tabler:brand-google-filled" class="text-white" width="24" height="24" />
+          </template>
+          <template #text>
+            <p v-if="oauthLoading === 'google'"></p>
+            <p v-else>Google</p>
+          </template>
+        </Button>
 
         <!-- GitHub -->
-        <button type="button" @click="signupWithOAuth('github')" :class="{
-          'opacity-70': oauthLoading && oauthLoading !== 'github',
-          'animate-pulse': oauthLoading === 'github'
-        }"
-          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
-          <span v-if="oauthLoading === 'github'">
-            <Icon icon="tabler:loader" class="text-white animate-spin" width="24" height="24" />
-          </span>
-          <span v-else>
-            <Icon icon="tabler:brand-github" class="text-white" width="24" height="24" />
-          </span>
-        </button>
-
-        <!-- Facebook -->
-        <button type="button" @click="signupWithOAuth('facebook')" :class="{
-          'opacity-70': oauthLoading && oauthLoading !== 'facebook',
-          'animate-pulse': oauthLoading === 'facebook'
-        }"
-          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
-          <span v-if="oauthLoading === 'facebook'">
-            <Icon icon="tabler:loader" class="text-blue-500 animate-spin" width="24" height="24" />
-          </span>
-          <span v-else>
-            <Icon icon="tabler:brand-facebook" class="text-blue-500" width="24" height="24" />
-          </span>
-        </button>
+        <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="signupWithOAuth('github')">
+          <template #icon>
+            <Icon v-if="oauthLoading === 'github'" icon="tabler:loader" class="text-white animate-spin" width="24"
+              height="24" />
+            <Icon v-else icon="tabler:brand-github" class="text-white" width="24" height="24" />
+          </template>
+          <template #text>
+            <p v-if="oauthLoading === 'github'"></p>
+            <p v-else>GitHub</p>
+          </template>
+        </Button>
       </div>
 
       <div class="relative">
@@ -212,7 +204,7 @@ const signupWithOAuth = (provider: OAuthProvider) => {
       <div>
         <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">
           <template #icon>
-            <Icon icon="tabler:user-plus" width="20" height="20" />
+            <Icon icon="tabler:user-plus" width="24" height="24" />
           </template>
           <template #text>
             <span class="relative">

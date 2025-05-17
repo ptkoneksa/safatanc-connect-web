@@ -93,7 +93,7 @@ const onSubmit = handleSubmit(async (values) => {
       <div>
         <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">
           <template #icon>
-            <Icon icon="tabler:mail-forward" width="20" height="20" />
+            <Icon icon="tabler:mail-forward" width="24" height="24" />
           </template>
           <template #text>
             {{ isSubmitting ? 'Sending...' : 'Send Reset Link' }}

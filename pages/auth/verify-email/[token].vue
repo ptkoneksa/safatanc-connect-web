@@ -100,7 +100,7 @@ const goToLogin = (): void => {
       <div class="mt-6">
         <Button @click="goToLogin" bg="bg-brand" color="text-black">
           <template #icon>
-            <Icon icon="tabler:login" width="20" height="20" />
+            <Icon icon="tabler:login" width="24" height="24" />
           </template>
           <template #text>
             Go to Login

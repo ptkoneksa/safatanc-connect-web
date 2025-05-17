@@ -165,15 +165,31 @@ export const useAuthStore = defineStore("auth", {
     },
 
     // Updated OAuth login methods
-    async initiateOAuthLogin(provider: OAuthProvider): Promise<void> {
+    async initiateOAuthLogin(
+      provider: OAuthProvider,
+      customRedirectUri?: string
+    ): Promise<void> {
       if (!import.meta.client) return;
 
       const config = useRuntimeConfig();
 
       try {
+        // Store current path for redirecting back after login
+        if (!customRedirectUri) {
+          localStorage.setItem("oauthRedirect", window.location.pathname);
+        }
+
+        // Build request URL with query parameters
+        let url = `${config.public.apiBaseUrl}/auth/oauth/${provider}`;
+
+        // Add redirect_uri parameter if provided
+        if (customRedirectUri) {
+          url += `?redirect_url=${encodeURIComponent(customRedirectUri)}`;
+        }
+
         // Get the OAuth URL from the backend
         const { data, error } = await useFetch<ApiResponse<{ url: string }>>(
-          `${config.public.apiBaseUrl}/auth/oauth/${provider}`,
+          url,
           {
             method: "GET",
             headers: {
@@ -192,9 +208,6 @@ export const useAuthStore = defineStore("auth", {
         }
 
         if (data.value?.success && data.value?.data?.url) {
-          // Store current path for redirecting back after login
-          localStorage.setItem("oauthRedirect", window.location.pathname);
-
           // Redirect to OAuth provider
           window.location.href = data.value.data.url;
         } else {
@@ -224,12 +237,19 @@ export const useAuthStore = defineStore("auth", {
         throw new Error("Failed to get user information after authentication");
       });
 
-      // Get redirect path
-      const redirect = localStorage.getItem("oauthRedirect") || "/account";
-      localStorage.removeItem("oauthRedirect");
-
-      // Navigate to redirect path
-      navigateTo(redirect);
+      // Get redirect path (if stored from non-custom redirect flow)
+      const redirect = localStorage.getItem("oauthRedirect");
+      if (redirect) {
+        localStorage.removeItem("oauthRedirect");
+        setTimeout(() => {
+          navigateTo(redirect);
+        }, 1000);
+      } else {
+        // Otherwise, redirect to account page
+        setTimeout(() => {
+          navigateTo("/account");
+        }, 1000);
+      }
     },
 
     async fetchCurrentUser(): Promise<User | null> {

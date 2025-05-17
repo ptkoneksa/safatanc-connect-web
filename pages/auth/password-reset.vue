@@ -95,7 +95,7 @@ const resetPassword = async (): Promise<void> => {
         <label for="newPassword" class="block text-sm font-medium text-gray-300 mb-1">New Password</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <Icon icon="tabler:lock" class="text-gray-400" width="20" height="20" />
+            <Icon icon="tabler:lock" class="text-gray-400" width="24" height="24" />
           </span>
           <input id="newPassword" v-model="form.newPassword" type="password" required autocomplete="new-password"
             class="bg-dark-3 border border-dark text-white w-full pl-10 pr-3 py-2 rounded-3xl focus:border-brand focus:bg-dark-3" />
@@ -106,7 +106,7 @@ const resetPassword = async (): Promise<void> => {
         <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-1">Confirm New Password</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <Icon icon="tabler:lock-check" class="text-gray-400" width="20" height="20" />
+            <Icon icon="tabler:lock-check" class="text-gray-400" width="24" height="24" />
           </span>
           <input id="confirmPassword" v-model="form.confirmPassword" type="password" required
             autocomplete="new-password"
@@ -117,7 +117,7 @@ const resetPassword = async (): Promise<void> => {
       <div>
         <Button type="submit" :disabled="loading || !form.token" bg="bg-brand" color="text-black">
           <template #icon>
-            <Icon icon="tabler:key" width="20" height="20" />
+            <Icon icon="tabler:key" width="24" height="24" />
           </template>
           <template #text>
             {{ loading ? 'Resetting...' : 'Reset Password' }}

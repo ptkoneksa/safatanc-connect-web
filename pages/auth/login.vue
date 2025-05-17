@@ -31,8 +31,12 @@ useHead({
   ],
 }, { mode: 'server' });
 
+const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
+
+// Check for redirect_uri in query parameters
+const redirectUri = route.query.redirect_uri ? String(route.query.redirect_uri) : undefined;
 
 // Form values
 const email = ref('');
@@ -68,9 +72,13 @@ const onSubmit = handleSubmit(async (values) => {
 
     loginSuccess.value = true;
 
-    // Redirect to dashboard after a short delay for animation
+    // Redirect to dashboard or specified redirect URI after a short delay
     setTimeout(() => {
-      router.push('/account');
+      if (redirectUri) {
+        router.push(redirectUri);
+      } else {
+        router.push('/account');
+      }
     }, 800);
   } catch (err: any) {
     apiError.value = err.message || 'Login failed. Please check your credentials.';
@@ -83,7 +91,7 @@ const loginWithOAuth = (provider: OAuthProvider) => {
   oauthLoading.value = provider;
 
   try {
-    authStore.initiateOAuthLogin(provider);
+    authStore.initiateOAuthLogin(provider, redirectUri);
   } catch (err: any) {
     oauthLoading.value = null;
     apiError.value = err.message || `Failed to initiate ${provider} login`;
@@ -93,9 +101,9 @@ const loginWithOAuth = (provider: OAuthProvider) => {
 
 <template>
   <div class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
-    <h2 class="text-2xl font-bold mb-8 text-center text-white">Login</h2>
+    <h2 class="text-2xl font-bold text-center text-white">Login</h2>
 
-    <form @submit.prevent="onSubmit" class="space-y-6">
+    <form @submit.prevent="onSubmit" class="space-y-6 mt-8">
       <transition name="fade">
         <div v-if="apiError"
           class="p-4 rounded-3xl bg-red-900/30 border border-red-500 text-red-200 text-sm mb-4 shake">
@@ -131,7 +139,7 @@ const loginWithOAuth = (provider: OAuthProvider) => {
       <div>
         <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">
           <template #icon>
-            <Icon icon="tabler:login" width="20" height="20" />
+            <Icon icon="tabler:login" width="24" height="24" />
           </template>
           <template #text>
             <span class="relative">
@@ -143,60 +151,49 @@ const loginWithOAuth = (provider: OAuthProvider) => {
           </template>
         </Button>
       </div>
-
-      <!-- OAuth Buttons -->
-      <div class="relative mt-8 mb-4">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-dark"></div>
-        </div>
-        <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-dark-2 text-gray-400">Or continue with</span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-3">
-        <!-- Google -->
-        <button type="button" @click="loginWithOAuth('google')" :class="{
-          'opacity-70': oauthLoading && oauthLoading !== 'google',
-          'animate-pulse': oauthLoading === 'google'
-        }"
-          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
-          <span v-if="oauthLoading === 'google'">
-            <Icon icon="tabler:loader" class="text-red-500 animate-spin" width="24" height="24" />
-          </span>
-          <span v-else>
-            <Icon icon="tabler:brand-google" class="text-red-500" width="24" height="24" />
-          </span>
-        </button>
-
-        <!-- GitHub -->
-        <button type="button" @click="loginWithOAuth('github')" :class="{
-          'opacity-70': oauthLoading && oauthLoading !== 'github',
-          'animate-pulse': oauthLoading === 'github'
-        }"
-          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
-          <span v-if="oauthLoading === 'github'">
-            <Icon icon="tabler:loader" class="text-white animate-spin" width="24" height="24" />
-          </span>
-          <span v-else>
-            <Icon icon="tabler:brand-github" class="text-white" width="24" height="24" />
-          </span>
-        </button>
-
-        <!-- Facebook -->
-        <button type="button" @click="loginWithOAuth('facebook')" :class="{
-          'opacity-70': oauthLoading && oauthLoading !== 'facebook',
-          'animate-pulse': oauthLoading === 'facebook'
-        }"
-          class="flex justify-center items-center py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-dark rounded-xl transition-all duration-300">
-          <span v-if="oauthLoading === 'facebook'">
-            <Icon icon="tabler:loader" class="text-blue-500 animate-spin" width="24" height="24" />
-          </span>
-          <span v-else>
-            <Icon icon="tabler:brand-facebook" class="text-blue-500" width="24" height="24" />
-          </span>
-        </button>
-      </div>
     </form>
+    <!-- OAuth Buttons -->
+    <div class="relative mt-8 mb-4">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-dark"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="px-2 bg-dark-2 text-gray-400">Or continue with</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <!-- Google -->
+      <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="loginWithOAuth('google')">
+        <template #icon>
+          <Icon v-if="oauthLoading === 'google'" icon="tabler:loader" class="text-white animate-spin" width="24"
+            height="24" />
+          <Icon v-else icon="tabler:brand-google-filled" class="text-white" width="24" height="24" />
+        </template>
+        <template #text>
+          <p v-if="oauthLoading === 'google'"></p>
+          <p v-else>Google</p>
+        </template>
+      </Button>
+
+      <!-- GitHub -->
+      <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="loginWithOAuth('github')">
+        <template #icon>
+          <Icon v-if="oauthLoading === 'github'" icon="tabler:loader" class="text-white animate-spin" width="24"
+            height="24" />
+          <Icon v-else icon="tabler:brand-github" class="text-white" width="24" height="24" />
+        </template>
+        <template #text>
+          <p v-if="oauthLoading === 'github'"></p>
+          <p v-else>GitHub</p>
+        </template>
+      </Button>
+    </div>
+  </div>
+  <div class="mt-5">
+    <p v-if="redirectUri" class="text-center text-white/70 text-xs italic">
+      You will be redirected to <NuxtLink :to="redirectUri" target="_blank" class="text-brand">{{ redirectUri }}
+      </NuxtLink> after
+      login
+    </p>
   </div>
 </template>
