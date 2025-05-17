@@ -184,7 +184,7 @@ export const useAuthStore = defineStore("auth", {
 
         // Add redirect_uri parameter if provided
         if (customRedirectUri) {
-          url += `?redirect_url=${encodeURIComponent(customRedirectUri)}`;
+          url += `?redirect_uri=${encodeURIComponent(customRedirectUri)}`;
         }
 
         // Get the OAuth URL from the backend
@@ -222,7 +222,11 @@ export const useAuthStore = defineStore("auth", {
     },
 
     // Process OAuth callback tokens
-    processOAuthCallback(token: string, refreshToken: string): void {
+    processOAuthCallback(
+      token: string,
+      refreshToken: string,
+      redirectUri?: string
+    ): void {
       if (!token) {
         throw new Error("No token received from OAuth provider");
       }
@@ -237,12 +241,10 @@ export const useAuthStore = defineStore("auth", {
         throw new Error("Failed to get user information after authentication");
       });
 
-      // Get redirect path (if stored from non-custom redirect flow)
-      const redirect = localStorage.getItem("oauthRedirect");
-      if (redirect) {
+      if (redirectUri) {
         localStorage.removeItem("oauthRedirect");
         setTimeout(() => {
-          navigateTo(redirect);
+          navigateTo(redirectUri);
         }, 1000);
       } else {
         // Otherwise, redirect to account page

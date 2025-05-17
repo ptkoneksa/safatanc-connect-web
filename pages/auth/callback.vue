@@ -38,7 +38,7 @@ const error = ref<string | null>(null);
 // Extract tokens from URL
 const token = route.query.token as string;
 const refreshToken = route.query.refresh_token as string;
-
+const redirectUri = route.query.redirect_uri as string;
 // Process tokens on mount
 onMounted(async () => {
   try {
@@ -49,7 +49,7 @@ onMounted(async () => {
     }
 
     // Process the OAuth authentication
-    authStore.processOAuthCallback(token, refreshToken || '');
+    authStore.processOAuthCallback(token, refreshToken || '', redirectUri);
 
     // Clean the URL (remove query parameters) using Nuxt's router
     await router.replace({ path: route.path, query: {} });
