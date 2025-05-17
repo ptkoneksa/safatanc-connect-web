@@ -222,11 +222,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     // Process OAuth callback tokens
-    processOAuthCallback(
-      token: string,
-      refreshToken: string,
-      redirectUri?: string
-    ): void {
+    processOAuthCallback(token: string, refreshToken: string): void {
       if (!token) {
         throw new Error("No token received from OAuth provider");
       }
@@ -241,17 +237,9 @@ export const useAuthStore = defineStore("auth", {
         throw new Error("Failed to get user information after authentication");
       });
 
-      if (redirectUri) {
-        localStorage.removeItem("oauthRedirect");
-        setTimeout(() => {
-          navigateTo(redirectUri);
-        }, 1000);
-      } else {
-        // Otherwise, redirect to account page
-        setTimeout(() => {
-          navigateTo("/account");
-        }, 1000);
-      }
+      setTimeout(() => {
+        navigateTo("/account");
+      }, 1000);
     },
 
     async fetchCurrentUser(): Promise<User | null> {
