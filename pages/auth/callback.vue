@@ -48,7 +48,7 @@ onMounted(async () => {
     }
 
     // Process the OAuth authentication
-    authStore.processOAuthCallback(token, refreshToken || '');
+    await authStore.processOAuthCallback(token, refreshToken || '');
 
     // Clean the URL (remove query parameters) using Nuxt's router
     await router.replace({ path: route.path, query: {} });
@@ -68,7 +68,7 @@ const goToLogin = () => {
 </script>
 
 <template>
-  <div class="max-w-md mx-auto px-4 py-8">
+  <div class="max-w-md mx-auto px-4 py-8 text-white">
     <div class="text-center mb-8">
       <img src="/images/stech_logo_gradient.png" alt="Safatanc Connect Logo" class="h-16 mx-auto mb-4" />
       <h1 class="text-2xl font-bold mb-2">Authentication</h1>

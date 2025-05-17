@@ -185,6 +185,10 @@ export const useAuthStore = defineStore("auth", {
         // Add redirect_uri parameter if provided
         if (customRedirectUri) {
           url += `?redirect_uri=${encodeURIComponent(customRedirectUri)}`;
+        } else {
+          url += `?redirect_uri=${encodeURIComponent(
+            window.location.origin
+          )}/auth/callback`;
         }
 
         // Get the OAuth URL from the backend
@@ -222,7 +226,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     // Process OAuth callback tokens
-    processOAuthCallback(token: string, refreshToken: string): void {
+    async processOAuthCallback(token: string, refreshToken: string) {
       if (!token) {
         throw new Error("No token received from OAuth provider");
       }
@@ -230,12 +234,7 @@ export const useAuthStore = defineStore("auth", {
       // Set tokens in store and localStorage
       this.setTokens(token, refreshToken);
 
-      // Fetch user data with the new token
-      this.fetchCurrentUser().catch((err) => {
-        console.error("Error fetching user after OAuth:", err);
-        this.clearTokens();
-        throw new Error("Failed to get user information after authentication");
-      });
+      await this.fetchCurrentUser();
 
       setTimeout(() => {
         navigateTo("/account");
