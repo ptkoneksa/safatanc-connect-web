@@ -226,7 +226,11 @@ export const useAuthStore = defineStore("auth", {
     },
 
     // Process OAuth callback tokens
-    async processOAuthCallback(token: string, refreshToken: string) {
+    async processOAuthCallback(
+      token: string,
+      refreshToken: string,
+      redirectUri: string
+    ) {
       if (!token) {
         throw new Error("No token received from OAuth provider");
       }
@@ -236,9 +240,22 @@ export const useAuthStore = defineStore("auth", {
 
       await this.fetchCurrentUser();
 
-      setTimeout(() => {
-        navigateTo("/account");
-      }, 1000);
+      if (redirectUri) {
+        // Example redirectUriL https://tipspace.com/auth/callback
+        const redirectUriParsed = new URL(redirectUri);
+
+        // Set token and refresh token in URL
+        redirectUriParsed.searchParams.set("token", token);
+        redirectUriParsed.searchParams.set("refresh_token", refreshToken);
+
+        setTimeout(() => {
+          navigateTo(redirectUriParsed.toString());
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          navigateTo("/account");
+        }, 1000);
+      }
     },
 
     async fetchCurrentUser(): Promise<User | null> {
