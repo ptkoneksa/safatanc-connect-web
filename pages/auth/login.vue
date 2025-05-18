@@ -63,17 +63,21 @@ const onSubmit = handleSubmit(async (values) => {
   apiError.value = '';
 
   try {
-    await authStore.login({
+    const response = await authStore.login({
       email: values.email,
       password: values.password
     });
 
-    loginSuccess.value = true;
+    loginSuccess.value = response.success;
 
     // Redirect to dashboard or specified redirect URI after a short delay
     setTimeout(() => {
-      if (redirectUri) {
-        navigateTo(redirectUri, { external: true });
+      if (redirectUri && response.data) {
+        const redirectUriWithToken = new URL(redirectUri);
+        redirectUriWithToken.searchParams.set('token', response.data.token);
+        redirectUriWithToken.searchParams.set('refresh_token', response.data.refresh_token);
+
+        navigateTo(redirectUriWithToken, { external: true });
       } else {
         navigateTo('/account');
       }
