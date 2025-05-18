@@ -174,11 +174,6 @@ export const useAuthStore = defineStore("auth", {
       const config = useRuntimeConfig();
 
       try {
-        // Store current path for redirecting back after login
-        if (!customRedirectUri) {
-          localStorage.setItem("oauthRedirect", window.location.pathname);
-        }
-
         // Build request URL with query parameters
         let url = `${config.public.apiBaseUrl}/auth/oauth/${provider}`;
 
@@ -187,7 +182,7 @@ export const useAuthStore = defineStore("auth", {
           url += `?redirect_uri=${encodeURIComponent(customRedirectUri)}`;
         } else {
           url += `?redirect_uri=${encodeURIComponent(
-            window.location.origin
+            useRequestURL().origin
           )}/auth/callback`;
         }
 
@@ -238,9 +233,13 @@ export const useAuthStore = defineStore("auth", {
       // Set tokens in store and localStorage
       this.setTokens(token, refreshToken);
 
-      await this.fetchCurrentUser();
+      const user = await this.fetchCurrentUser();
 
-      if (redirectUri) {
+      if (!user) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      if (redirectUri && redirectUri != "") {
         // Example redirectUriL https://tipspace.com/auth/callback
         const redirectUriParsed = new URL(redirectUri);
 
