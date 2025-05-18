@@ -3,7 +3,7 @@ import { useAuthStore } from '~/stores/auth';
 import { Icon } from '@iconify/vue';
 
 definePageMeta({
-  layout: 'account'
+  layout: 'auth'
 });
 
 // SEO Meta Tags
@@ -53,7 +53,7 @@ onMounted(async () => {
     await authStore.processOAuthCallback(token, refreshToken || '', redirectUri || '');
 
     // Clean the URL (remove query parameters) using Nuxt's router
-    await router.replace({ path: route.path, query: {} });
+    // await router.replace({ path: route.path, query: {} });
 
     // Note: the navigation to final destination happens in the store method
   } catch (err: any) {
@@ -65,7 +65,7 @@ onMounted(async () => {
 
 // Handle going back to login page
 const goToLogin = () => {
-  router.push('/auth/login');
+  navigateTo('/auth/login', { external: true });
 };
 </script>
 

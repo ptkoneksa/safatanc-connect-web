@@ -3,7 +3,7 @@ import { useAuthStore } from '~/stores/auth';
 import { Icon } from '@iconify/vue';
 
 definePageMeta({
-  layout: 'account'
+  layout: 'auth'
 });
 
 const router = useRouter();

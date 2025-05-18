@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue';
 import type { ApiResponse } from '~/types/api';
 
 definePageMeta({
-  layout: 'account'
+  layout: 'auth'
 });
 
 // SEO Meta Tags

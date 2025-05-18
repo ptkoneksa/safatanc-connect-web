@@ -7,7 +7,7 @@ import * as z from 'zod';
 import type { OAuthProvider } from '~/types/api';
 
 definePageMeta({
-  layout: 'account'
+  layout: 'auth',
 });
 
 // SEO Meta Tags
@@ -35,8 +35,12 @@ const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 
-// Check for redirect_uri in query parameters
-const redirectUri = route.query.redirect_uri ? String(route.query.redirect_uri) : undefined;
+// Check for redirect parameters (support both redirect and redirect_uri)
+const redirectUri = computed(() => {
+  if (route.query.redirect_uri) return String(route.query.redirect_uri);
+  if (route.query.redirect) return String(route.query.redirect);
+  return undefined;
+});
 
 // Form values
 const name = ref('');
@@ -98,8 +102,8 @@ const onSubmit = handleSubmit(async (values) => {
 
     // Redirect to registration confirmation page after a short delay
     setTimeout(() => {
-      if (redirectUri) {
-        router.push(redirectUri);
+      if (redirectUri.value) {
+        router.push(redirectUri.value);
       } else {
         router.push('/auth/registration-confirmation');
       }
@@ -115,7 +119,7 @@ const signupWithOAuth = (provider: OAuthProvider) => {
   oauthLoading.value = provider;
 
   try {
-    authStore.initiateOAuthLogin(provider, redirectUri);
+    authStore.initiateOAuthLogin(provider, redirectUri.value);
   } catch (err: any) {
     oauthLoading.value = null;
     apiError.value = err.message || `Failed to initiate ${provider} signup`;
@@ -124,98 +128,102 @@ const signupWithOAuth = (provider: OAuthProvider) => {
 </script>
 
 <template>
-  <div class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
-    <h2 class="text-2xl font-bold mb-8 text-center text-white">Create an Account</h2>
+  <div>
+    <div class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
+      <h2 class="text-2xl font-bold mb-8 text-center text-white">Create an Account</h2>
 
-    <form @submit.prevent="onSubmit" class="space-y-6">
-      <transition name="fade">
-        <div v-if="apiError"
-          class="p-4 rounded-3xl bg-red-900/30 border border-red-500 text-red-200 text-sm mb-4 shake">
-          {{ apiError }}
+      <form @submit.prevent="onSubmit" class="space-y-6">
+        <transition name="fade">
+          <div v-if="apiError"
+            class="p-4 rounded-3xl bg-red-900/30 border border-red-500 text-red-200 text-sm mb-4 shake">
+            {{ apiError }}
+          </div>
+        </transition>
+
+        <transition name="fade">
+          <div v-if="registrationSuccess"
+            class="p-4 rounded-3xl bg-green-900/30 border border-green-500 text-green-200 text-sm mb-4">
+            Registration successful! Redirecting to registration confirmation...
+          </div>
+        </transition>
+
+        <!-- OAuth Sign Up -->
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Google -->
+          <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full"
+            @click="signupWithOAuth('google')">
+            <template #icon>
+              <Icon v-if="oauthLoading === 'google'" icon="tabler:loader" class="text-white animate-spin" width="24"
+                height="24" />
+              <Icon v-else icon="tabler:brand-google-filled" class="text-white" width="24" height="24" />
+            </template>
+            <template #text>
+              <p v-if="oauthLoading === 'google'"></p>
+              <p v-else>Google</p>
+            </template>
+          </Button>
+
+          <!-- GitHub -->
+          <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full"
+            @click="signupWithOAuth('github')">
+            <template #icon>
+              <Icon v-if="oauthLoading === 'github'" icon="tabler:loader" class="text-white animate-spin" width="24"
+                height="24" />
+              <Icon v-else icon="tabler:brand-github" class="text-white" width="24" height="24" />
+            </template>
+            <template #text>
+              <p v-if="oauthLoading === 'github'"></p>
+              <p v-else>GitHub</p>
+            </template>
+          </Button>
         </div>
-      </transition>
 
-      <transition name="fade">
-        <div v-if="registrationSuccess"
-          class="p-4 rounded-3xl bg-green-900/30 border border-green-500 text-green-200 text-sm mb-4">
-          Registration successful! Redirecting to registration confirmation...
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-dark"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-dark-2 text-gray-400">Or sign up with email</span>
+          </div>
         </div>
-      </transition>
 
-      <!-- OAuth Sign Up -->
-      <div class="grid grid-cols-2 gap-3">
-        <!-- Google -->
-        <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="signupWithOAuth('google')">
-          <template #icon>
-            <Icon v-if="oauthLoading === 'google'" icon="tabler:loader" class="text-white animate-spin" width="24"
-              height="24" />
-            <Icon v-else icon="tabler:brand-google-filled" class="text-white" width="24" height="24" />
-          </template>
-          <template #text>
-            <p v-if="oauthLoading === 'google'"></p>
-            <p v-else>Google</p>
-          </template>
-        </Button>
-
-        <!-- GitHub -->
-        <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="signupWithOAuth('github')">
-          <template #icon>
-            <Icon v-if="oauthLoading === 'github'" icon="tabler:loader" class="text-white animate-spin" width="24"
-              height="24" />
-            <Icon v-else icon="tabler:brand-github" class="text-white" width="24" height="24" />
-          </template>
-          <template #text>
-            <p v-if="oauthLoading === 'github'"></p>
-            <p v-else>GitHub</p>
-          </template>
-        </Button>
-      </div>
-
-      <div class="relative">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-dark"></div>
+        <div class="form-field">
+          <InputField name="name" type="text" label="Username" icon="tabler:user" autocomplete="username"
+            placeholder="3-30 chars: letters, numbers, _, -" rules="required" v-model="name" />
         </div>
-        <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-dark-2 text-gray-400">Or sign up with email</span>
+
+        <div class="form-field">
+          <InputField name="email" type="email" label="Email" icon="tabler:mail" autocomplete="email"
+            placeholder="Enter your email" rules="required|email" v-model="email" />
         </div>
-      </div>
 
-      <div class="form-field">
-        <InputField name="name" type="text" label="Username" icon="tabler:user" autocomplete="username"
-          placeholder="3-30 chars: letters, numbers, _, -" rules="required" v-model="name" />
-      </div>
+        <div class="form-field">
+          <InputField name="password" type="password" label="Password" icon="tabler:lock" autocomplete="new-password"
+            placeholder="Min 6 chars with 1 uppercase letter" rules="required|min:6" v-model="password" />
+        </div>
 
-      <div class="form-field">
-        <InputField name="email" type="email" label="Email" icon="tabler:mail" autocomplete="email"
-          placeholder="Enter your email" rules="required|email" v-model="email" />
-      </div>
+        <div class="form-field">
+          <InputField name="confirmPassword" type="password" label="Confirm Password" icon="tabler:lock-check"
+            autocomplete="new-password" placeholder="Confirm your password" rules="required|confirmed:password"
+            v-model="confirmPassword" />
+        </div>
 
-      <div class="form-field">
-        <InputField name="password" type="password" label="Password" icon="tabler:lock" autocomplete="new-password"
-          placeholder="Min 6 chars with 1 uppercase letter" rules="required|min:6" v-model="password" />
-      </div>
-
-      <div class="form-field">
-        <InputField name="confirmPassword" type="password" label="Confirm Password" icon="tabler:lock-check"
-          autocomplete="new-password" placeholder="Confirm your password" rules="required|confirmed:password"
-          v-model="confirmPassword" />
-      </div>
-
-      <div>
-        <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">
-          <template #icon>
-            <Icon icon="tabler:user-plus" width="24" height="24" />
-          </template>
-          <template #text>
-            <span class="relative">
-              <transition name="fade" mode="out-in">
-                <span v-if="isSubmitting" key="loading">Registering...</span>
-                <span v-else key="default">Register</span>
-              </transition>
-            </span>
-          </template>
-        </Button>
-      </div>
-    </form>
+        <div>
+          <Button type="submit" :disabled="isSubmitting" bg="bg-brand" color="text-black" class="w-full">
+            <template #icon>
+              <Icon icon="tabler:user-plus" width="24" height="24" />
+            </template>
+            <template #text>
+              <span class="relative">
+                <transition name="fade" mode="out-in">
+                  <span v-if="isSubmitting" key="loading">Registering...</span>
+                  <span v-else key="default">Register</span>
+                </transition>
+              </span>
+            </template>
+          </Button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>

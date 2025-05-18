@@ -2,7 +2,7 @@
 import { Icon } from '@iconify/vue';
 
 definePageMeta({
-  layout: 'account'
+  layout: 'auth'
 });
 
 // SEO Meta Tags

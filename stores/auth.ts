@@ -248,7 +248,7 @@ export const useAuthStore = defineStore("auth", {
         redirectUriParsed.searchParams.set("refresh_token", refreshToken);
 
         setTimeout(() => {
-          navigateTo(redirectUriParsed.toString());
+          navigateTo(redirectUriParsed.toString(), { external: true });
         }, 1000);
       } else {
         setTimeout(() => {

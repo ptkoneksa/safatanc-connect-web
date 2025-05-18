@@ -2,19 +2,25 @@
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const isLoginPage = computed(() => route.path === '/auth/login');
-const isRegisterPage = computed(() => route.path === '/auth/register');
-const isPasswordResetPage = computed(() => route.path === '/auth/password-reset-request');
+const redirectUri = ref(route.query.redirect_uri);
+
+const isLoginPage = computed(() => route.path.includes('/auth/login'));
+const isRegisterPage = computed(() => route.path.includes('/auth/register'));
+const isPasswordResetPage = computed(() => route.path.includes('/auth/password-reset-request'));
 
 const showLogin = ref(isLoginPage.value);
 const showRegister = ref(isRegisterPage.value);
 const showPasswordReset = ref(isPasswordResetPage.value);
 
+const loginPath = computed(() => '/auth/login' + (redirectUri.value ? '?redirect_uri=' + redirectUri.value : ''));
+const registerPath = computed(() => '/auth/register' + (redirectUri.value ? '?redirect_uri=' + redirectUri.value : ''));
+const passwordResetPath = computed(() => '/auth/password-reset-request');
+
 // Monitor route changes to update active state
 watch(() => route.path, (newPath) => {
-  showLogin.value = newPath === '/auth/login';
-  showRegister.value = newPath === '/auth/register';
-  showPasswordReset.value = newPath === '/auth/password-reset-request';
+  showLogin.value = newPath.includes('/auth/login');
+  showRegister.value = newPath.includes('/auth/register');
+  showPasswordReset.value = newPath.includes('/auth/password-reset-request');
 });
 </script>
 
@@ -77,17 +83,16 @@ watch(() => route.path, (newPath) => {
             <div v-if="showLogin" key="login-links" class="space-y-4">
               <p class="text-sm text-white/70">
                 Don't have an account?
-                <NuxtLink to="/auth/register" class="text-brand hover:text-opacity-80 transition-opacity">
+                <NuxtLink :to="registerPath" class="text-brand hover:text-opacity-80 transition-opacity">
                   Register
                 </NuxtLink>
               </p>
-
             </div>
 
             <div v-else-if="showRegister" key="register-links">
               <p class="text-sm text-white/70">
                 Already have an account?
-                <NuxtLink to="/auth/login" class="text-brand hover:text-opacity-80 transition-opacity">
+                <NuxtLink :to="loginPath" class="text-brand hover:text-opacity-80 transition-opacity">
                   Log In
                 </NuxtLink>
               </p>
@@ -96,7 +101,7 @@ watch(() => route.path, (newPath) => {
             <div v-else-if="showPasswordReset" key="reset-links">
               <p class="text-sm text-white/70">
                 Remember your password?
-                <NuxtLink to="/auth/login" class="text-brand hover:text-opacity-80 transition-opacity">
+                <NuxtLink :to="loginPath" class="text-brand hover:text-opacity-80 transition-opacity">
                   Back to Login
                 </NuxtLink>
               </p>

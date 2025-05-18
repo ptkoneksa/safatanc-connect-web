@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue';
 import type { Badge, ApiResponse, PaginatedResponse } from '~/types/api';
 
 definePageMeta({
-  layout: 'account',
+  layout: 'auth',
   middleware: 'admin'
 });
 

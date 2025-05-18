@@ -1,8 +1,11 @@
 <script setup lang="ts">
-// Redirect to login page
+// Redirect to login page with redirect_uri
 definePageMeta({
   middleware: (to) => {
-    return navigateTo('/auth/login')
+    if (to.query.redirect_uri) {
+      return navigateTo("/auth/login?redirect_uri=" + to.query.redirect_uri)
+    }
+    return navigateTo("/auth/login")
   }
 })
 </script>
