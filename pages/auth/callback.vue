@@ -52,9 +52,12 @@ onMounted(async () => {
     // Process the OAuth authentication
     await authStore.processOAuthCallback(token, refreshToken || '', redirectUri || '');
 
-    // Check if we should close the window
-    const shouldClose = localStorage.getItem('auth_close_on_success') === 'true';
-    localStorage.removeItem('auth_close_on_success'); // Clean up
+    // Check if we should close the window - only on client side
+    let shouldClose = false;
+    if (import.meta.client) {
+      shouldClose = localStorage.getItem('auth_close_on_success') === 'true';
+      localStorage.removeItem('auth_close_on_success'); // Clean up
+    }
 
     if (shouldClose) {
       // Close the window if running in a browser

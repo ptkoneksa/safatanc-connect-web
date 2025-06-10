@@ -38,10 +38,12 @@ const redirectUri = route.query.redirect_uri ? String(route.query.redirect_uri) 
 const closeOnSuccess = route.query.close_on_success === 'true';
 
 // Store close_on_success in localStorage if it's true
-if (closeOnSuccess) {
-  localStorage.setItem('auth_close_on_success', 'true');
-} else {
-  localStorage.removeItem('auth_close_on_success');
+if (import.meta.client) {
+  if (closeOnSuccess) {
+    localStorage.setItem('auth_close_on_success', 'true');
+  } else {
+    localStorage.removeItem('auth_close_on_success');
+  }
 }
 
 // Form values
