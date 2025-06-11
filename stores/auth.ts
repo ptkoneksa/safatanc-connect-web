@@ -242,15 +242,6 @@ export const useAuthStore = defineStore("auth", {
         throw new Error("Failed to fetch user data");
       }
 
-      if (import.meta.client) {
-        const shouldClose =
-          localStorage.getItem("auth_close_on_success") === "true";
-        localStorage.removeItem("auth_close_on_success"); // Clean up
-        if (shouldClose && window.close) {
-          window.close();
-        }
-      }
-
       if (redirectUri && redirectUri != "") {
         // Example redirectUriL https://tipspace.com/auth/callback
         const redirectUriParsed = new URL(redirectUri);

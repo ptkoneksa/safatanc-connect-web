@@ -30,6 +30,7 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@iconify-json/tabler": "^1.2.19",
     "@iconify/vue": "^5.0.0",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.3"

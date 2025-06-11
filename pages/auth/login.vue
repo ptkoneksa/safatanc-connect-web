@@ -35,16 +35,6 @@ const authStore = useAuthStore();
 
 // Check for redirect_uri and close_on_success in query parameters
 const redirectUri = route.query.redirect_uri ? String(route.query.redirect_uri) : undefined;
-const closeOnSuccess = route.query.close_on_success === 'true';
-
-// Store close_on_success in localStorage if it's true
-if (import.meta.client) {
-  if (closeOnSuccess) {
-    localStorage.setItem('auth_close_on_success', 'true');
-  } else {
-    localStorage.removeItem('auth_close_on_success');
-  }
-}
 
 // Form values
 const email = ref('');
