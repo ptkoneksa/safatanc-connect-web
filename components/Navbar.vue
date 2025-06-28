@@ -63,6 +63,11 @@ const handleLogout = async () => {
           <!-- Show Account button when logged in -->
           <template v-if="isAuthenticated">
             <div class="flex items-center gap-4">
+              <NuxtLink to="/gsalt"
+                class="text-white hover:text-brand transition-colors duration-200 flex items-center gap-2">
+                <Icon icon="tabler:coin" width="20" height="20" />
+                <span class="text-sm font-medium">GSalt</span>
+              </NuxtLink>
               <NuxtLink to="/account" class="text-white">
                 <Button bg="bg-brand" color="text-black">
                   <template #icon>
@@ -118,6 +123,11 @@ const handleLogout = async () => {
 
           <!-- Mobile Auth Buttons -->
           <template v-if="isAuthenticated">
+            <NuxtLink to="/gsalt"
+              class="text-white py-2 flex items-center gap-2 hover:text-brand transition-colors duration-200">
+              <Icon icon="tabler:coin" width="20" height="20" />
+              <span>GSalt Wallet</span>
+            </NuxtLink>
             <NuxtLink to="/account" class="text-white py-2">
               <Button bg="bg-brand" color="text-black">
                 <template #icon>

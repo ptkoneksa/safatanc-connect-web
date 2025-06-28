@@ -46,6 +46,8 @@ const { data: userBadges, error: userBadgesError, pending: isLoadingBadges } = u
 
 // Sample dashboard stats for demo
 const stats = ref([
+  { id: 1, name: 'GSalt Balance', value: 'View Wallet', icon: 'tabler:coin', route: '/gsalt' },
+  { id: 2, name: 'Badges Earned', value: userBadges?.value?.data?.length?.toString() || '0', icon: 'tabler:award' },
   { id: 3, name: 'Connections', value: '12', icon: 'tabler:users' },
   { id: 4, name: 'Last Login', value: 'Today', icon: 'tabler:calendar' },
 ]);
@@ -133,18 +135,20 @@ const accountSettings = ref([
       <div class="mb-12" v-auto-animate>
         <h2 class="text-xl font-bold mb-6 text-white">Your Account Stats</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" v-auto-animate>
-          <div v-for="stat in stats" :key="stat.id"
-            class="bg-dark-2 rounded-3xl p-6 border border-dark hover:border-brand/30 transition-all duration-300 hover:shadow-lg">
+          <component v-for="stat in stats" :key="stat.id" :is="stat.route ? 'NuxtLink' : 'div'" :to="stat.route" :class="[
+            'bg-dark-2 rounded-3xl p-6 border border-dark transition-all duration-300 hover:shadow-lg',
+            stat.route ? 'hover:border-brand/50 cursor-pointer hover:scale-105' : 'hover:border-brand/30'
+          ]">
             <div class="flex items-center gap-4">
               <div class="bg-dark-3 rounded-full p-3">
                 <Icon :icon="stat.icon" class="text-brand w-6 h-6" />
               </div>
               <div>
                 <div class="text-gray-400 text-sm">{{ stat.name }}</div>
-                <div class="text-white text-xl font-semibold">{{ stat.value }}</div>
+                <div :class="['text-xl font-semibold', stat.route ? 'text-brand' : 'text-white']">{{ stat.value }}</div>
               </div>
             </div>
-          </div>
+          </component>
         </div>
       </div>
 

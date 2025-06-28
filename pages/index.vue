@@ -83,8 +83,8 @@ const user = computed(() => authStore.getUser);
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <!-- Hero Content -->
         <div class="md:pr-8 text-center md:text-left space-y-6">
-          <h1 class="gradient-text">SAFATANC CONNECT</h1>
-          <h3 class="mt-2 mb-8">Together, Made Simple.</h3>
+          <h3 class="gradient-text font-bold">SAFATANC CONNECT</h3>
+          <h1 class="mt-2 mb-8">Together, Made Simple.</h1>
           <p class="max-w-lg">The central hub for all Safatanc Group users. Manage your unified account,
             access all Safatanc services, and control your GSalt balance in one place.</p>
 

@@ -35,6 +35,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBaseUrl: "https://connect-core.safatanc.com",
+      gsaltApiBaseUrl: "http://localhost:8080",
     },
   },
 

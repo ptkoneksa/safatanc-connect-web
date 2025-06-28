@@ -352,6 +352,10 @@ export const useAuthStore = defineStore("auth", {
       } finally {
         this.clearTokens();
         this.user = null;
+
+        // Clear GSalt store data
+        const gsaltStore = useGSaltStore();
+        gsaltStore.clearData();
       }
     },
 

@@ -5,7 +5,7 @@
 
   /* Primary Colors */
   --color-brand: oklch(84.03% 0.1724 84.08);
-  --color-black: oklch(20.88% 0 84.08);
+  --color-black: oklch(15% 0 0);
   --color-accent: oklch(84.41% 0.0789 282.71);
 
   /* Dark Variations - based on --color-black with different luminosity */
