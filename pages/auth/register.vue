@@ -5,6 +5,7 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import * as z from 'zod';
 import type { OAuthProvider } from '~/types/api';
+import { useAuthApi } from '~/composables/useAuthApi';
 
 definePageMeta({
   layout: 'auth',
@@ -32,6 +33,7 @@ useSeoMeta({
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
+const { register, initiateOAuthLogin } = useAuthApi();
 
 // Check for redirect parameters (support both redirect and redirect_uri)
 const redirectUri = computed(() => {
@@ -90,7 +92,7 @@ const onSubmit = handleSubmit(async (values) => {
   apiError.value = '';
 
   try {
-    await authStore.register({
+    await register({
       username: values.name,
       email: values.email,
       password: values.password
@@ -117,7 +119,7 @@ const signupWithOAuth = (provider: OAuthProvider) => {
   oauthLoading.value = provider;
 
   try {
-    authStore.initiateOAuthLogin(provider, redirectUri.value);
+    initiateOAuthLogin(provider, redirectUri.value);
   } catch (err: any) {
     oauthLoading.value = null;
     apiError.value = err.message || `Failed to initiate ${provider} signup`;

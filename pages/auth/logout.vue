@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
+import { useAuthApi } from '~/composables/useAuthApi';
 
 definePageMeta({
   layout: 'auth'
@@ -7,10 +8,11 @@ definePageMeta({
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { logoutApi } = useAuthApi();
 
 onMounted(async () => {
   try {
-    await authStore.logout();
+    await logoutApi();
   } catch (error: any) {
     console.error('Logout error:', error);
   } finally {

@@ -33,7 +33,8 @@ const {
   fetchAccount,
   createAccount,
   fetchTransactions,
-  formatGSaltAmount
+  formatGSaltAmount,
+  healthCheck
 } = useGSaltApi();
 const {
   showToast,
@@ -50,6 +51,7 @@ const isAccountNotFound = ref(false);
 const isCreatingAccount = ref(false);
 const recentTransactions = ref<GSaltTransaction[]>([]);
 const transactionsLoading = ref(false);
+const healthStatus = ref<'checking' | 'healthy' | 'unhealthy'>('checking');
 
 // Features menu
 const features = [
@@ -75,6 +77,13 @@ const features = [
     color: 'bg-purple-500/20 text-purple-400'
   },
   {
+    title: 'Withdrawal',
+    description: 'Withdraw to bank account',
+    icon: 'tabler:cash',
+    route: '/gsalt/withdrawal',
+    color: 'bg-red-500/20 text-red-400'
+  },
+  {
     title: 'Gift',
     description: 'Send gifts to friends',
     icon: 'tabler:gift',
@@ -97,11 +106,25 @@ const features = [
   }
 ];
 
-// Account operations
+// Health check
+const checkHealth = async () => {
+  try {
+    healthStatus.value = 'checking';
+    const health = await healthCheck();
+    healthStatus.value = health.status;
+  } catch (error) {
+    healthStatus.value = 'unhealthy';
+    console.error('Health check failed:', error);
+  }
+};
+
+// Load GSalt account
 const loadAccount = async () => {
   try {
     isLoading.value = true;
     isAccountNotFound.value = false;
+
+    await checkHealth();
 
     const result = await fetchAccount();
     if (result) {
@@ -171,6 +194,7 @@ const getTransactionIcon = (type: string) => {
     transfer_in: 'tabler:arrow-down',
     transfer_out: 'tabler:arrow-up',
     payment: 'tabler:credit-card',
+    withdrawal: 'tabler:cash',
     voucher_redemption: 'tabler:ticket',
     gift_in: 'tabler:gift',
     gift_out: 'tabler:gift',
@@ -183,10 +207,11 @@ const getTransactionColor = (type: string) => {
     topup: 'text-green-400',
     transfer_in: 'text-green-400',
     transfer_out: 'text-red-400',
-    payment: 'text-blue-400',
-    voucher_redemption: 'text-purple-400',
-    gift_in: 'text-green-400',
-    gift_out: 'text-red-400',
+    payment: 'text-purple-400',
+    withdrawal: 'text-red-400',
+    voucher_redemption: 'text-orange-400',
+    gift_in: 'text-pink-400',
+    gift_out: 'text-pink-400',
   };
   return colors[type] || 'text-gray-400';
 };
@@ -202,9 +227,15 @@ const formatDate = (dateString: string) => {
 
 // Load data on mount
 onMounted(async () => {
-  await loadAccount();
-  if (account.value) {
-    await loadRecentTransactions();
+  // Check health first
+  await checkHealth();
+
+  // Load account if health is good
+  if (healthStatus.value === 'healthy') {
+    await loadAccount();
+    if (account.value) {
+      await loadRecentTransactions();
+    }
   }
 });
 </script>
@@ -212,10 +243,31 @@ onMounted(async () => {
 <template>
   <div class="py-6">
     <div class="container mx-auto px-4 md:px-8">
-      <!-- Page Header -->
+      <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-2 text-white">GSalt Wallet</h1>
-        <p class="text-gray-400">Manage your Global Safatanc Loyalty Token balance and transactions</p>
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h1 class="text-3xl font-bold text-white">GSalt</h1>
+            <p class="text-brand font-semibold text-2xl">Global Safatanc Asset Loyalty Token</p>
+            <p class="text-gray-400">Manage your GSalt balance and transactions</p>
+          </div>
+          <!-- Health Status Indicator -->
+          <div class="flex items-center gap-2">
+            <div :class="[
+              'w-3 h-3 rounded-full',
+              healthStatus === 'healthy' ? 'bg-green-500' :
+                healthStatus === 'unhealthy' ? 'bg-red-500' : 'bg-yellow-500'
+            ]"></div>
+            <span :class="[
+              'text-sm font-medium',
+              healthStatus === 'healthy' ? 'text-green-400' :
+                healthStatus === 'unhealthy' ? 'text-red-400' : 'text-yellow-400'
+            ]">
+              {{ healthStatus === 'checking' ? 'Checking...' :
+                healthStatus === 'healthy' ? 'Service Online' : 'Service Offline' }}
+            </span>
+          </div>
+        </div>
       </div>
 
       <!-- Account Not Found - Show Create Account UI -->
