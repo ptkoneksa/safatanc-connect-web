@@ -128,17 +128,18 @@ const handleSubmit = async () => {
 
     const result: TopupResponse = await topup(request);
 
-    // Check if payment instructions are needed (external payment methods)
-    if (result.payment_instructions && result.transaction.status === 'pending') {
+    if (result.transaction.status === 'pending') {
       showToastNotification('Payment instructions created! Redirecting to payment page...');
 
-      // Redirect to payment page with external reference ID
+      // Redirect to payment page with external reference ID or transaction ID
+      const paymentId = result.transaction.external_reference_id || result.transaction.id;
       setTimeout(() => {
-        navigateTo(`/gsalt/payment/${result.transaction.external_reference_id || result.transaction.id}`);
+        navigateTo(`/gsalt/payment/${paymentId}`);
       }, 1500);
     } else {
-      showToastNotification('Top up successful!');
-      // Reset form and redirect for completed payments
+      // For bank transfer or already completed payments
+      showToastNotification('Top up request created successfully!');
+      // Reset form and redirect
       Object.assign(form, {
         amount_gsalt: '',
         payment_method: 'QRIS',
