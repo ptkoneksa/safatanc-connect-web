@@ -109,6 +109,16 @@ watch(() => route.path, (newPath) => {
           </transition>
         </div>
       </div>
+
+      <!-- Certificate -->
+      <div class="absolute bottom-0 left-0 w-full">
+        <p class="text-white/70 text-center text-xs">Certified by</p>
+        <div class="flex justify-center items-center mt-2">
+          <NuxtLink to="https://komdigi.com" target="_blank">
+            <NuxtImg src="/images/komdigi.png" alt="Komdigi" class="h-16 w-auto mx-auto mb-4" />
+          </NuxtLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>
