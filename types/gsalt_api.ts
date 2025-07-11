@@ -1,8 +1,11 @@
 // GSALT Types
 export interface GSaltAccount {
   connect_id: string;
-  balance: number; // Balance in GSALT units
+  balance: number;
   points: number;
+  account_type: "PERSONAL" | "BUSINESS";
+  status: "ACTIVE" | "SUSPENDED" | "CLOSED";
+  kyc_status: "UNVERIFIED" | "PENDING" | "VERIFIED" | "REJECTED";
   created_at: string;
   updated_at: string;
 }
@@ -17,14 +20,35 @@ export interface GSaltTransaction {
     | "PAYMENT"
     | "WITHDRAWAL"
     | "VOUCHER_REDEMPTION";
-  amount_gsalt_units: number;
-  fee_amount_gsalt_units?: number;
-  total_amount_gsalt_units?: number;
-  status: "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED";
-  payment_method?: PaymentMethodCode;
-  external_payment_id?: string;
-  payment_instructions?: PaymentInstructions;
+  currency: "GSALT";
+  status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "CANCELLED";
   description?: string;
+  amount_gsalt_units: number;
+  exchange_rate_idr?: string;
+  payment_amount?: number;
+  payment_currency?: string;
+  payment_method?: PaymentMethodCode;
+  fee_gsalt_units?: number;
+  total_amount_gsalt_units?: number;
+  payment_status?: string;
+  payment_initiated_at?: string;
+  payment_completed_at?: string;
+  created_at: string;
+  updated_at: string;
+  completed_at?: string;
+  payment_details?: PaymentDetails;
+}
+
+export interface PaymentDetails {
+  id: string;
+  transaction_id: string;
+  provider: string;
+  provider_payment_id: string;
+  payment_url: string;
+  qr_code?: string;
+  expiry_time: string;
+  payment_time?: string;
+  provider_fee_amount: number;
   created_at: string;
   updated_at: string;
 }
@@ -48,20 +72,28 @@ export type PaymentMethodCode =
   | "EWALLET_SHOPEEPAY";
 
 export interface PaymentMethod {
-  code: PaymentMethodCode;
+  id: string;
   name: string;
-  type: "PAYMENT" | "TOPUP" | "WITHDRAWAL";
-  provider_code: string;
+  code: PaymentMethodCode;
   currency: string;
-  min_amount: number;
-  max_amount: number;
-  fee_percentage: string;
-  fee_fixed: number;
-  fee_min: number;
-  fee_max: number;
+  method_type: string;
+  provider_code: string;
+  payment_fee_flat: number;
+  payment_fee_percent: string;
+  withdrawal_fee_flat: number;
+  withdrawal_fee_percent: string;
+  is_active: boolean;
   is_available_for_topup: boolean;
-  is_available_for_payment: boolean;
-  status: "ACTIVE" | "INACTIVE";
+  is_available_for_withdrawal: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PaymentMethodsQuery {
+  currency?: string;
+  is_active?: boolean;
+  is_available_for_topup?: boolean;
+  is_available_for_withdrawal?: boolean;
 }
 
 export interface PaymentMethodResponse {
@@ -69,41 +101,17 @@ export interface PaymentMethodResponse {
   data: PaymentMethod[];
 }
 
-export interface PaymentInstructions {
-  link_id: number;
-  link_url: string;
-  payment_url: string;
-  status: string;
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  instructions: string;
-  expiry_time?: string;
-  qr_string?: string;
-  bank_code?: string;
-  virtual_account_number?: string;
-  checkout_url?: string;
-  payment_code?: string;
-}
-
-export interface TopupResponse {
-  transaction: GSaltTransaction;
-  payment_instructions: PaymentInstructions;
-}
-
-export interface PaymentResponse {
-  transaction: GSaltTransaction;
-  payment_instructions: PaymentInstructions;
-}
-
 export interface GSaltTopupRequest {
   amount_gsalt: string;
-  payment_method: PaymentMethodCode;
   payment_amount: number;
   payment_currency: string;
+  payment_method: PaymentMethodCode;
   external_reference_id?: string;
+  payment_details?: {
+    provider: string;
+    payment_url: string;
+    expiry_time: string;
+  };
 }
 
 export interface GSaltTransferRequest {
@@ -113,10 +121,19 @@ export interface GSaltTransferRequest {
 }
 
 export interface GSaltPaymentRequest {
+  account_id: string;
   amount_gsalt_units: number;
   payment_method: PaymentMethodCode;
   customer_name: string;
   customer_email: string;
+  customer_phone: string;
+  customer_address: string;
+  redirect_url: string;
+  payment_details?: {
+    provider: string;
+    payment_url: string;
+    expiry_time: string;
+  };
 }
 
 export interface GSaltWithdrawalRequest {
@@ -124,81 +141,156 @@ export interface GSaltWithdrawalRequest {
   bank_code: string;
   account_number: string;
   recipient_name: string;
-  description?: string; // Optional description field
+  description?: string;
+  external_reference_id?: string;
 }
 
-// Add withdrawal response type
 export interface WithdrawalResponse {
-  transaction: GSaltTransaction;
-  disbursement_id: string;
-  status: string;
-  estimated_time: string;
+  success: boolean;
+  data: {
+    transaction: GSaltTransaction;
+    disbursement_id: string;
+    estimated_time: string;
+    status: string;
+  };
 }
 
-// Add transfer response type
 export interface TransferResponse {
-  transfer_out: GSaltTransaction;
-  transfer_in: GSaltTransaction;
+  success: boolean;
+  data: {
+    transfer_out: GSaltTransaction;
+    transfer_in: GSaltTransaction;
+  };
 }
 
-export interface BankInfo {
+export interface BankListResponse {
   bank_code: string;
   bank_name: string;
-  available: boolean;
+  is_active: boolean;
 }
 
-export interface BankAccountValidation {
-  valid: boolean;
-  account_holder_name?: string;
+export interface BankAccountInquiryRequest {
+  bank_code: string;
+  account_number: string;
 }
 
-export interface WithdrawalBalance {
-  available_balance: number;
+export interface BankAccountInquiryResponse {
+  success: boolean;
+  data: {
+    account_number: string;
+    account_holder: string;
+    bank_code: string;
+  };
+}
+
+export interface WithdrawalBalanceResponse {
+  success: boolean;
+  data: {
+    balance_gsalt_units: number;
+    balance_gsalt: string;
+    balance_idr: string;
+  };
 }
 
 export interface GSaltVoucher {
   id: string;
   code: string;
-  title: string;
+  name: string;
   description: string;
-  amount_gsalt_units: number;
-  status: "ACTIVE" | "EXPIRED" | "REDEEMED";
+  type: "BALANCE";
+  value: string;
+  currency: "GSALT";
+  max_redeem_count: number;
+  current_redeem_count: number;
+  valid_from: string;
+  valid_until: string;
+  status: "ACTIVE" | "INACTIVE" | "REDEEMED" | "EXPIRED";
   created_at: string;
   updated_at: string;
 }
 
-export interface VoucherValidation {
-  valid: boolean;
-  voucher?: GSaltVoucher;
-  message?: string;
+export interface VoucherCreateRequest {
+  code: string;
+  name: string;
+  description: string;
+  type: "BALANCE";
+  value: string;
+  currency: "GSALT";
+  max_redeem_count: number;
+  valid_from: string;
+  valid_until: string;
 }
 
-export interface TransactionConfirmRequest {
-  external_payment_id: string;
+export interface VoucherUpdateRequest extends Partial<VoucherCreateRequest> {}
+
+export interface VoucherRedeemRequest {
+  code: string;
+  account_id: string;
 }
 
-export interface TransactionRejectRequest {
-  reason: string;
+export interface VoucherRedemption {
+  id: string;
+  voucher_id: string;
+  voucher_code: string;
+  account_id: string;
+  redeemed_at: string;
+  status: "COMPLETED" | "CANCELLED";
+  transaction_id: string;
+}
+
+export interface VoucherRedemptionResponse {
+  success: boolean;
+  data: {
+    redemption: VoucherRedemption;
+    transaction: GSaltTransaction;
+  };
+}
+
+export interface APIKeyCreateRequest {
+  key_name: string;
+  scopes: Array<"READ" | "WRITE" | "PAYMENT">;
+  rate_limit: number;
+  expires_at: string;
+}
+
+export interface APIKeyUpdateRequest extends Partial<APIKeyCreateRequest> {}
+
+export interface APIKey {
+  id: string;
+  merchant_id: string;
+  key_name: string;
+  api_key?: string;
+  prefix: string;
+  scopes: Array<"READ" | "WRITE" | "PAYMENT">;
+  rate_limit: number;
+  last_used_at?: string;
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: Record<string, string>;
+  };
 }
 
 // Error codes from API documentation
 export enum GSaltErrorCode {
+  INVALID_REQUEST = "INVALID_REQUEST",
   UNAUTHORIZED = "UNAUTHORIZED",
-  ACCOUNT_NOT_REGISTERED = "ACCOUNT_NOT_REGISTERED",
-  INSUFFICIENT_BALANCE = "INSUFFICIENT_BALANCE",
-  INVALID_PAYMENT_METHOD = "INVALID_PAYMENT_METHOD",
-  BANK_ACCOUNT_INVALID = "BANK_ACCOUNT_INVALID",
-  SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE",
+  FORBIDDEN = "FORBIDDEN",
+  NOT_FOUND = "NOT_FOUND",
+  CONFLICT = "CONFLICT",
+  TOO_MANY_REQUESTS = "TOO_MANY_REQUESTS",
+  INTERNAL_ERROR = "INTERNAL_ERROR",
 }
 
 // Health check response
 export interface GSaltHealthCheck {
-  status: "healthy" | "unhealthy";
-  timestamp: string;
-  version: string;
-  services: {
-    database: "up" | "down";
-    flip: "up" | "down";
-    [key: string]: "up" | "down";
-  };
+  success: boolean;
+  data: string;
 }

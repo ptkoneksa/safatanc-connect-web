@@ -17,15 +17,10 @@ import type {
   PaymentMethod,
   PaymentMethodResponse,
   TransferResponse,
+  PaymentMethodsQuery,
 } from "~/types/gsalt_api";
 import { GSaltErrorCode } from "~/types/gsalt_api";
 import type { ApiResponse, PaginatedResponse } from "~/types/api";
-
-interface PaymentMethodsQuery {
-  type?: "TOPUP" | "PAYMENT" | "WITHDRAWAL";
-  currency?: string;
-  status?: "ACTIVE" | "INACTIVE";
-}
 
 export const useGSaltApi = () => {
   const config = useRuntimeConfig();
@@ -455,7 +450,11 @@ export const useGSaltApi = () => {
       ? `?${new URLSearchParams(query as any).toString()}`
       : "";
     return await $fetch<PaymentMethodResponse>(
-      `${config.public.gsaltApiBaseUrl}/transactions/payment-methods${queryString}`
+      `${config.public.gsaltApiBaseUrl}/transactions/payment-methods${queryString}`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
     );
   };
 

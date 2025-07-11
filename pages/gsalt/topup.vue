@@ -40,7 +40,11 @@ const form = reactive({
 const loadPaymentMethods = async () => {
   try {
     isLoadingPaymentMethods.value = true;
-    const response = await getPaymentMethods({ type: 'TOPUP', currency: 'IDR', status: 'ACTIVE' });
+    const response = await getPaymentMethods({
+      currency: 'IDR',
+      is_active: true,
+      is_available_for_topup: true
+    });
     paymentMethods.value = response.data;
   } catch (error: any) {
     console.error('Error loading payment methods:', error);
@@ -50,26 +54,20 @@ const loadPaymentMethods = async () => {
   }
 };
 
+const formatFeeText = (method: PaymentMethod) => {
+  const parts = [];
+  if (method.payment_fee_percent) parts.push(`${method.payment_fee_percent}%`);
+  if (method.payment_fee_flat) parts.push(`+${method.payment_fee_flat / 1000} GSALT`);
+  return parts.join(' ');
+};
+
+// Remove min/max amount validations since they're not in the API
 const handleSubmit = async () => {
   // Validate amount_gsalt is a valid number
   const amount = parseFloat(form.amount_gsalt);
   if (isNaN(amount) || amount <= 0) {
     showToastNotification('Please enter a valid amount greater than 0', 'error');
     return;
-  }
-
-  // Validate against payment method limits
-  const selectedMethod = paymentMethods.value.find(m => m.code === form.payment_method);
-  if (selectedMethod) {
-    const amountIDR = Math.round(amount * 1000); // Convert to IDR
-    if (amountIDR < selectedMethod.min_amount) {
-      showToastNotification(`Minimum amount for ${selectedMethod.name} is ${selectedMethod.min_amount / 1000} GSALT`, 'error');
-      return;
-    }
-    if (amountIDR > selectedMethod.max_amount) {
-      showToastNotification(`Maximum amount for ${selectedMethod.name} is ${selectedMethod.max_amount / 1000} GSALT`, 'error');
-      return;
-    }
   }
 
   try {
@@ -127,14 +125,6 @@ const getPaymentMethodIcon = (code: string) => {
   if (code.toLowerCase().includes('ewallet')) return 'tabler:wallet';
   return 'tabler:credit-card';
 };
-
-const formatFeeText = (method: PaymentMethod) => {
-  const parts = [];
-  if (method.fee_percentage) parts.push(`${method.fee_percentage}%`);
-  if (method.fee_fixed) parts.push(`+${method.fee_fixed / 1000} GSALT`);
-  if (method.fee_min) parts.push(`(min ${method.fee_min / 1000} GSALT)`);
-  return parts.join(' ');
-};
 </script>
 
 <template>
@@ -182,8 +172,7 @@ const formatFeeText = (method: PaymentMethod) => {
                       <h4 class="font-medium text-white">{{ method.name }}</h4>
                       <span class="text-xs text-brand font-medium">{{ formatFeeText(method) }}</span>
                     </div>
-                    <p class="text-gray-400 text-sm">Min: {{ method.min_amount / 1000 }} GSALT | Max: {{
-                      method.max_amount / 1000 }} GSALT</p>
+                    <p class="text-gray-400 text-sm">{{ method.method_type }} via {{ method.provider_code }}</p>
                   </div>
                 </label>
               </div>
