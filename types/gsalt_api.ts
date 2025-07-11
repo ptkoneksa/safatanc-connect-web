@@ -11,41 +11,27 @@ export interface GSaltTransaction {
   id: string;
   account_id: string;
   type:
-    | "topup"
-    | "transfer_in"
-    | "transfer_out"
-    | "payment"
-    | "withdrawal"
-    | "voucher_redemption"
-    | "gift_in"
-    | "gift_out";
+    | "TOPUP"
+    | "TRANSFER_IN"
+    | "TRANSFER_OUT"
+    | "PAYMENT"
+    | "WITHDRAWAL"
+    | "VOUCHER_REDEMPTION";
   amount_gsalt_units: number;
-  total_amount_gsalt_units?: number; // Amount + fees
-  fee_amount_gsalt_units?: number; // Fee amount
-  currency: string;
-  exchange_rate_idr: string;
-  payment_amount?: number;
-  payment_currency?: string;
-  payment_method?: PaymentMethod;
-  status: "pending" | "completed" | "failed" | "cancelled" | "processing";
-  description?: string;
-  source_account_id?: string;
-  destination_account_id?: string;
-  voucher_code?: string;
-  external_reference_id?: string;
+  fee_amount_gsalt_units?: number;
+  total_amount_gsalt_units?: number;
+  status: "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED";
+  payment_method?: PaymentMethodCode;
+  external_payment_id?: string;
   payment_instructions?: PaymentInstructions;
+  description?: string;
   created_at: string;
-  completed_at?: string;
-  updated_at?: string;
+  updated_at: string;
 }
 
-// Comprehensive Payment Methods
-export type PaymentMethod =
-  // Internal
-  | "GSALT_BALANCE"
-  // QRIS
+// Payment Methods based on API documentation
+export type PaymentMethodCode =
   | "QRIS"
-  // Virtual Account
   | "VA_BCA"
   | "VA_BNI"
   | "VA_BRI"
@@ -55,194 +41,82 @@ export type PaymentMethod =
   | "VA_BSI"
   | "VA_DANAMON"
   | "VA_MAYBANK"
-  // E-Wallet
   | "EWALLET_OVO"
   | "EWALLET_DANA"
   | "EWALLET_GOPAY"
   | "EWALLET_LINKAJA"
-  | "EWALLET_SHOPEEPAY"
-  // Cards
-  | "CREDIT_CARD"
-  | "DEBIT_CARD"
-  // Retail Outlets
-  | "RETAIL_ALFAMART"
-  | "RETAIL_INDOMARET"
-  | "RETAIL_CIRCLEK"
-  | "RETAIL_LAWSON"
-  | "RETAIL_DANDANPAY"
-  // Direct Debit
-  | "DIRECT_DEBIT"
-  // Bank Transfer
-  | "BANK_TRANSFER"
-  // Legacy support
-  | "VIRTUAL_ACCOUNT"
-  | "EWALLET"
-  | "RETAIL_OUTLET"
-  | "CARDLESS_CREDIT"
-  | "CARD"
-  | "GOPAY"
-  | "OVO"
-  | "DANA";
+  | "EWALLET_SHOPEEPAY";
 
-// Enhanced Payment instructions from payment gateway
-export interface PaymentInstructions {
-  // Payment Request Info
-  payment_request_id?: string;
-  status?: string;
-  amount?: number;
-  currency?: string;
-  fee_amount?: number;
-  total_amount?: number;
-  expiry_time?: string;
-  created_at?: string;
-
-  // QRIS Instructions
-  qr_code?: string;
-  qr_string?: string;
-  qr_code_url?: string;
-
-  // Virtual Account Instructions
-  bank_code?: string;
-  virtual_account?: {
-    bank_code: string;
-    account_number: string;
-    bank_name: string;
-  };
-  virtual_account_number?: string; // Legacy support
-
-  // E-Wallet Instructions
-  ewallet?: {
-    provider: string;
-    checkout_url: string;
-    qr_code?: string;
-    deep_link?: string;
-  };
-  provider_name?: string; // Legacy support
-  checkout_url?: string; // Legacy support
-
-  // Card Payment Instructions
-  card?: {
-    checkout_url: string;
-    payment_form_url: string;
-    secure_form_url: string;
-  };
-
-  // Retail Outlet Instructions
-  retail?: {
-    outlet_name: string;
-    payment_code: string;
-    instructions: string;
-    locations?: string[];
-  };
-  payment_code?: string; // Legacy support
-
-  // Direct Debit Instructions
-  direct_debit?: {
-    bank_code: string;
-    instructions: string;
-  };
-
-  // General Instructions
-  instructions?: string;
-  notes?: string;
-
-  // Raw response from payment gateway
-  raw_response?: Record<string, any>;
-}
-
-// Payment Method Information
-export interface PaymentMethodInfo {
-  method: PaymentMethod;
+export interface PaymentMethod {
+  code: PaymentMethodCode;
   name: string;
-  type:
-    | "internal"
-    | "qris"
-    | "virtual_account"
-    | "ewallet"
-    | "card"
-    | "retail"
-    | "direct_debit"
-    | "bank_transfer";
-  icon: string;
-  description: string;
-  fee: number; // Fee in GSALT units
-  fee_description: string;
-  minimum_amount?: number;
-  maximum_amount?: number;
-  available: boolean;
+  type: "PAYMENT" | "TOPUP" | "WITHDRAWAL";
+  provider_code: string;
+  currency: string;
+  min_amount: number;
+  max_amount: number;
+  fee_percentage: string;
+  fee_fixed: number;
+  fee_min: number;
+  fee_max: number;
+  is_available_for_topup: boolean;
+  is_available_for_payment: boolean;
+  status: "ACTIVE" | "INACTIVE";
 }
 
-// Topup Response with Payment Instructions
+export interface PaymentMethodResponse {
+  success: boolean;
+  data: PaymentMethod[];
+}
+
+export interface PaymentInstructions {
+  link_id: number;
+  link_url: string;
+  payment_url: string;
+  status: string;
+  customer: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  instructions: string;
+  expiry_time?: string;
+  qr_string?: string;
+  bank_code?: string;
+  virtual_account_number?: string;
+  checkout_url?: string;
+  payment_code?: string;
+}
+
 export interface TopupResponse {
   transaction: GSaltTransaction;
-  payment_instructions?: PaymentInstructions;
+  payment_instructions: PaymentInstructions;
 }
 
-// Payment Response
 export interface PaymentResponse {
   transaction: GSaltTransaction;
-  payment_instructions?: PaymentInstructions;
-}
-
-export interface GSaltVoucher {
-  id: string;
-  code: string;
-  name: string;
-  type: "balance" | "loyalty_points" | "discount";
-  value: string;
-  currency: string;
-  loyalty_points_value?: number;
-  discount_percentage?: number;
-  discount_amount?: string;
-  description?: string;
-  terms_and_conditions?: string;
-  status: "active" | "expired" | "redeemed";
-  max_redeem_count?: number;
-  current_redeem_count: number;
-  valid_from: string;
-  valid_until?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface GSaltVoucherRedemption {
-  id: string;
-  voucher_id: string;
-  account_id: string;
-  transaction_id: string;
-  redeemed_at: string;
+  payment_instructions: PaymentInstructions;
 }
 
 export interface GSaltTopupRequest {
   amount_gsalt: string;
-  payment_method?: PaymentMethod;
-  payment_currency?: string;
-  payment_amount?: number;
+  payment_method: PaymentMethodCode;
+  payment_amount: number;
+  payment_currency: string;
   external_reference_id?: string;
 }
 
 export interface GSaltTransferRequest {
   destination_account_id: string;
-  destination_connect_id?: string; // Support both ways
   amount_gsalt: string;
   description?: string;
-  external_reference_id?: string;
 }
 
 export interface GSaltPaymentRequest {
-  amount_gsalt: string;
-  payment_method?: PaymentMethod;
-  description: string;
-  merchant_id?: string;
-  external_reference_id?: string;
-}
-
-export interface GSaltGiftRequest {
-  destination_account_id?: string;
-  destination_connect_id: string;
-  amount_gsalt: string;
-  message?: string;
-  external_reference_id?: string;
+  amount_gsalt_units: number;
+  payment_method: PaymentMethodCode;
+  customer_name: string;
+  customer_email: string;
 }
 
 export interface GSaltWithdrawalRequest {
@@ -250,51 +124,71 @@ export interface GSaltWithdrawalRequest {
   bank_code: string;
   account_number: string;
   recipient_name: string;
-  description?: string;
-  external_reference_id?: string;
+  description?: string; // Optional description field
 }
 
-// Bank Information
+// Add withdrawal response type
+export interface WithdrawalResponse {
+  transaction: GSaltTransaction;
+  disbursement_id: string;
+  status: string;
+  estimated_time: string;
+}
+
+// Add transfer response type
+export interface TransferResponse {
+  transfer_out: GSaltTransaction;
+  transfer_in: GSaltTransaction;
+}
+
 export interface BankInfo {
-  code: string;
-  name: string;
+  bank_code: string;
+  bank_name: string;
   available: boolean;
 }
 
-// Bank Account Validation
 export interface BankAccountValidation {
   valid: boolean;
   account_holder_name?: string;
-  bank_name?: string;
 }
 
-// Withdrawal Balance
 export interface WithdrawalBalance {
-  balance_gsalt_units: number;
-  balance_gsalt: string;
-  balance_idr: string;
+  available_balance: number;
 }
 
-// Enhanced error response
-export interface GSaltError {
+export interface GSaltVoucher {
+  id: string;
   code: string;
-  message: string;
-  details?: Record<string, any>;
+  title: string;
+  description: string;
+  amount_gsalt_units: number;
+  status: "ACTIVE" | "EXPIRED" | "REDEEMED";
+  created_at: string;
+  updated_at: string;
 }
 
-// Error codes for better error handling
+export interface VoucherValidation {
+  valid: boolean;
+  voucher?: GSaltVoucher;
+  message?: string;
+}
+
+export interface TransactionConfirmRequest {
+  external_payment_id: string;
+}
+
+export interface TransactionRejectRequest {
+  reason: string;
+}
+
+// Error codes from API documentation
 export enum GSaltErrorCode {
-  ACCOUNT_NOT_REGISTERED = "ACCOUNT_NOT_REGISTERED",
   UNAUTHORIZED = "UNAUTHORIZED",
+  ACCOUNT_NOT_REGISTERED = "ACCOUNT_NOT_REGISTERED",
   INSUFFICIENT_BALANCE = "INSUFFICIENT_BALANCE",
-  DAILY_LIMIT_EXCEEDED = "DAILY_LIMIT_EXCEEDED",
-  AMOUNT_BELOW_MINIMUM = "AMOUNT_BELOW_MINIMUM",
-  AMOUNT_ABOVE_MAXIMUM = "AMOUNT_ABOVE_MAXIMUM",
   INVALID_PAYMENT_METHOD = "INVALID_PAYMENT_METHOD",
-  PAYMENT_EXPIRED = "PAYMENT_EXPIRED",
   BANK_ACCOUNT_INVALID = "BANK_ACCOUNT_INVALID",
   SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE",
-  NETWORK_ERROR = "NETWORK_ERROR",
 }
 
 // Health check response
@@ -307,21 +201,4 @@ export interface GSaltHealthCheck {
     flip: "up" | "down";
     [key: string]: "up" | "down";
   };
-}
-
-// Voucher validation response
-export interface VoucherValidation {
-  valid: boolean;
-  voucher?: GSaltVoucher;
-  message?: string;
-}
-
-// Transaction confirmation request
-export interface TransactionConfirmRequest {
-  external_payment_id?: string;
-}
-
-// Transaction rejection request
-export interface TransactionRejectRequest {
-  reason?: string;
 }

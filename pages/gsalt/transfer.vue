@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import type { GSaltTransferRequest } from '~/types/gsalt_api';
+import type { GSaltTransferRequest, TransferResponse } from '~/types/gsalt_api';
 import { useGSaltApi } from '~/composables/gsalt/useGSaltApi';
 import { useGSaltToast } from '~/composables/gsalt/useGSaltToast';
 
@@ -20,7 +20,7 @@ const { showToast, toastMessage, toastType, showToastNotification, hideToast } =
 // State
 const isLoading = ref(false);
 const form = reactive<GSaltTransferRequest>({
-  destination_connect_id: '',
+  destination_account_id: '',
   amount_gsalt: '',
   description: '',
 });
@@ -37,17 +37,19 @@ const handleSubmit = async () => {
     isLoading.value = true;
 
     const request: GSaltTransferRequest = {
-      destination_connect_id: form.destination_connect_id.trim(),
+      destination_account_id: form.destination_account_id.trim(),
       amount_gsalt: form.amount_gsalt.trim(),
       description: form.description?.trim() || undefined,
     };
 
-    await transfer(request);
-    showToastNotification('Transfer successful!');
+    const result: TransferResponse = await transfer(request);
+    showToastNotification(
+      `Transfer successful! Transaction IDs: Out-${result.transfer_out.id.substring(0, 8)}, In-${result.transfer_in.id.substring(0, 8)}`
+    );
 
     // Reset form
     Object.assign(form, {
-      destination_connect_id: '',
+      destination_account_id: '',
       amount_gsalt: '',
       description: '',
     });
@@ -93,7 +95,7 @@ const handleSubmit = async () => {
         <form @submit.prevent="handleSubmit" class="space-y-6">
           <div>
             <label class="block text-sm font-medium text-gray-300 mb-2">Recipient Connect ID</label>
-            <input v-model="form.destination_connect_id" type="text" required
+            <input v-model="form.destination_account_id" type="text" required
               class="w-full px-4 py-3 bg-dark-3 border border-dark rounded-2xl text-white focus:border-brand focus:bg-dark-2 transition-colors"
               placeholder="Enter recipient's Connect ID (e.g., user123)">
             <p class="text-gray-400 text-sm mt-2">
@@ -123,7 +125,7 @@ const handleSubmit = async () => {
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
                 <span class="text-gray-400">Recipient:</span>
-                <span class="text-white">{{ form.destination_connect_id || 'Not specified' }}</span>
+                <span class="text-white">{{ form.destination_account_id || 'Not specified' }}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-400">Amount:</span>
@@ -148,7 +150,7 @@ const handleSubmit = async () => {
             </div>
           </div>
 
-          <button type="submit" :disabled="isLoading || !form.amount_gsalt || !form.destination_connect_id"
+          <button type="submit" :disabled="isLoading || !form.amount_gsalt || !form.destination_account_id"
             class="w-full py-3 bg-brand text-black rounded-2xl font-semibold hover:bg-brand/90 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
             <Icon v-if="isLoading" icon="tabler:loader" class="animate-spin mr-2" width="20" height="20" />
             {{ isLoading ? 'Sending Transfer...' : 'Send Transfer' }}

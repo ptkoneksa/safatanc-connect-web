@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import type { GSaltWithdrawalRequest } from '~/types/gsalt_api';
+import type { GSaltWithdrawalRequest, WithdrawalResponse } from '~/types/gsalt_api';
 import { useGSaltApi } from '~/composables/gsalt/useGSaltApi';
 import { useGSaltToast } from '~/composables/gsalt/useGSaltToast';
 
@@ -26,12 +26,15 @@ const availableBalance = ref<any>(null);
 const supportedBanks = ref<Array<{ code: string; name: string; available: boolean }>>([]);
 const bankValidation = ref<{ valid: boolean; account_holder_name?: string; bank_name?: string } | null>(null);
 
+// Constants
+const ESTIMATED_TIME = "1-3 business days";
+
 const form = reactive<GSaltWithdrawalRequest>({
   amount_gsalt: '',
   bank_code: '',
   account_number: '',
   recipient_name: '',
-  description: '',
+  description: '', // Add description field
 });
 
 // Load supported banks on mount
@@ -135,8 +138,12 @@ const handleSubmit = async () => {
       description: form.description?.trim() || undefined,
     };
 
-    const result = await withdrawal(request);
-    showToastNotification(`Withdrawal request submitted! Transaction ID: ${result.id.substring(0, 8)}...`);
+    const result: WithdrawalResponse = await withdrawal(request);
+    showToastNotification(
+      `Withdrawal request submitted! Transaction ID: ${result.transaction.id.substring(0, 8)}... 
+      Disbursement ID: ${result.disbursement_id}
+      Estimated time: ${result.estimated_time}`
+    );
 
     // Reset form
     Object.assign(form, {
@@ -335,7 +342,7 @@ onMounted(() => {
               <div class="flex justify-between">
                 <span class="text-gray-400">Bank:</span>
                 <span class="text-white">{{supportedBanks.find(b => b.code === form.bank_code)?.name || 'Not selected'
-                }}</span>
+                  }}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-400">Account:</span>

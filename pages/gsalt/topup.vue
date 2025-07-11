@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import type { GSaltTopupRequest, TopupResponse } from '~/types/gsalt_api';
+import type { GSaltTopupRequest, TopupResponse, PaymentMethodCode, PaymentMethod } from '~/types/gsalt_api';
 import { useGSaltApi } from '~/composables/gsalt/useGSaltApi';
 import { useGSaltToast } from '~/composables/gsalt/useGSaltToast';
 import { usePaymentInstructions } from '~/composables/gsalt/usePaymentInstructions';
@@ -15,7 +15,7 @@ useHead({
 });
 
 // Composables
-const { topup } = useGSaltApi();
+const { topup, getPaymentMethods } = useGSaltApi();
 const { showToast, toastMessage, toastType, showToastNotification, hideToast } = useGSaltToast();
 const {
   copyToClipboard,
@@ -26,87 +26,28 @@ const {
 
 // State
 const isLoading = ref(false);
-const form = reactive<GSaltTopupRequest>({
+const isLoadingPaymentMethods = ref(false);
+const paymentMethods = ref<PaymentMethod[]>([]);
+
+const form = reactive({
   amount_gsalt: '',
-  payment_method: 'QRIS',
+  payment_method: 'QRIS' as PaymentMethodCode,
   payment_currency: 'IDR',
+  external_reference_id: '',
 });
 
-// Payment methods
-const paymentMethods = [
-  // Modern Payment Methods (Flip V3)
-  { value: 'QRIS', label: 'QRIS', icon: 'tabler:qrcode', description: 'Indonesian QR Code payment standard', fee: '0.7% (min 2 GSALT)' },
-  { value: 'VA_BCA', label: 'BCA Virtual Account', icon: 'tabler:building-bank', description: 'BCA bank transfer', fee: '4 GSALT' },
-  { value: 'VA_BNI', label: 'BNI Virtual Account', icon: 'tabler:building-bank', description: 'BNI bank transfer', fee: '4 GSALT' },
-  { value: 'VA_BRI', label: 'BRI Virtual Account', icon: 'tabler:building-bank', description: 'BRI bank transfer', fee: '4 GSALT' },
-  { value: 'VA_MANDIRI', label: 'Mandiri Virtual Account', icon: 'tabler:building-bank', description: 'Mandiri bank transfer', fee: '4 GSALT' },
-  { value: 'VA_CIMB', label: 'CIMB Virtual Account', icon: 'tabler:building-bank', description: 'CIMB bank transfer', fee: '4 GSALT' },
-  { value: 'VA_PERMATA', label: 'Permata Virtual Account', icon: 'tabler:building-bank', description: 'Permata bank transfer', fee: '4 GSALT' },
-  { value: 'VA_BSI', label: 'BSI Virtual Account', icon: 'tabler:building-bank', description: 'BSI bank transfer', fee: '4 GSALT' },
-  { value: 'VA_DANAMON', label: 'Danamon Virtual Account', icon: 'tabler:building-bank', description: 'Danamon bank transfer', fee: '4 GSALT' },
-  { value: 'VA_MAYBANK', label: 'Maybank Virtual Account', icon: 'tabler:building-bank', description: 'Maybank bank transfer', fee: '4 GSALT' },
-  { value: 'EWALLET_OVO', label: 'OVO', icon: 'tabler:wallet', description: 'OVO e-wallet', fee: '5 GSALT' },
-  { value: 'EWALLET_DANA', label: 'DANA', icon: 'tabler:wallet', description: 'DANA e-wallet', fee: '5 GSALT' },
-  { value: 'EWALLET_GOPAY', label: 'GoPay', icon: 'tabler:wallet', description: 'GoPay e-wallet', fee: '5 GSALT' },
-  { value: 'EWALLET_LINKAJA', label: 'LinkAja', icon: 'tabler:wallet', description: 'LinkAja e-wallet', fee: '5 GSALT' },
-  { value: 'EWALLET_SHOPEEPAY', label: 'ShopeePay', icon: 'tabler:wallet', description: 'ShopeePay e-wallet', fee: '5 GSALT' },
-  { value: 'CREDIT_CARD', label: 'Credit Card', icon: 'tabler:credit-card', description: 'Visa, Mastercard, JCB, American Express', fee: '2.9% (min 10 GSALT)' },
-  { value: 'DEBIT_CARD', label: 'Debit Card', icon: 'tabler:credit-card', description: 'Debit card payments', fee: '2.9% (min 10 GSALT)' },
-  { value: 'RETAIL_ALFAMART', label: 'Alfamart', icon: 'tabler:building-store', description: 'Pay at Alfamart outlets', fee: '5 GSALT' },
-  { value: 'RETAIL_INDOMARET', label: 'Indomaret', icon: 'tabler:building-store', description: 'Pay at Indomaret outlets', fee: '5 GSALT' },
-  { value: 'RETAIL_CIRCLEK', label: 'Circle K', icon: 'tabler:building-store', description: 'Pay at Circle K outlets', fee: '5 GSALT' },
-  { value: 'RETAIL_LAWSON', label: 'Lawson', icon: 'tabler:building-store', description: 'Pay at Lawson outlets', fee: '5 GSALT' },
-  { value: 'DIRECT_DEBIT', label: 'Direct Debit', icon: 'tabler:credit-card-off', description: 'Direct debit from bank account', fee: '3 GSALT' },
-  { value: 'BANK_TRANSFER', label: 'Bank Transfer', icon: 'tabler:building-bank', description: 'Manual bank transfer', fee: 'Free' },
-];
-
-// Helper functions for payment method information
-const getPaymentMethodInfo = (method: string) => {
-  return paymentMethods.find(m => m.value === method);
-};
-
-const getPaymentMethodIcon = (method: string) => {
-  const info = getPaymentMethodInfo(method);
-  return info?.icon || 'tabler:credit-card';
-};
-
-const getPaymentMethodLabel = (method: string) => {
-  const info = getPaymentMethodInfo(method);
-  return info?.label || method;
-};
-
-// Generate QR Code Data URL
-const generateQRCodeDataURL = (qrString: string): string => {
-  // Simple QR code generation using a service
-  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrString)}`;
-};
-
-// Get bank name from bank code
-const getBankName = (bankCode: string): string => {
-  const bankNames: Record<string, string> = {
-    'BCA': 'BCA',
-    'BNI': 'BNI',
-    'BRI': 'BRI',
-    'MANDIRI': 'Mandiri',
-    'CIMB': 'CIMB Niaga',
-    'PERMATA': 'Permata',
-    'BSI': 'BSI',
-    'DANAMON': 'Danamon',
-    'MAYBANK': 'Maybank'
-  };
-  return bankNames[bankCode] || bankCode;
-};
-
-// Get e-wallet name
-const getEWalletName = (method: string): string => {
-  const ewalletNames: Record<string, string> = {
-    'EWALLET_OVO': 'OVO',
-    'EWALLET_DANA': 'DANA',
-    'EWALLET_GOPAY': 'GoPay',
-    'EWALLET_LINKAJA': 'LinkAja',
-    'EWALLET_SHOPEEPAY': 'ShopeePay'
-  };
-  return ewalletNames[method] || method;
+// Load payment methods from API
+const loadPaymentMethods = async () => {
+  try {
+    isLoadingPaymentMethods.value = true;
+    const response = await getPaymentMethods({ type: 'TOPUP', currency: 'IDR', status: 'ACTIVE' });
+    paymentMethods.value = response.data;
+  } catch (error: any) {
+    console.error('Error loading payment methods:', error);
+    showToastNotification('Failed to load payment methods', 'error');
+  } finally {
+    isLoadingPaymentMethods.value = false;
+  }
 };
 
 const handleSubmit = async () => {
@@ -117,33 +58,49 @@ const handleSubmit = async () => {
     return;
   }
 
+  // Validate against payment method limits
+  const selectedMethod = paymentMethods.value.find(m => m.code === form.payment_method);
+  if (selectedMethod) {
+    const amountIDR = Math.round(amount * 1000); // Convert to IDR
+    if (amountIDR < selectedMethod.min_amount) {
+      showToastNotification(`Minimum amount for ${selectedMethod.name} is ${selectedMethod.min_amount / 1000} GSALT`, 'error');
+      return;
+    }
+    if (amountIDR > selectedMethod.max_amount) {
+      showToastNotification(`Maximum amount for ${selectedMethod.name} is ${selectedMethod.max_amount / 1000} GSALT`, 'error');
+      return;
+    }
+  }
+
   try {
     isLoading.value = true;
 
     const request: GSaltTopupRequest = {
       amount_gsalt: form.amount_gsalt.trim(),
       payment_method: form.payment_method,
+      payment_amount: Math.round(parseFloat(form.amount_gsalt) * 1000), // Convert to IDR (1 GSALT = 1000 IDR)
       payment_currency: form.payment_currency,
+      external_reference_id: form.external_reference_id.trim() || undefined,
     };
 
     const result: TopupResponse = await topup(request);
 
-    if (result.transaction.status === 'pending') {
+    if (result.transaction.status === 'PENDING') {
       showToastNotification('Payment instructions created! Redirecting to payment page...');
 
-      // Redirect to payment page with external reference ID or transaction ID
-      const paymentId = result.transaction.external_reference_id || result.transaction.id;
+      // Redirect to payment page with transaction ID
+      const paymentId = result.transaction.id;
       setTimeout(() => {
         navigateTo(`/gsalt/payment/${paymentId}`);
       }, 1500);
     } else {
-      // For bank transfer or already completed payments
       showToastNotification('Top up request created successfully!');
-      // Reset form and redirect
+      // Reset form
       Object.assign(form, {
         amount_gsalt: '',
         payment_method: 'QRIS',
         payment_currency: 'IDR',
+        external_reference_id: '',
       });
 
       setTimeout(() => {
@@ -158,21 +115,25 @@ const handleSubmit = async () => {
   }
 };
 
-// Helper functions for payment method checking
-const isVirtualAccountMethod = (method: string) => {
-  return method?.startsWith('VA_');
+// Initialize data
+onMounted(() => {
+  loadPaymentMethods();
+});
+
+// Computed properties for payment method display
+const getPaymentMethodIcon = (code: string) => {
+  if (code.toLowerCase().includes('qris')) return 'tabler:qrcode';
+  if (code.toLowerCase().includes('va_')) return 'tabler:building-bank';
+  if (code.toLowerCase().includes('ewallet')) return 'tabler:wallet';
+  return 'tabler:credit-card';
 };
 
-const isEWalletMethod = (method: string) => {
-  return method?.startsWith('EWALLET_');
-};
-
-const isRetailMethod = (method: string) => {
-  return method?.startsWith('RETAIL_');
-};
-
-const isCardMethod = (method: string) => {
-  return method === 'CREDIT_CARD' || method === 'DEBIT_CARD';
+const formatFeeText = (method: PaymentMethod) => {
+  const parts = [];
+  if (method.fee_percentage) parts.push(`${method.fee_percentage}%`);
+  if (method.fee_fixed) parts.push(`+${method.fee_fixed / 1000} GSALT`);
+  if (method.fee_min) parts.push(`(min ${method.fee_min / 1000} GSALT)`);
+  return parts.join(' ');
 };
 </script>
 
@@ -205,35 +166,26 @@ const isCardMethod = (method: string) => {
           <!-- Payment Method Selection -->
           <div>
             <label class="block text-sm font-medium text-gray-300 mb-2">Payment Method</label>
-            <div class="grid gap-3">
-              <div v-for="method in paymentMethods" :key="method.value" class="relative">
-                <input v-model="form.payment_method" :value="method.value" type="radio" :id="method.value"
+            <div v-if="isLoadingPaymentMethods" class="animate-pulse space-y-3">
+              <div v-for="i in 3" :key="i" class="h-16 bg-dark-3 rounded-2xl"></div>
+            </div>
+            <div v-else class="grid gap-3">
+              <div v-for="method in paymentMethods" :key="method.code" class="relative">
+                <input v-model="form.payment_method" :value="method.code" type="radio" :id="method.code"
                   class="sr-only peer">
-                <label :for="method.value"
+                <label :for="method.code"
                   class="flex items-center gap-4 p-4 bg-dark-3 border border-dark rounded-2xl cursor-pointer hover:bg-dark-2 peer-checked:border-brand peer-checked:bg-brand/10 transition-all duration-300">
-                  <Icon :icon="method.icon" class="text-brand flex-shrink-0" width="24" height="24" />
+                  <Icon :icon="getPaymentMethodIcon(method.code)" class="text-brand flex-shrink-0" width="24"
+                    height="24" />
                   <div class="flex-grow">
                     <div class="flex items-center justify-between">
-                      <h4 class="font-medium text-white">{{ method.label }}</h4>
-                      <span class="text-xs text-brand font-medium">{{ method.fee }}</span>
+                      <h4 class="font-medium text-white">{{ method.name }}</h4>
+                      <span class="text-xs text-brand font-medium">{{ formatFeeText(method) }}</span>
                     </div>
-                    <p class="text-gray-400 text-sm">{{ method.description }}</p>
+                    <p class="text-gray-400 text-sm">Min: {{ method.min_amount / 1000 }} GSALT | Max: {{
+                      method.max_amount / 1000 }} GSALT</p>
                   </div>
                 </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Fee Information -->
-          <div class="bg-brand/10 border border-brand/30 rounded-2xl p-4">
-            <div class="flex items-start gap-3">
-              <Icon icon="tabler:info-circle" class="text-brand flex-shrink-0 mt-0.5" width="20" height="20" />
-              <div>
-                <h4 class="font-semibold text-brand mb-1">Payment Fees</h4>
-                <p class="text-brand/80 text-sm">
-                  All payment processing fees are paid by you (the user) and will be added to your transaction amount.
-                  The fees shown are transparent and calculated automatically.
-                </p>
               </div>
             </div>
           </div>
@@ -245,21 +197,22 @@ const isCardMethod = (method: string) => {
               class="w-full px-4 py-3 bg-dark-3 border border-dark rounded-2xl text-white focus:border-brand focus:bg-dark-2 transition-colors"
               placeholder="Enter GSALT amount (e.g., 10.50)">
             <p class="text-gray-400 text-sm mt-2">
-              1 GSALT = 1,000 IDR (default exchange rate)
+              1 GSALT = 1,000 IDR
             </p>
           </div>
 
+          <!-- External Reference ID -->
           <div>
-            <label class="block text-sm font-medium text-gray-300 mb-2">Payment Currency</label>
-            <select v-model="form.payment_currency" required
-              class="w-full px-4 py-3 bg-dark-3 border border-dark rounded-2xl text-white focus:border-brand focus:bg-dark-2 transition-colors">
-              <option value="IDR">Indonesian Rupiah (IDR)</option>
-              <option value="USD">US Dollar (USD)</option>
-              <option value="EUR">Euro (EUR)</option>
-              <option value="SGD">Singapore Dollar (SGD)</option>
-            </select>
+            <label class="block text-sm font-medium text-gray-300 mb-2">External Reference ID (Optional)</label>
+            <input v-model="form.external_reference_id" type="text"
+              class="w-full px-4 py-3 bg-dark-3 border border-dark rounded-2xl text-white focus:border-brand focus:bg-dark-2 transition-colors"
+              placeholder="Enter your reference ID">
+            <p class="text-gray-400 text-sm mt-2">
+              Custom reference ID for tracking this transaction
+            </p>
           </div>
 
+          <!-- Transaction Summary -->
           <div class="bg-dark-3 rounded-2xl p-4">
             <h4 class="font-semibold text-white mb-2">Transaction Summary</h4>
             <div class="space-y-2 text-sm">
@@ -269,11 +222,12 @@ const isCardMethod = (method: string) => {
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-400">Payment Method:</span>
-                <span class="text-white">{{ getPaymentMethodLabel(form.payment_method || '') }}</span>
+                <span class="text-white">{{paymentMethods.find(m => m.code === form.payment_method)?.name ||
+                  'Not selected'}}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-400">Currency:</span>
-                <span class="text-white">{{ form.payment_currency }}</span>
+                <span class="text-white">IDR</span>
               </div>
             </div>
           </div>

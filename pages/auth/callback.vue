@@ -50,7 +50,7 @@ onMounted(async () => {
     }
 
     // Process the OAuth authentication
-    await authStore.processOAuthCallback(token, refreshToken || '', redirectUri || '');
+    await useAuthApi().processOAuthCallback(token, refreshToken || '', redirectUri || '');
 
     // Clean the URL (remove query parameters) using Nuxt's router
     // await router.replace({ path: route.path, query: {} });
