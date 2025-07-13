@@ -83,10 +83,12 @@ const user = computed(() => authStore.getUser);
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <!-- Hero Content -->
         <div class="md:pr-8 text-center md:text-left space-y-6">
-          <h3 class="gradient-text font-bold">SAFATANC CONNECT</h3>
-          <h1 class="mt-2 mb-8">Together, Made Simple.</h1>
-          <p class="max-w-lg">The central hub for all Safatanc Group users. Manage your unified account,
-            access all Safatanc services, and control your GSalt balance in one place.</p>
+          <div>
+            <h4 class="text-brand font-bold">SAFATANC CONNECT</h4>
+            <h1>Together, Made Simple.</h1>
+            <p class="max-w-lg mt-4">The central hub for all Safatanc Group users. Manage your unified account,
+              access all Safatanc services, and control your GSalt balance in one place.</p>
+          </div>
 
           <div v-if="!user" class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
             <NuxtLink to="/auth">
@@ -125,7 +127,7 @@ const user = computed(() => authStore.getUser);
     <!-- Features Section -->
     <div class="container mx-auto px-8 py-16 border-t border-dark-3" id="features">
       <div class="pt-20 -mt-20"></div>
-      <h2 class="text-center mb-16">Core Features of <span class="gradient-text">SAFATANC CONNECT</span></h2>
+      <h2 class="text-center mb-16">Core Features of <span class="text-brand">SAFATANC CONNECT</span></h2>
 
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Feature 1 -->

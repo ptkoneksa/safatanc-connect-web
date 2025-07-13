@@ -60,49 +60,48 @@ const features = [
     description: 'Add GSalt to your balance',
     icon: 'tabler:plus',
     route: '/gsalt/topup',
-    color: 'bg-green-500/20 text-green-400'
+    color: 'bg-green-500/20 text-green-400',
+    active: true
   },
   {
     title: 'Transfer',
     description: 'Send GSalt to others',
     icon: 'tabler:send',
     route: '/gsalt/transfer',
-    color: 'bg-blue-500/20 text-blue-400'
+    color: 'bg-blue-500/20 text-blue-400',
+    active: false
   },
   {
     title: 'Payment',
     description: 'Pay for services',
     icon: 'tabler:credit-card',
     route: '/gsalt/payment',
-    color: 'bg-purple-500/20 text-purple-400'
-  },
-  {
-    title: 'Withdrawal',
-    description: 'Withdraw to bank account',
-    icon: 'tabler:cash',
-    route: '/gsalt/withdrawal',
-    color: 'bg-red-500/20 text-red-400'
+    color: 'bg-purple-500/20 text-purple-400',
+    active: false
   },
   {
     title: 'Gift',
     description: 'Send gifts to friends',
     icon: 'tabler:gift',
     route: '/gsalt/gift',
-    color: 'bg-pink-500/20 text-pink-400'
+    color: 'bg-pink-500/20 text-pink-400',
+    active: false
   },
   {
     title: 'Voucher',
     description: 'Redeem voucher codes',
     icon: 'tabler:ticket',
     route: '/gsalt/voucher',
-    color: 'bg-orange-500/20 text-orange-400'
+    color: 'bg-orange-500/20 text-orange-400',
+    active: false
   },
   {
     title: 'Transactions',
     description: 'View transaction history',
     icon: 'tabler:list',
     route: '/gsalt/transactions',
-    color: 'bg-gray-500/20 text-gray-400'
+    color: 'bg-gray-500/20 text-gray-400',
+    active: false
   }
 ];
 
@@ -242,30 +241,33 @@ onMounted(async () => {
 
 <template>
   <div class="py-6">
-    <div class="container mx-auto px-4 md:px-8">
+    <div v-if="healthStatus === 'unhealthy'" class="container mx-auto px-4 md:px-8">
+      <div class="bg-brand/20 rounded-2xl p-4 text-center">
+        <h2 class="text-brand font-bold">Service Unavailable</h2>
+        <p class="text-brand">The GSalt service is currently unavailable. Please try again later.</p>
+        <NuxtLink to="/">
+          <Button class="mt-4">
+            <template #icon>
+              <Icon icon="tabler:arrow-left" width="20" height="20" />
+            </template>
+            <template #text>
+              Back to Home
+            </template>
+          </Button>
+        </NuxtLink>
+      </div>
+    </div>
+    <div v-if="healthStatus === 'healthy'" class="container mx-auto px-4 md:px-8">
       <!-- Header -->
       <div class="mb-8">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h1 class="text-3xl font-bold text-white">GSalt</h1>
+            <div class="flex items-center gap-2">
+              <NuxtImg src="/images/GSalt.png" alt="GSalt" class="h-12 aspect-square object-contain" />
+              <h2 class="font-bold">GSalt</h2>
+            </div>
             <p class="text-brand font-semibold text-2xl">Global Safatanc Asset Loyalty Token</p>
-            <p class="text-gray-400">Manage your GSalt balance and transactions</p>
-          </div>
-          <!-- Health Status Indicator -->
-          <div class="flex items-center gap-2">
-            <div :class="[
-              'w-3 h-3 rounded-full',
-              healthStatus === 'healthy' ? 'bg-green-500' :
-                healthStatus === 'unhealthy' ? 'bg-red-500' : 'bg-yellow-500'
-            ]"></div>
-            <span :class="[
-              'text-sm font-medium',
-              healthStatus === 'healthy' ? 'text-green-400' :
-                healthStatus === 'unhealthy' ? 'text-red-400' : 'text-yellow-400'
-            ]">
-              {{ healthStatus === 'checking' ? 'Checking...' :
-                healthStatus === 'healthy' ? 'Service Online' : 'Service Offline' }}
-            </span>
+            <p class="text-gray-400">View your GSalt balance and transactions</p>
           </div>
         </div>
       </div>
@@ -323,9 +325,7 @@ onMounted(async () => {
         <div class="bg-dark-2 rounded-3xl p-6 border border-dark hover:border-brand transition-colors duration-300">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-full bg-brand/20 flex items-center justify-center">
-                <Icon icon="tabler:coin" class="text-brand" width="24" height="24" />
-              </div>
+              <NuxtImg src="/images/GSalt_Coin.png" alt="GSalt" class="h-12 aspect-square object-contain" />
               <div>
                 <h3 class="text-lg font-semibold text-white">GSalt Balance</h3>
                 <p class="text-gray-400 text-sm">1 GSALT = 1,000 IDR</p>
@@ -344,8 +344,6 @@ onMounted(async () => {
             </div>
 
             <div class="flex items-center gap-4 text-sm text-gray-400">
-              <div>Balance Units: {{ account.balance.toLocaleString() }}</div>
-              <div>•</div>
               <div>Points: {{ account.points.toLocaleString() }}</div>
             </div>
           </div>
@@ -353,13 +351,15 @@ onMounted(async () => {
 
         <!-- Features Grid -->
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <NuxtLink v-for="feature in features" :key="feature.title" :to="feature.route"
-            class="bg-dark-2 rounded-3xl p-6 border border-dark hover:border-brand transition-all duration-300 group">
+          <NuxtLink v-for="feature in features" :key="feature.title" :to="feature.active ? feature.route : '#'"
+            class="relative z-50 bg-dark-2 rounded-3xl p-6 border border-dark hover:border-brand transition-all duration-300 group"
+            :class="{ 'opacity-50 cursor-not-allowed': !feature.active }">
             <div :class="['w-12 h-12 rounded-full flex items-center justify-center mb-4', feature.color]">
               <Icon :icon="feature.icon" width="24" height="24" />
             </div>
             <h3 class="font-semibold text-white mb-2">{{ feature.title }}</h3>
             <p class="text-gray-400 text-sm">{{ feature.description }}</p>
+            <p v-if="!feature.active" class="absolute top-5 right-5 text-brand/50 text-sm">Coming Soon</p>
           </NuxtLink>
         </div>
 

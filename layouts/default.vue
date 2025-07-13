@@ -29,16 +29,18 @@ const currentYear = new Date().getFullYear();
             <h4 class="mb-4 font-semibold">Quick Links</h4>
             <ul class="space-y-2 text-gray-400">
               <li>
-                <NuxtLink to="#" class="hover:text-brand transition-colors duration-200">My Account</NuxtLink>
+                <NuxtLink to="/account" class="hover:text-brand transition-colors duration-200">My Account</NuxtLink>
               </li>
               <li>
-                <NuxtLink to="#" class="hover:text-brand transition-colors duration-200">GSalt Management</NuxtLink>
+                <NuxtLink to="/gsalt" class="hover:text-brand transition-colors duration-200">GSalt</NuxtLink>
               </li>
               <li>
-                <NuxtLink to="#" class="hover:text-brand transition-colors duration-200">Safatanc Services</NuxtLink>
+                <NuxtLink to="https://www.safatanc.com" target="_blank"
+                  class="hover:text-brand transition-colors duration-200">Company Profile
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="#" class="hover:text-brand transition-colors duration-200">Help Center</NuxtLink>
+                <NuxtLink to="/help" class="hover:text-brand transition-colors duration-200">Help Center</NuxtLink>
               </li>
             </ul>
           </div>
@@ -48,13 +50,16 @@ const currentYear = new Date().getFullYear();
             <h4 class="mb-4 font-semibold">Legal</h4>
             <ul class="space-y-2 text-gray-400">
               <li>
-                <NuxtLink to="#" class="hover:text-brand transition-colors duration-200">Privacy Policy</NuxtLink>
+                <NuxtLink to="/privacy-policy" class="hover:text-brand transition-colors duration-200">Privacy
+                  Policy</NuxtLink>
               </li>
               <li>
-                <NuxtLink to="#" class="hover:text-brand transition-colors duration-200">Terms of Use</NuxtLink>
+                <NuxtLink to="/terms-of-use" class="hover:text-brand transition-colors duration-200">Terms of Use
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="#" class="hover:text-brand transition-colors duration-200">Security Information</NuxtLink>
+                <NuxtLink to="/security-information" class="hover:text-brand transition-colors duration-200">Security
+                  Information</NuxtLink>
               </li>
             </ul>
           </div>
@@ -63,7 +68,7 @@ const currentYear = new Date().getFullYear();
         <div class="border-t border-dark mt-8 pt-8 text-center text-sm text-gray-400">
           <NuxtLink to="https://www.safatanc.com" target="_blank"
             class="hover:text-brand transition-colors duration-200">
-            © PT SAFATANC TECHNOLOGY DIGITAL {{ currentYear }}
+            © {{ currentYear }} PT SAFATANC TECHNOLOGY DIGITAL
           </NuxtLink>
           <p class="mt-2">All rights reserved.</p>
         </div>

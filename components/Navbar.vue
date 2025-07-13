@@ -54,8 +54,8 @@ const handleLogout = async () => {
             class="text-white hover:text-brand transition-colors duration-200 cursor-pointer">Home</NuxtLink>
           <NuxtLink @click="scrollToSection('features')" to="#features"
             class="text-white hover:text-brand transition-colors duration-200 cursor-pointer">Features</NuxtLink>
-          <NuxtLink @click="scrollToSection('about')" to="#about"
-            class="text-white hover:text-brand transition-colors duration-200 cursor-pointer">GSalt</NuxtLink>
+          <NuxtLink to="/gsalt" class="text-white hover:text-brand transition-colors duration-200 cursor-pointer">GSalt
+          </NuxtLink>
         </div>
 
         <!-- Auth Buttons -->
@@ -63,11 +63,6 @@ const handleLogout = async () => {
           <!-- Show Account button when logged in -->
           <template v-if="isAuthenticated">
             <div class="flex items-center gap-4">
-              <NuxtLink to="/gsalt"
-                class="text-white hover:text-brand transition-colors duration-200 flex items-center gap-2">
-                <Icon icon="tabler:coin" width="20" height="20" />
-                <span class="text-sm font-medium">GSalt</span>
-              </NuxtLink>
               <NuxtLink to="/account" class="text-white">
                 <Button bg="bg-brand" color="text-black">
                   <template #icon>
