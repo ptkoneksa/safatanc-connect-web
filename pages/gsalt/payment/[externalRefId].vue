@@ -164,15 +164,15 @@ const fetchTransaction = async () => {
     transaction.value = result;
 
     // Update expiry status
-    if (result.payment_instructions?.expiry_time) {
-      isExpired.value = isPaymentExpired(result.payment_instructions.expiry_time);
+    if (result.payment_details?.expiry_time) {
+      isExpired.value = isPaymentExpired(result.payment_details.expiry_time);
       if (!isExpired.value) {
-        timeRemaining.value = getTimeRemaining(result.payment_instructions.expiry_time);
+        timeRemaining.value = getTimeRemaining(result.payment_details.expiry_time);
       }
     }
   } catch (error: any) {
     // Handle specific error cases
-    if (error.message === GSaltErrorCode.SERVICE_UNAVAILABLE) {
+    if (error.message === GSaltErrorCode.INTERNAL_ERROR) {
       showToastNotification('Service temporarily unavailable. Please try again later.', 'error');
     } else if (error.message === GSaltErrorCode.UNAUTHORIZED) {
       showToastNotification('Session expired. Please login again.', 'error');
@@ -202,10 +202,10 @@ const startTimer = () => {
   if (timerInterval) clearInterval(timerInterval);
 
   timerInterval = setInterval(() => {
-    if (transaction.value?.payment_instructions?.expiry_time) {
-      isExpired.value = isPaymentExpired(transaction.value.payment_instructions.expiry_time);
+    if (transaction.value?.payment_details?.expiry_time) {
+      isExpired.value = isPaymentExpired(transaction.value.payment_details.expiry_time);
       if (!isExpired.value) {
-        timeRemaining.value = getTimeRemaining(transaction.value.payment_instructions.expiry_time);
+        timeRemaining.value = getTimeRemaining(transaction.value.payment_details.expiry_time);
       } else {
         if (timerInterval) {
           clearInterval(timerInterval);
@@ -222,7 +222,7 @@ onMounted(() => {
 });
 
 watch(transaction, (newTransaction) => {
-  if (newTransaction?.payment_instructions?.expiry_time && !isExpired.value) {
+  if (newTransaction?.payment_details?.expiry_time && !isExpired.value) {
     startTimer();
   }
 });
@@ -282,9 +282,9 @@ onUnmounted(() => {
                 <span class="text-gray-400">Amount:</span>
                 <span class="text-white">{{ (transaction.amount_gsalt_units / 100).toFixed(2) }} GSALT</span>
               </div>
-              <div v-if="transaction.fee_amount_gsalt_units" class="flex justify-between">
+              <div v-if="transaction.fee_gsalt_units" class="flex justify-between">
                 <span class="text-gray-400">Fee:</span>
-                <span class="text-white">{{ (transaction.fee_amount_gsalt_units / 100).toFixed(2) }} GSALT</span>
+                <span class="text-white">{{ (transaction.fee_gsalt_units / 100).toFixed(2) }} GSALT</span>
               </div>
               <div v-if="transaction.total_amount_gsalt_units" class="flex justify-between">
                 <span class="text-gray-400">Total:</span>
@@ -304,7 +304,7 @@ onUnmounted(() => {
                   'text-gray-400': transaction.status === 'CANCELLED'
                 }" class="capitalize">{{ transaction.status.toLowerCase() }}</span>
               </div>
-              <div v-if="transaction.payment_instructions?.expiry_time && !isExpired" class="flex justify-between">
+              <div v-if="transaction.payment_details?.expiry_time && !isExpired" class="flex justify-between">
                 <span class="text-gray-400">Expires in:</span>
                 <span class="text-orange-400">{{ timeRemaining.hours }}h {{ timeRemaining.minutes }}m {{
                   timeRemaining.seconds }}s</span>
@@ -328,12 +328,11 @@ onUnmounted(() => {
           </div>
 
           <!-- QRIS Instructions -->
-          <div
-            v-if="!isExpired && transaction?.payment_method === 'QRIS' && transaction.payment_instructions?.qr_string"
+          <div v-if="!isExpired && transaction?.payment_method === 'QRIS' && transaction.payment_details?.qr_code"
             class="space-y-4">
             <div class="text-center">
               <div class="bg-white rounded-2xl p-4 inline-block mb-4">
-                <img :src="generateQRCodeDataURL(transaction.payment_instructions.qr_string)" alt="QRIS Payment QR Code"
+                <img :src="generateQRCodeDataURL(transaction.payment_details.qr_code)" alt="QRIS Payment QR Code"
                   class="w-48 h-48 mx-auto" />
               </div>
               <p class="text-gray-300 text-sm">Scan the QR code with any QRIS-compatible app</p>
@@ -343,8 +342,8 @@ onUnmounted(() => {
               <h5 class="font-medium text-white mb-2">QR Code String</h5>
               <div class="flex items-center gap-2">
                 <code
-                  class="flex-grow bg-dark text-gray-300 p-2 rounded text-xs break-all">{{ transaction.payment_instructions.qr_string }}</code>
-                <button @click="handleCopyText(transaction.payment_instructions.qr_string, 'QR Code')"
+                  class="flex-grow bg-dark text-gray-300 p-2 rounded text-xs break-all">{{ transaction.payment_details.qr_code }}</code>
+                <button @click="handleCopyText(transaction.payment_details.qr_code, 'QR Code')"
                   class="px-3 py-2 bg-brand text-black rounded font-medium hover:bg-brand/90 transition-colors">
                   <Icon icon="tabler:copy" width="16" height="16" />
                 </button>
@@ -354,20 +353,21 @@ onUnmounted(() => {
 
           <!-- Virtual Account Instructions -->
           <div
-            v-else-if="!isExpired && transaction && isVirtualAccountMethod(transaction.payment_method || '') && transaction.payment_instructions?.virtual_account_number"
+            v-else-if="!isExpired && transaction && isVirtualAccountMethod(transaction.payment_method || '') && transaction.payment_details?.virtual_account_number"
             class="space-y-4">
             <div class="bg-dark-3 rounded-2xl p-4">
-              <h5 class="font-medium text-white mb-2">{{ getBankName(transaction.payment_instructions.bank_code || '')
-              }} Virtual Account</h5>
+              <h5 class="font-medium text-white mb-2">{{ getBankName(transaction.payment_details.virtual_account_bank ||
+                '')
+                }} Virtual Account</h5>
               <div class="space-y-3">
                 <div>
                   <p class="text-gray-400 text-sm">Virtual Account Number</p>
                   <div class="flex items-center gap-2">
                     <code class="flex-grow bg-dark text-white p-2 rounded font-mono text-lg">
-                      {{ formatVirtualAccountNumber(transaction.payment_instructions.virtual_account_number) }}
+                      {{ formatVirtualAccountNumber(transaction.payment_details?.virtual_account_number || '') }}
                     </code>
                     <button
-                      @click="handleCopyText(transaction.payment_instructions.virtual_account_number, 'Virtual Account Number')"
+                      @click="handleCopyText(transaction.payment_details.virtual_account_number, 'Virtual Account Number')"
                       class="px-3 py-2 bg-brand text-black rounded font-medium hover:bg-brand/90 transition-colors">
                       <Icon icon="tabler:copy" width="16" height="16" />
                     </button>
@@ -380,16 +380,15 @@ onUnmounted(() => {
             <div class="bg-dark-3 rounded-2xl p-4">
               <h5 class="font-medium text-white mb-3">How to Pay</h5>
               <div class="space-y-4">
-                <div v-if="transaction.payment_instructions?.instructions" class="text-gray-300 text-sm space-y-2">
-                  <div v-for="(instruction, index) in transaction.payment_instructions.instructions.split('\n')"
-                    :key="index">
+                <div v-if="transaction.payment_details?.payment_url" class="text-gray-300 text-sm space-y-2">
+                  <div v-for="(instruction, index) in transaction.payment_details.payment_url.split('\n')" :key="index">
                     {{ instruction }}
                   </div>
                 </div>
                 <div v-else>
                   <p class="text-gray-300 text-sm">Transfer the exact amount to the virtual account number above using
-                    {{ getBankName(transaction.payment_instructions?.bank_code || '') }} mobile banking, internet
-                    banking, or ATM.</p>
+                    {{ getBankName(transaction.payment_details?.virtual_account_bank || '') }} mobile banking,
+                    internet banking, or ATM.</p>
                 </div>
               </div>
             </div>
@@ -397,12 +396,12 @@ onUnmounted(() => {
 
           <!-- E-Wallet Instructions -->
           <div
-            v-else-if="!isExpired && transaction && isEWalletMethod(transaction.payment_method || '') && transaction.payment_instructions?.payment_url"
+            v-else-if="!isExpired && transaction && isEWalletMethod(transaction.payment_method || '') && transaction.payment_details?.payment_url"
             class="space-y-4">
             <div class="text-center">
               <p class="text-gray-300 mb-4">You will be redirected to {{ getEWalletName(transaction.payment_method ||
                 '') }} to complete the payment</p>
-              <a :href="transaction.payment_instructions.payment_url" target="_blank"
+              <a :href="transaction.payment_details.payment_url" target="_blank"
                 class="inline-block px-6 py-3 bg-brand text-black rounded-2xl font-semibold hover:bg-brand/90 transition-colors">
                 Open {{ getEWalletName(transaction.payment_method || '') }}
               </a>
@@ -410,10 +409,10 @@ onUnmounted(() => {
           </div>
 
           <!-- Generic Instructions -->
-          <div v-else-if="!isExpired && transaction?.payment_instructions" class="space-y-4">
+          <div v-else-if="!isExpired && transaction?.payment_details" class="space-y-4">
             <div class="bg-dark-3 rounded-2xl p-4">
               <h5 class="font-medium text-white mb-2">Payment Instructions</h5>
-              <p class="text-gray-300 text-sm">{{ transaction.payment_instructions.instructions }}</p>
+              <p class="text-gray-300 text-sm">{{ transaction.payment_details.payment_url }}</p>
             </div>
           </div>
 
@@ -442,7 +441,7 @@ onUnmounted(() => {
                 <li>• Payment confirmation is automatic</li>
                 <li>• GSalt will be added to your balance once payment is confirmed</li>
                 <li>• Keep this page open until payment is completed</li>
-                <li v-if="transaction.payment_instructions?.expiry_time">• Payment must be completed before expiry time
+                <li v-if="transaction.payment_details?.expiry_time">• Payment must be completed before expiry time
                 </li>
               </ul>
             </div>

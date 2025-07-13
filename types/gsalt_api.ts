@@ -43,12 +43,19 @@ export interface PaymentDetails {
   id: string;
   transaction_id: string;
   provider: string;
-  provider_payment_id: string;
-  payment_url: string;
+  provider_payment_id?: string;
+  payment_url?: string;
   qr_code?: string;
-  expiry_time: string;
+  virtual_account_number?: string;
+  virtual_account_bank?: string;
+  retail_outlet_code?: string;
+  retail_payment_code?: string;
+  card_token?: string;
+  expiry_time?: string;
   payment_time?: string;
-  provider_fee_amount: number;
+  provider_fee_amount?: number;
+  status_history?: string;
+  raw_provider_response?: string;
   created_at: string;
   updated_at: string;
 }
