@@ -62,6 +62,19 @@ const currentYear = new Date().getFullYear();
                   Information</NuxtLink>
               </li>
             </ul>
+            <!-- Certificate -->
+            <div class="mt-8">
+              <p class="text-white/70">TD-PSE Registration Certificate</p>
+              <p class="text-white/70">015335.01/DJAI.PSE/08/2024</p>
+              <div class="flex items-center gap-2 mt-2">
+                <NuxtLink to="https://komdigi.go.id" target="_blank">
+                  <NuxtImg src="/images/logo-komdigi.png" alt="Komdigi" class="h-16 w-auto mx-auto mb-4" />
+                </NuxtLink>
+                <NuxtLink to="https://pse.komdigi.go.id" target="_blank">
+                  <NuxtImg src="/images/logo-pse.png" alt="PSE" class="h-16 w-auto mx-auto mb-4" />
+                </NuxtLink>
+              </div>
+            </div>
           </div>
         </div>
 

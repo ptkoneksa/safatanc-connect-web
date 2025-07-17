@@ -108,15 +108,19 @@ watch(() => route.path, (newPath) => {
             </div>
           </transition>
         </div>
-      </div>
 
-      <!-- Certificate -->
-      <div class="absolute bottom-0 left-0 w-full">
-        <p class="text-white/70 text-center text-xs">Certified by</p>
-        <div class="flex justify-center items-center mt-2">
-          <NuxtLink to="https://komdigi.com" target="_blank">
-            <NuxtImg src="/images/komdigi.png" alt="Komdigi" class="h-16 w-auto mx-auto mb-4" />
-          </NuxtLink>
+        <!-- Certificate -->
+        <div class="mt-8">
+          <p class="text-white/70 text-center text-xs">TD-PSE Registration Certificate</p>
+          <p class="text-white/70 text-center text-xs">015335.01/DJAI.PSE/08/2024</p>
+          <div class="flex justify-center items-center gap-2 mt-2">
+            <NuxtLink to="https://komdigi.go.id" target="_blank">
+              <NuxtImg src="/images/logo-komdigi.png" alt="Komdigi" class="h-16 w-auto mx-auto mb-4" />
+            </NuxtLink>
+            <NuxtLink to="https://pse.komdigi.go.id" target="_blank">
+              <NuxtImg src="/images/logo-pse.png" alt="PSE" class="h-16 w-auto mx-auto mb-4" />
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </div>

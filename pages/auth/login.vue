@@ -31,12 +31,13 @@ useSeoMeta({
 }, { mode: 'server' });
 
 const route = useRoute();
-const router = useRouter();
 const authStore = useAuthStore();
 const { login, initiateOAuthLogin } = useAuthApi();
 
 // Check for redirect_uri and close_on_success in query parameters
 const redirectUri = route.query.redirect_uri ? String(route.query.redirect_uri) : undefined;
+
+const showLogin = ref(!authStore.isAuthenticated);
 
 // Form values
 const email = ref('');
@@ -101,12 +102,56 @@ const loginWithOAuth = (provider: OAuthProvider) => {
     apiError.value = err.message || `Failed to initiate ${provider} login`;
   }
 };
+
+const handleContinue = () => {
+  if (redirectUri) {
+    const redirectUriWithToken = new URL(redirectUri);
+    redirectUriWithToken.searchParams.set('token', authStore.user?.token);
+    redirectUriWithToken.searchParams.set('refresh_token', authStore.user?.refresh_token);
+
+    navigateTo(redirectUriWithToken, { external: true });
+  } else {
+    navigateTo('/account');
+  }
+};
 </script>
 
 <template>
   <div class="auth-container">
     <div>
-      <div class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
+      <div v-if="!showLogin"
+        class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
+        <h2 class="text-center text-white">Confirmation</h2>
+        <div class="flex justify-center items-center gap-2 my-5">
+          <NuxtImg :src="authStore.user?.avatar_url" alt="Avatar" class="h-16 w-16 rounded-full bg-white" />
+          <div>
+            <h3 class="text-white">{{ authStore.user?.full_name }}</h3>
+            <p class="text-white/70">{{ authStore.user?.email }}</p>
+          </div>
+        </div>
+        <h4 class="text-center text-white">You are already logged in, do you want to login with another account or
+          continue with this account?</h4>
+        <div class="mt-5 space-y-5">
+          <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="showLogin = true">
+            <template #icon>
+              <Icon icon="tabler:logout" width="24" height="24" />
+            </template>
+            <template #text>
+              Login with another account
+            </template>
+          </Button>
+          <Button bg="bg-brand" color="text-black" class="w-full" @click="handleContinue">
+            <template #icon>
+              <Icon icon="tabler:arrow-right" width="24" height="24" />
+            </template>
+            <template #text>
+              Continue with this account
+            </template>
+          </Button>
+        </div>
+      </div>
+      <div v-else="showLogin"
+        class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
         <h2 class="text-2xl font-bold text-center text-white">Login</h2>
 
         <form @submit.prevent="onSubmit" class="space-y-6 mt-8">
