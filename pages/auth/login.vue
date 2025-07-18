@@ -103,15 +103,15 @@ const loginWithOAuth = (provider: OAuthProvider) => {
   }
 };
 
-const handleContinue = () => {
+const handleContinue = async () => {
   if (redirectUri) {
     const redirectUriWithToken = new URL(redirectUri);
-    redirectUriWithToken.searchParams.set('token', authStore.user?.token);
-    redirectUriWithToken.searchParams.set('refresh_token', authStore.user?.refresh_token);
+    redirectUriWithToken.searchParams.set('token', authStore.token || '');
+    redirectUriWithToken.searchParams.set('refresh_token', authStore.refresh_token || '');
 
-    navigateTo(redirectUriWithToken, { external: true });
+    await navigateTo(redirectUriWithToken.toString(), { external: true });
   } else {
-    navigateTo('/account');
+    await navigateTo('/account');
   }
 };
 </script>
