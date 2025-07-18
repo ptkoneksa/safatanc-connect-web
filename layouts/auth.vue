@@ -63,14 +63,14 @@ watch(() => route.path, (newPath) => {
     <!-- Right panel - Auth forms -->
     <div class="col-span-1 md:col-span-2 flex items-center justify-center p-6 md:p-12 relative">
       <!-- Mobile logo -->
-      <div class="md:hidden text-center mb-8 absolute top-8 left-0 right-0">
-        <NuxtImg src="/images/stech_logo_gradient.png" alt="Safatanc" class="h-16 w-auto mx-auto mb-4" />
-        <h1 class="gradient-text text-2xl">SAFATANC CONNECT</h1>
-        <h3 class="text-sm text-white/80 mb-8">Together, Made Simple.</h3>
-      </div>
 
       <!-- Auth form card -->
-      <div class="w-full max-w-md mt-16 md:mt-0">
+      <div class="w-full max-w-md mt-16 md:mt-0 pb-16">
+        <div class="md:hidden text-center mb-8 md:mb-0">
+          <NuxtImg src="/images/stech_logo_gradient.png" alt="Safatanc" class="h-16 w-auto mx-auto" />
+          <h1 class="gradient-text text-2xl">SAFATANC CONNECT</h1>
+          <h3 class="text-sm text-white/80">Together, Made Simple.</h3>
+        </div>
         <transition name="scale" mode="out-in">
           <div class="relative">
             <slot />

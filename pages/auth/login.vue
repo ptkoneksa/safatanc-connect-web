@@ -123,7 +123,7 @@ const handleContinue = () => {
         class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
         <h2 class="text-center text-white">Confirmation</h2>
         <div class="flex justify-center items-center gap-2 my-5">
-          <NuxtImg :src="authStore.user?.avatar_url" alt="Avatar" class="h-16 w-16 rounded-full bg-white" />
+          <Icon icon="tabler:user-circle" class="text-white" width="64" height="64" />
           <div>
             <h3 class="text-white">{{ authStore.user?.full_name }}</h3>
             <p class="text-white/70">{{ authStore.user?.email }}</p>
@@ -131,21 +131,21 @@ const handleContinue = () => {
         </div>
         <h4 class="text-center text-white">You are already logged in, do you want to login with another account or
           continue with this account?</h4>
-        <div class="mt-5 space-y-5">
+        <div class="mt-5">
           <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="showLogin = true">
             <template #icon>
               <Icon icon="tabler:logout" width="24" height="24" />
             </template>
             <template #text>
-              Login with another account
+              <p class="text-xs md:text-base">Login with another account</p>
             </template>
           </Button>
-          <Button bg="bg-brand" color="text-black" class="w-full" @click="handleContinue">
+          <Button bg="bg-brand" color="text-black" class="w-full mt-5" @click="handleContinue">
             <template #icon>
               <Icon icon="tabler:arrow-right" width="24" height="24" />
             </template>
             <template #text>
-              Continue with this account
+              <p class="text-xs md:text-base">Continue with this account</p>
             </template>
           </Button>
         </div>
