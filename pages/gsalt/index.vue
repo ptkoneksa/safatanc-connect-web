@@ -12,18 +12,18 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'GSalt Wallet - Safatanc Connect',
+  title: 'GSalt Wallet - Konek',
   meta: [
-    { name: 'description', content: 'Manage your GSalt (Global Safatanc Loyalty Token) balance, transactions, and payments on Safatanc Connect.' },
-    { property: 'og:title', content: 'GSalt Wallet - Safatanc Connect' },
-    { property: 'og:description', content: 'Manage your GSalt (Global Safatanc Loyalty Token) balance, transactions, and payments on Safatanc Connect.' },
-    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { name: 'description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Konek.' },
+    { property: 'og:title', content: 'GSalt Wallet - Konek' },
+    { property: 'og:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Konek.' },
+    { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/gsalt' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'GSalt Wallet - Safatanc Connect' },
-    { name: 'twitter:description', content: 'Manage your GSalt (Global Safatanc Loyalty Token) balance, transactions, and payments on Safatanc Connect.' },
-    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    { name: 'twitter:title', content: 'GSalt Wallet - Konek' },
+    { name: 'twitter:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Konek.' },
+    { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     { name: 'theme-color', content: '#ffbf00' }
   ],
 }, { mode: 'server' });
@@ -266,7 +266,7 @@ onMounted(async () => {
               <NuxtImg src="/images/GSalt.png" alt="GSalt" class="h-12 aspect-square object-contain" />
               <h2 class="font-bold">GSalt</h2>
             </div>
-            <p class="text-brand font-semibold text-2xl">Global Safatanc Asset Loyalty Token</p>
+            <p class="text-brand font-semibold text-2xl">Global Koneksa Asset Loyalty Token</p>
             <p class="text-gray-400">View your GSalt balance and transactions</p>
           </div>
         </div>
@@ -281,7 +281,7 @@ onMounted(async () => {
           </div>
           <h3 class="text-2xl font-bold text-white mb-2">GSalt Account Required</h3>
           <p class="text-gray-400 max-w-md mx-auto">
-            You don't have a GSalt account yet. Create one now to start using GSalt (Global Safatanc Loyalty Token)
+            You don't have a GSalt account yet. Create one now to start using GSalt (Global Koneksa Loyalty Token)
             for payments, transfers, and earning rewards.
           </p>
         </div>
@@ -303,7 +303,7 @@ onMounted(async () => {
             </li>
             <li class="flex items-center gap-2">
               <Icon icon="tabler:check" class="text-green-400 flex-shrink-0" width="16" height="16" />
-              <span>Seamless integration with Safatanc services</span>
+              <span>Seamless integration with Koneksa services</span>
             </li>
           </ul>
         </div>

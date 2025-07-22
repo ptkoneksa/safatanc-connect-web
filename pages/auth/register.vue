@@ -13,19 +13,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Create Account - Safatanc Connect',
-  description: 'Register for a Safatanc Connect account to access all Safatanc services in one place. Join our community today.',
+  title: 'Create Account - Konek',
+  description: 'Register for a Konek account to access all Koneksa services in one place. Join our community today.',
   // Open Graph
-  ogTitle: 'Create Account - Safatanc Connect',
-  ogDescription: 'Register for a Safatanc Connect account to access all Safatanc services in one place. Join our community today.',
-  ogImage: '/images/stech_logo_gradient.png',
+  ogTitle: 'Create Account - Konek',
+  ogDescription: 'Register for a Konek account to access all Koneksa services in one place. Join our community today.',
+  ogImage: '/images/koneksa_logotype.png',
   ogUrl: 'https://connect.safatanc.com/auth/register',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',
-  twitterTitle: 'Create Account - Safatanc Connect',
-  twitterDescription: 'Register for a Safatanc Connect account to access all Safatanc services in one place. Join our community today.',
-  twitterImage: '/images/stech_logo_gradient.png',
+  twitterTitle: 'Create Account - Konek',
+  twitterDescription: 'Register for a Konek account to access all Koneksa services in one place. Join our community today.',
+  twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
   themeColor: '#ffbf00', // Using brand color
 }, { mode: 'server' });

@@ -15,7 +15,7 @@ const route = useRoute();
 const externalRefId = route.params.externalRefId as string;
 
 useHead({
-  title: 'Payment Instructions - Safatanc Connect',
+  title: 'Payment Instructions - Konek',
 });
 
 // Composables
@@ -358,7 +358,7 @@ onUnmounted(() => {
             <div class="bg-dark-3 rounded-2xl p-4">
               <h5 class="font-medium text-white mb-2">{{ getBankName(transaction.payment_details.virtual_account_bank ||
                 '')
-                }} Virtual Account</h5>
+              }} Virtual Account</h5>
               <div class="space-y-3">
                 <div>
                   <p class="text-gray-400 text-sm">Virtual Account Number</p>

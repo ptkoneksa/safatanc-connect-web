@@ -43,8 +43,8 @@ const handleLogout = async () => {
         <!-- Logo -->
         <div class="flex items-center">
           <NuxtLink to="/" class="flex items-center">
-            <NuxtImg src="/images/stech_logo_gradient.png" alt="Safatanc"
-              class="h-12 w-auto aspect-video object-cover hover:scale-105 transition-transform duration-300" />
+            <NuxtImg src="/images/koneksa_logotype.png" alt="Koneksa"
+              class="h-12 w-auto object-cover hover:scale-105 transition-transform duration-300" />
           </NuxtLink>
         </div>
 

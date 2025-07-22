@@ -10,7 +10,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Transfer GSalt - Safatanc Connect',
+  title: 'Transfer GSalt - Konek',
 });
 
 // Composables

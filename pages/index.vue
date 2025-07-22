@@ -7,20 +7,20 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Safatanc Connect - Together, Made Simple',
+  title: 'Konek - Together, Made Simple',
   meta: [
-    { name: 'description', content: 'Safatanc Connect is your all-in-one platform for Safatanc Group services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { name: 'description', content: 'Konek is your all-in-one platform for Koneksa services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
     // Open Graph
-    { property: 'og:title', content: 'Safatanc Connect - Together, Made Simple' },
-    { property: 'og:description', content: 'Safatanc Connect is your all-in-one platform for Safatanc Group services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
-    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:title', content: 'Konek - Together, Made Simple' },
+    { property: 'og:description', content: 'Konek is your all-in-one platform for Koneksa services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Safatanc Connect - Together, Made Simple' },
-    { name: 'twitter:description', content: 'Safatanc Connect is your all-in-one platform for Safatanc Group services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
-    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    { name: 'twitter:title', content: 'Konek - Together, Made Simple' },
+    { name: 'twitter:description', content: 'Konek is your all-in-one platform for Koneksa services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
+    { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],
@@ -30,7 +30,7 @@ const features = [
   {
     id: 1,
     title: 'Unified Access',
-    description: 'One account for all Safatanc services. Streamlined and secure.',
+    description: 'One account for all Koneksa services. Streamlined and secure.',
     icon: 'tabler:key',
   },
   {
@@ -48,7 +48,7 @@ const features = [
   {
     id: 4,
     title: 'Data Synchronization',
-    description: 'Seamless data flow between all your Safatanc applications.',
+    description: 'Seamless data flow between all your Koneksa applications.',
     icon: 'tabler:refresh',
   },
   {
@@ -84,10 +84,10 @@ const user = computed(() => authStore.getUser);
         <!-- Hero Content -->
         <div class="md:pr-8 text-center md:text-left space-y-6">
           <div>
-            <h4 class="text-brand font-bold">SAFATANC CONNECT</h4>
+            <NuxtImg src="/images/koneksa_logotype.png" alt="Koneksa" class="h-12 w-auto object-cover" />
             <h1>Together, Made Simple.</h1>
-            <p class="max-w-lg mt-4">The central hub for all Safatanc Group users. Manage your unified account,
-              access all Safatanc services, and control your GSalt balance in one place.</p>
+            <p class="max-w-lg mt-4">The central hub for all Koneksa users. Manage your unified account,
+              access all Koneksa services, and control your GSalt balance in one place.</p>
           </div>
 
           <div v-if="!user" class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
@@ -127,7 +127,8 @@ const user = computed(() => authStore.getUser);
     <!-- Features Section -->
     <div class="container mx-auto px-8 py-16 border-t border-dark-3" id="features">
       <div class="pt-20 -mt-20"></div>
-      <h2 class="text-center mb-16">Core Features of <span class="text-brand">SAFATANC CONNECT</span></h2>
+      <NuxtImg src="/images/koneksa_logotype.png" alt="Koneksa" class="h-12 w-auto object-cover mx-auto" />
+      <h2 class="text-center mb-16">Core Features</h2>
 
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Feature 1 -->
@@ -139,7 +140,7 @@ const user = computed(() => authStore.getUser);
             </div>
           </div>
           <h3 class="text-center mb-2">Account Management</h3>
-          <p class="text-gray-400 text-center">Manage your Safatanc Group account profile, privacy settings, and
+          <p class="text-gray-400 text-center">Manage your Koneksa account profile, privacy settings, and
             connected
             services in one place.</p>
         </div>
@@ -153,7 +154,7 @@ const user = computed(() => authStore.getUser);
             </div>
           </div>
           <h3 class="text-center mb-2">Single Sign-On (SSO)</h3>
-          <p class="text-gray-400 text-center">One account to access all Safatanc Group services and platforms with
+          <p class="text-gray-400 text-center">One account to access all Koneksa services and platforms with
             enhanced
             security.</p>
         </div>
@@ -167,7 +168,7 @@ const user = computed(() => authStore.getUser);
             </div>
           </div>
           <h3 class="text-center mb-2">GSalt</h3>
-          <p class="text-gray-400 text-center">Global Safatanc Loyalty Token - Check your balance, top-up, and manage
+          <p class="text-gray-400 text-center">Global Koneksa Loyalty Token - Check your balance, top-up, and manage
             your
             loyalty rewards.</p>
         </div>
@@ -208,10 +209,10 @@ const user = computed(() => authStore.getUser);
         </div>
 
         <div class="order-1 md:order-2 md:pl-8 text-center md:text-left">
-          <h2 class="gradient-text mb-6">Global Safatanc Loyalty Token</h2>
-          <p class="mb-6">GSalt is Safatanc Group's loyalty program and payment system. Check your
+          <h2 class="gradient-text mb-6">Global Koneksa Loyalty Token</h2>
+          <p class="mb-6">GSalt is Koneksa's loyalty program and payment system. Check your
             balance,
-            top-up points, and use GSalt tokens as a convenient payment method across Safatanc services.</p>
+            top-up points, and use GSalt tokens as a convenient payment method across Koneksa services.</p>
           <p class="mb-6"><em>Note: GSalt will have its own dedicated platform for expanded features and
               services.</em></p>
           <NuxtLink to="/gsalt">
@@ -240,7 +241,7 @@ const user = computed(() => authStore.getUser);
 
         <div class="text-center max-w-2xl mx-auto">
           <h2 class="mb-4">Ready to Connect?</h2>
-          <p class="text-gray-400 mb-8">Manage your Safatanc accounts, access all services, and enjoy a seamless
+          <p class="text-gray-400 mb-8">Manage your Koneksa accounts, access all services, and enjoy a seamless
             experience.
           </p>
           <NuxtLink v-if="!user" to="/auth">

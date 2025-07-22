@@ -10,7 +10,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Withdraw GSalt - Safatanc Connect',
+  title: 'Withdraw GSalt - Konek',
 });
 
 // Composables
@@ -342,7 +342,7 @@ onMounted(() => {
               <div class="flex justify-between">
                 <span class="text-gray-400">Bank:</span>
                 <span class="text-white">{{supportedBanks.find(b => b.code === form.bank_code)?.name || 'Not selected'
-                  }}</span>
+                }}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-400">Account:</span>

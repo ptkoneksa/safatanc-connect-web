@@ -8,20 +8,20 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Badges - Safatanc Connect',
+  title: 'Badges - Konek',
   meta: [
-    { name: 'description', content: 'Explore available badges on Safatanc Connect.' },
+    { name: 'description', content: 'Explore available badges on Konek.' },
     // Open Graph
-    { property: 'og:title', content: 'Badges - Safatanc Connect' },
-    { property: 'og:description', content: 'Explore available badges on Safatanc Connect.' },
-    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:title', content: 'Badges - Konek' },
+    { property: 'og:description', content: 'Explore available badges on Konek.' },
+    { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/badges' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Badges - Safatanc Connect' },
-    { name: 'twitter:description', content: 'Explore available badges on Safatanc Connect.' },
-    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    { name: 'twitter:title', content: 'Badges - Konek' },
+    { name: 'twitter:description', content: 'Explore available badges on Konek.' },
+    { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],
@@ -89,7 +89,7 @@ const prevPage = () => {
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 class="text-3xl font-bold text-white mb-2 gradient-text">Explore Badges</h1>
-          <p class="text-gray-300">Discover and earn Safatanc Connect badges to showcase your achievements.</p>
+          <p class="text-gray-300">Discover and earn Konek badges to showcase your achievements.</p>
         </div>
 
         <div class="relative w-full md:w-64">

@@ -10,20 +10,20 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Account Dashboard - Safatanc Connect',
+  title: 'Account Dashboard - Konek',
   meta: [
-    { name: 'description', content: 'Manage your Safatanc Connect account, view activity, and access all Safatanc services from your personalized dashboard.' },
+    { name: 'description', content: 'Manage your Konek account, view activity, and access all Koneksa services from your personalized dashboard.' },
     // Open Graph
-    { property: 'og:title', content: 'Account Dashboard - Safatanc Connect' },
-    { property: 'og:description', content: 'Manage your Safatanc Connect account, view activity, and access all Safatanc services from your personalized dashboard.' },
-    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:title', content: 'Account Dashboard - Konek' },
+    { property: 'og:description', content: 'Manage your Konek account, view activity, and access all Koneksa services from your personalized dashboard.' },
+    { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/account' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Account Dashboard - Safatanc Connect' },
-    { name: 'twitter:description', content: 'Manage your Safatanc Connect account, view activity, and access all Safatanc services from your personalized dashboard.' },
-    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    { name: 'twitter:title', content: 'Account Dashboard - Konek' },
+    { name: 'twitter:description', content: 'Manage your Konek account, view activity, and access all Koneksa services from your personalized dashboard.' },
+    { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],

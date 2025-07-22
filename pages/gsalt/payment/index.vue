@@ -7,7 +7,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'GSalt Payment - Safatanc Connect',
+  title: 'GSalt Payment - Konek',
 });
 </script>
 
@@ -43,7 +43,7 @@ useHead({
           <ul class="text-gray-300 text-sm space-y-2 text-left max-w-sm mx-auto">
             <li class="flex items-center gap-2">
               <Icon icon="tabler:check" class="text-green-400 flex-shrink-0" width="16" height="16" />
-              <span>Pay for Safatanc services</span>
+              <span>Pay for Koneksa services</span>
             </li>
             <li class="flex items-center gap-2">
               <Icon icon="tabler:check" class="text-green-400 flex-shrink-0" width="16" height="16" />

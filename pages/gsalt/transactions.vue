@@ -10,7 +10,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'GSalt Transactions - Safatanc Connect',
+  title: 'GSalt Transactions - Konek',
 });
 
 // Composables

@@ -7,7 +7,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'GSalt Gift - Safatanc Connect',
+  title: 'GSalt Gift - Konek',
 });
 </script>
 

@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Redeem Voucher - Safatanc Connect',
+  title: 'Redeem Voucher - Konek',
 });
 
 // Composables
@@ -113,7 +113,7 @@ const handleSubmit = async () => {
               <div>
                 <h4 class="font-semibold text-blue-400 mb-1">Where to find vouchers?</h4>
                 <p class="text-blue-200 text-sm">
-                  Voucher codes are distributed through Safatanc promotions, events, partnerships,
+                  Voucher codes are distributed through Koneksa promotions, events, partnerships,
                   and special campaigns. Follow our social media for the latest voucher opportunities!
                 </p>
               </div>
@@ -158,7 +158,7 @@ const handleSubmit = async () => {
               <span class="font-medium text-white">Join Events</span>
             </div>
             <p class="text-gray-400 text-sm mb-3">
-              Participate in Safatanc events and competitions to earn voucher rewards.
+              Participate in Koneksa events and competitions to earn voucher rewards.
             </p>
             <NuxtLink to="/events"
               class="inline-block px-4 py-2 bg-purple-500 text-white rounded-xl text-sm font-medium hover:bg-purple-600 transition-colors">

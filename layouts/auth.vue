@@ -52,7 +52,7 @@ watch(() => route.path, (newPath) => {
 
       <div class="absolute bottom-6 left-0 right-0 text-center text-black text-sm">
         <p>
-          &copy; {{ new Date().getFullYear() }} PT SAFATANC TECHNOLOGY DIGITAL
+          &copy; {{ new Date().getFullYear() }} PT Koneksi Kreatif Nusantara
         </p>
         <p>
           All rights reserved.
@@ -67,9 +67,9 @@ watch(() => route.path, (newPath) => {
       <!-- Auth form card -->
       <div class="w-full max-w-md mt-16 md:mt-0 pb-16">
         <div class="md:hidden text-center mb-8 md:mb-0">
-          <NuxtImg src="/images/stech_logo_gradient.png" alt="Safatanc" class="h-16 w-auto mx-auto" />
-          <h1 class="gradient-text text-2xl">SAFATANC CONNECT</h1>
-          <h3 class="text-sm text-white/80">Together, Made Simple.</h3>
+          <NuxtImg src="/images/koneksa_logotype.png" alt="Koneksa" class="h-16 w-auto mx-auto" />
+          <h1 class="gradient-text text-2xl">Koneksa</h1>
+          <h3 class="text-sm text-white/80">Together, Made Simple</h3>
         </div>
         <transition name="scale" mode="out-in">
           <div class="relative">

@@ -11,7 +11,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Top Up GSalt - Safatanc Connect',
+  title: 'Top Up GSalt - Konek',
 });
 
 // Composables

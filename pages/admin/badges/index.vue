@@ -10,9 +10,9 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Manage Badges - Admin - Safatanc Connect',
+  title: 'Manage Badges - Admin - Konek',
   meta: [
-    { name: 'description', content: 'Admin panel for managing badges on Safatanc Connect.' },
+    { name: 'description', content: 'Admin panel for managing badges on Konek.' },
     // Theme Color
     { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],

@@ -42,17 +42,17 @@ const error = computed(() => {
 watchEffect(() => {
   if (badge.value) {
     useHead({
-      title: `${badge.value.name} - Badges - Safatanc Connect`,
+      title: `${badge.value.name} - Badges - Konek`,
       meta: [
         { name: 'description', content: badge.value.description },
         // Open Graph
-        { property: 'og:title', content: `${badge.value.name} - Badges - Safatanc Connect` },
+        { property: 'og:title', content: `${badge.value.name} - Badges - Konek` },
         { property: 'og:description', content: badge.value.description },
         { property: 'og:image', content: badge.value.image_url },
         { property: 'og:type', content: 'website' },
         // Twitter Card
         { name: 'twitter:card', content: 'summary' },
-        { name: 'twitter:title', content: `${badge.value.name} - Badges - Safatanc Connect` },
+        { name: 'twitter:title', content: `${badge.value.name} - Badges - Konek` },
         { name: 'twitter:description', content: badge.value.description },
         { name: 'twitter:image', content: badge.value.image_url },
         // Theme Color

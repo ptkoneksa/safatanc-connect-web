@@ -18,9 +18,8 @@ const currentYear = new Date().getFullYear();
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Company Info -->
           <div>
-            <NuxtImg src="/images/stech_logo_gradient.png" alt="Safatanc"
-              class="h-12 w-auto aspect-video object-cover mb-4" />
-            <p class="text-gray-400 text-sm mt-4">The central platform for Safatanc Group's users to manage their
+            <NuxtImg src="/images/koneksa_logotype.png" alt="Koneksa" class="h-12 w-auto object-cover mb-4" />
+            <p class="text-gray-400 text-sm mt-4">The central platform for Koneksa users to manage their
               accounts and access all services.</p>
           </div>
 
@@ -81,7 +80,7 @@ const currentYear = new Date().getFullYear();
         <div class="border-t border-dark mt-8 pt-8 text-center text-sm text-gray-400">
           <NuxtLink to="https://www.safatanc.com" target="_blank"
             class="hover:text-brand transition-colors duration-200">
-            © {{ currentYear }} PT SAFATANC TECHNOLOGY DIGITAL
+            © {{ currentYear }} PT Koneksi Kreatif Nusantara
           </NuxtLink>
           <p class="mt-2">All rights reserved.</p>
         </div>

@@ -10,20 +10,20 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'My Badges - Safatanc Connect',
+  title: 'My Badges - Konek',
   meta: [
-    { name: 'description', content: 'View and manage your earned badges on Safatanc Connect.' },
+    { name: 'description', content: 'View and manage your earned badges on Konek.' },
     // Open Graph
-    { property: 'og:title', content: 'My Badges - Safatanc Connect' },
-    { property: 'og:description', content: 'View and manage your earned badges on Safatanc Connect.' },
-    { property: 'og:image', content: '/images/stech_logo_gradient.png' },
+    { property: 'og:title', content: 'My Badges - Konek' },
+    { property: 'og:description', content: 'View and manage your earned badges on Konek.' },
+    { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/account/badges' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'My Badges - Safatanc Connect' },
-    { name: 'twitter:description', content: 'View and manage your earned badges on Safatanc Connect.' },
-    { name: 'twitter:image', content: '/images/stech_logo_gradient.png' },
+    { name: 'twitter:title', content: 'My Badges - Konek' },
+    { name: 'twitter:description', content: 'View and manage your earned badges on Konek.' },
+    { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#ffbf00' } // Using brand color
   ],

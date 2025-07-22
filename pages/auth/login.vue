@@ -13,19 +13,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Login - Safatanc Connect',
-  description: 'Log in to Safatanc Connect to access your account. Seamless connectivity for all your Safatanc services.',
+  title: 'Login - Konek',
+  description: 'Log in to Konek to access your account. Seamless connectivity for all your Koneksa services.',
   // Open Graph
-  ogTitle: 'Login to Safatanc Connect',
-  ogDescription: 'Log in to Safatanc Connect to access your account. Seamless connectivity for all your Safatanc services.',
-  ogImage: '/images/stech_logo_gradient.png',
+  ogTitle: 'Login to Konek',
+  ogDescription: 'Log in to Konek to access your account. Seamless connectivity for all your Koneksa services.',
+  ogImage: '/images/koneksa_logotype.png',
   ogUrl: 'https://connect.safatanc.com/auth/login',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',
-  twitterTitle: 'Login to Safatanc Connect',
-  twitterDescription: 'Log in to Safatanc Connect to access your account. Seamless connectivity for all your Safatanc services.',
-  twitterImage: '/images/stech_logo_gradient.png',
+  twitterTitle: 'Login to Konek',
+  twitterDescription: 'Log in to Konek to access your account. Seamless connectivity for all your Koneksa services.',
+  twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
   themeColor: '#ffbf00', // Using brand color
 }, { mode: 'server' });

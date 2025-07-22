@@ -11,19 +11,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Reset Password - Safatanc Connect',
-  description: 'Reset your Safatanc Connect account password. We will send you instructions to regain access to your account.',
+  title: 'Reset Password - Konek',
+  description: 'Reset your Konek account password. We will send you instructions to regain access to your account.',
   // Open Graph
-  ogTitle: 'Reset Password - Safatanc Connect',
-  ogDescription: 'Reset your Safatanc Connect account password. We will send you instructions to regain access to your account.',
-  ogImage: '/images/stech_logo_gradient.png',
+  ogTitle: 'Reset Password - Konek',
+  ogDescription: 'Reset your Konek account password. We will send you instructions to regain access to your account.',
+  ogImage: '/images/koneksa_logotype.png',
   ogUrl: 'https://connect.safatanc.com/auth/password-reset-request',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',
-  twitterTitle: 'Reset Password - Safatanc Connect',
-  twitterDescription: 'Reset your Safatanc Connect account password. We will send you instructions to regain access to your account.',
-  twitterImage: '/images/stech_logo_gradient.png',
+  twitterTitle: 'Reset Password - Konek',
+  twitterDescription: 'Reset your Konek account password. We will send you instructions to regain access to your account.',
+  twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
   themeColor: '#ffbf00', // Using brand color
 }, { mode: 'server' });

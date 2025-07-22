@@ -10,9 +10,9 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Edit Profile - Safatanc Connect',
+  title: 'Edit Profile - Konek',
   meta: [
-    { name: 'description', content: 'Update your profile information on Safatanc Connect.' },
+    { name: 'description', content: 'Update your profile information on Konek.' },
   ],
 });
 
