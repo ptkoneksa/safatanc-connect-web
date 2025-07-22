@@ -24,7 +24,7 @@ useHead({
     { name: 'twitter:title', content: 'GSalt Wallet - Konek' },
     { name: 'twitter:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Konek.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
-    { name: 'theme-color', content: '#ffbf00' }
+    { name: 'theme-color', content: '#DC4E0C' }
   ],
 }, { mode: 'server' });
 

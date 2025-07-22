@@ -23,7 +23,7 @@ useHead({
     { name: 'twitter:description', content: 'Processing authentication for Konek.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ffbf00' } // Using brand color
+    { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],
 }, { mode: 'server' });
 

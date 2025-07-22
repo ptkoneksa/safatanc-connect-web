@@ -27,7 +27,7 @@ useSeoMeta({
   twitterDescription: 'Log in to Konek to access your account. Seamless connectivity for all your Koneksa services.',
   twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
-  themeColor: '#ffbf00', // Using brand color
+  themeColor: '#DC4E0C', // Using brand color
 }, { mode: 'server' });
 
 const route = useRoute();

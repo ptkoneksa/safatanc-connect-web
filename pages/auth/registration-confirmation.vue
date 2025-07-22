@@ -22,7 +22,7 @@ useHead({
     { name: 'twitter:description', content: 'Thank you for registering with Konek. Please check your email to verify your account and complete the registration process.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ffbf00' } // Using brand color
+    { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],
 }, { mode: 'server' });
 

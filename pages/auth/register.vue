@@ -27,7 +27,7 @@ useSeoMeta({
   twitterDescription: 'Register for a Konek account to access all Koneksa services in one place. Join our community today.',
   twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
-  themeColor: '#ffbf00', // Using brand color
+  themeColor: '#DC4E0C', // Using brand color
 }, { mode: 'server' });
 
 const route = useRoute();

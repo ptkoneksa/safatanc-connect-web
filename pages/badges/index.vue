@@ -23,7 +23,7 @@ useHead({
     { name: 'twitter:description', content: 'Explore available badges on Konek.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ffbf00' } // Using brand color
+    { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],
 }, { mode: 'server' });
 
@@ -215,7 +215,7 @@ const prevPage = () => {
 
 <style scoped>
 .gradient-text {
-  background: linear-gradient(135deg, #ffbf00, #ff8300);
+  background: linear-gradient(135deg, #DC4E0C, #ff8300);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

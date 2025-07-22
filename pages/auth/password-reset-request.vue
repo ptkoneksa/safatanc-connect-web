@@ -25,7 +25,7 @@ useSeoMeta({
   twitterDescription: 'Reset your Konek account password. We will send you instructions to regain access to your account.',
   twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
-  themeColor: '#ffbf00', // Using brand color
+  themeColor: '#DC4E0C', // Using brand color
 }, { mode: 'server' });
 
 const router = useRouter();

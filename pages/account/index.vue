@@ -25,7 +25,7 @@ useHead({
     { name: 'twitter:description', content: 'Manage your Konek account, view activity, and access all Koneksa services from your personalized dashboard.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ffbf00' } // Using brand color
+    { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],
 }, { mode: 'server' });
 

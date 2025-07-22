@@ -25,7 +25,7 @@ useHead({
     { name: 'twitter:description', content: 'View and manage your earned badges on Konek.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
-    { name: 'theme-color', content: '#ffbf00' } // Using brand color
+    { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],
 }, { mode: 'server' });
 
@@ -167,7 +167,7 @@ const closeBadgeDetails = () => {
             <h3 class="text-xl font-medium text-white text-center mb-2">{{ selectedBadge.name }}</h3>
             <p class="text-gray-300 text-center">{{ selectedBadge.description }}</p>
             <p class="text-gray-400 text-sm mt-4">Earned on: {{ new Date(selectedBadge.created_at).toLocaleDateString()
-              }}</p>
+            }}</p>
           </div>
 
           <div class="flex justify-end">

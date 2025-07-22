@@ -13,16 +13,17 @@ useHead({
     // Open Graph
     { property: 'og:title', content: 'Konek - Together, Made Simple' },
     { property: 'og:description', content: 'Konek is your all-in-one platform for Koneksa services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
-    { property: 'og:image', content: '/images/koneksa_logotype.png' },
+    { property: 'og:image', content: '/images/koneksa_banner.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
     { name: 'twitter:title', content: 'Konek - Together, Made Simple' },
     { name: 'twitter:description', content: 'Konek is your all-in-one platform for Koneksa services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
-    { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
+    { name: 'twitter:image', content: '/images/koneksa_banner.png' },
+    { name: 'twitter:card', content: 'summary_large_image' },
     // Theme Color
-    { name: 'theme-color', content: '#ffbf00' } // Using brand color
+    { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],
 }, { mode: 'server' });
 

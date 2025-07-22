@@ -14,7 +14,7 @@ useHead({
   meta: [
     { name: 'description', content: 'Admin panel for managing badges on Konek.' },
     // Theme Color
-    { name: 'theme-color', content: '#ffbf00' } // Using brand color
+    { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],
 }, { mode: 'server' });
 
