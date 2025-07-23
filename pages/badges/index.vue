@@ -8,19 +8,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Badges - Konek',
+  title: 'Badges - Koneksa',
   meta: [
-    { name: 'description', content: 'Explore available badges on Konek.' },
+    { name: 'description', content: 'Explore available badges on Koneksa.' },
     // Open Graph
-    { property: 'og:title', content: 'Badges - Konek' },
-    { property: 'og:description', content: 'Explore available badges on Konek.' },
+    { property: 'og:title', content: 'Badges - Koneksa' },
+    { property: 'og:description', content: 'Explore available badges on Koneksa.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/badges' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Badges - Konek' },
-    { name: 'twitter:description', content: 'Explore available badges on Konek.' },
+    { name: 'twitter:title', content: 'Badges - Koneksa' },
+    { name: 'twitter:description', content: 'Explore available badges on Koneksa.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#DC4E0C' } // Using brand color
@@ -89,7 +89,7 @@ const prevPage = () => {
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 class="text-3xl font-bold text-white mb-2 gradient-text">Explore Badges</h1>
-          <p class="text-gray-300">Discover and earn Konek badges to showcase your achievements.</p>
+          <p class="text-gray-300">Discover and earn Koneksa badges to showcase your achievements.</p>
         </div>
 
         <div class="relative w-full md:w-64">

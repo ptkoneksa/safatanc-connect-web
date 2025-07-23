@@ -10,9 +10,9 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Edit Profile - Konek',
+  title: 'Edit Profile - Koneksa',
   meta: [
-    { name: 'description', content: 'Update your profile information on Konek.' },
+    { name: 'description', content: 'Update your profile information on Koneksa.' },
   ],
 });
 

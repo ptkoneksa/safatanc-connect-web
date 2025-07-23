@@ -13,18 +13,18 @@ definePageMeta({
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Login - Konek',
-  description: 'Log in to Konek to access your account. Seamless connectivity for all your Koneksa services.',
+  title: 'Login - Koneksa',
+  description: 'Log in to Koneksa to access your account. Seamless connectivity for all your Koneksa services.',
   // Open Graph
-  ogTitle: 'Login to Konek',
-  ogDescription: 'Log in to Konek to access your account. Seamless connectivity for all your Koneksa services.',
+  ogTitle: 'Login to Koneksa',
+  ogDescription: 'Log in to Koneksa to access your account. Seamless connectivity for all your Koneksa services.',
   ogImage: '/images/koneksa_logotype.png',
   ogUrl: 'https://connect.safatanc.com/auth/login',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',
-  twitterTitle: 'Login to Konek',
-  twitterDescription: 'Log in to Konek to access your account. Seamless connectivity for all your Koneksa services.',
+  twitterTitle: 'Login to Koneksa',
+  twitterDescription: 'Log in to Koneksa to access your account. Seamless connectivity for all your Koneksa services.',
   twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
   themeColor: '#DC4E0C', // Using brand color
@@ -38,6 +38,7 @@ const { login, initiateOAuthLogin } = useAuthApi();
 const redirectUri = route.query.redirect_uri ? String(route.query.redirect_uri) : undefined;
 
 const showLogin = ref(!authStore.isAuthenticated);
+const showEmailForm = ref(false);
 
 // Form values
 const email = ref('');
@@ -119,6 +120,7 @@ const handleContinue = async () => {
 <template>
   <div class="auth-container">
     <div>
+      <NuxtImg src="/images/koneksa_logotype.png" alt="Koneksa" class="mx-auto h-16 mb-8" />
       <div v-if="!showLogin"
         class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
         <h2 class="text-center text-white">Confirmation</h2>
@@ -152,9 +154,67 @@ const handleContinue = async () => {
       </div>
       <div v-else="showLogin"
         class="p-8 bg-dark-2 border border-dark rounded-3xl transition-all duration-300 hover:shadow-xl">
-        <h2 class="text-2xl font-bold text-center text-white">Login</h2>
+        <h2 class="text-2xl font-bold text-center text-white mt-5">Login</h2>
 
-        <form @submit.prevent="onSubmit" class="space-y-6 mt-8">
+        <!-- OAuth Buttons -->
+        <div v-if="!showEmailForm" class="space-y-4 mt-8">
+          <!-- Google -->
+          <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="loginWithOAuth('google')">
+            <template #icon>
+              <Icon v-if="oauthLoading === 'google'" icon="tabler:loader" class="text-white animate-spin" width="24"
+                height="24" />
+              <Icon v-else icon="tabler:brand-google-filled" class="text-white" width="24" height="24" />
+            </template>
+            <template #text>
+              <p v-if="oauthLoading === 'google'"></p>
+              <p v-else>Google</p>
+            </template>
+          </Button>
+
+          <!-- GitHub -->
+          <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="loginWithOAuth('github')">
+            <template #icon>
+              <Icon v-if="oauthLoading === 'github'" icon="tabler:loader" class="text-white animate-spin" width="24"
+                height="24" />
+              <Icon v-else icon="tabler:brand-github" class="text-white" width="24" height="24" />
+            </template>
+            <template #text>
+              <p v-if="oauthLoading === 'github'"></p>
+              <p v-else>GitHub</p>
+            </template>
+          </Button>
+        </div>
+
+        <!-- Switcher -->
+        <div class="relative mt-8 mb-4">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-dark"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-dark-2 text-gray-400">Or continue with</span>
+          </div>
+        </div>
+        <Button v-if="!showEmailForm" bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full"
+          @click="showEmailForm = !showEmailForm">
+          <template #icon>
+            <Icon icon="tabler:mail" width="24" height="24" />
+          </template>
+          <template #text>
+            <p>Email / Password</p>
+          </template>
+        </Button>
+        <Button v-else bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full"
+          @click="showEmailForm = !showEmailForm">
+          <template #icon>
+            <Icon icon="tabler:brand-google-filled" width="24" height="24" />
+          </template>
+          <template #text>
+            <p>Google / GitHub</p>
+          </template>
+        </Button>
+
+        <!-- Email/Password Form -->
+        <form v-if="showEmailForm" @submit.prevent="onSubmit" class="space-y-6 mt-5">
           <transition name="fade">
             <div v-if="apiError"
               class="p-4 rounded-3xl bg-red-900/30 border border-red-500 text-red-200 text-sm mb-4 shake">
@@ -203,42 +263,6 @@ const handleContinue = async () => {
             </Button>
           </div>
         </form>
-        <!-- OAuth Buttons -->
-        <div class="relative mt-8 mb-4">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-dark"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-dark-2 text-gray-400">Or continue with</span>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <!-- Google -->
-          <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="loginWithOAuth('google')">
-            <template #icon>
-              <Icon v-if="oauthLoading === 'google'" icon="tabler:loader" class="text-white animate-spin" width="24"
-                height="24" />
-              <Icon v-else icon="tabler:brand-google-filled" class="text-white" width="24" height="24" />
-            </template>
-            <template #text>
-              <p v-if="oauthLoading === 'google'"></p>
-              <p v-else>Google</p>
-            </template>
-          </Button>
-
-          <!-- GitHub -->
-          <Button bg="bg-white/5 hover:bg-white/10" color="text-white" class="w-full" @click="loginWithOAuth('github')">
-            <template #icon>
-              <Icon v-if="oauthLoading === 'github'" icon="tabler:loader" class="text-white animate-spin" width="24"
-                height="24" />
-              <Icon v-else icon="tabler:brand-github" class="text-white" width="24" height="24" />
-            </template>
-            <template #text>
-              <p v-if="oauthLoading === 'github'"></p>
-              <p v-else>GitHub</p>
-            </template>
-          </Button>
-        </div>
       </div>
       <div class="mt-5">
         <p v-if="redirectUri" class="text-center text-white/70 text-xs italic">

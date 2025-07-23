@@ -42,17 +42,17 @@ const error = computed(() => {
 watchEffect(() => {
   if (badge.value) {
     useHead({
-      title: `${badge.value.name} - Badges - Konek`,
+      title: `${badge.value.name} - Badges - Koneksa`,
       meta: [
         { name: 'description', content: badge.value.description },
         // Open Graph
-        { property: 'og:title', content: `${badge.value.name} - Badges - Konek` },
+        { property: 'og:title', content: `${badge.value.name} - Badges - Koneksa` },
         { property: 'og:description', content: badge.value.description },
         { property: 'og:image', content: badge.value.image_url },
         { property: 'og:type', content: 'website' },
         // Twitter Card
         { name: 'twitter:card', content: 'summary' },
-        { name: 'twitter:title', content: `${badge.value.name} - Badges - Konek` },
+        { name: 'twitter:title', content: `${badge.value.name} - Badges - Koneksa` },
         { name: 'twitter:description', content: badge.value.description },
         { name: 'twitter:image', content: badge.value.image_url },
         // Theme Color

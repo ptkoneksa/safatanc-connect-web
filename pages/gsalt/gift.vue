@@ -7,7 +7,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'GSalt Gift - Konek',
+  title: 'GSalt Gift - Koneksa',
 });
 </script>
 

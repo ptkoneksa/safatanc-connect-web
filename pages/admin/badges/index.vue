@@ -10,9 +10,9 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Manage Badges - Admin - Konek',
+  title: 'Manage Badges - Admin - Koneksa',
   meta: [
-    { name: 'description', content: 'Admin panel for managing badges on Konek.' },
+    { name: 'description', content: 'Admin panel for managing badges on Koneksa.' },
     // Theme Color
     { name: 'theme-color', content: '#DC4E0C' } // Using brand color
   ],

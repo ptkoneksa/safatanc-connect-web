@@ -7,19 +7,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Registration Successful - Konek',
+  title: 'Registration Successful - Koneksa',
   meta: [
-    { name: 'description', content: 'Thank you for registering with Konek. Please check your email to verify your account and complete the registration process.' },
+    { name: 'description', content: 'Thank you for registering with Koneksa. Please check your email to verify your account and complete the registration process.' },
     // Open Graph
-    { property: 'og:title', content: 'Registration Successful - Konek' },
-    { property: 'og:description', content: 'Thank you for registering with Konek. Please check your email to verify your account and complete the registration process.' },
+    { property: 'og:title', content: 'Registration Successful - Koneksa' },
+    { property: 'og:description', content: 'Thank you for registering with Koneksa. Please check your email to verify your account and complete the registration process.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/auth/registration-confirmation' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Registration Successful - Konek' },
-    { name: 'twitter:description', content: 'Thank you for registering with Konek. Please check your email to verify your account and complete the registration process.' },
+    { name: 'twitter:title', content: 'Registration Successful - Koneksa' },
+    { name: 'twitter:description', content: 'Thank you for registering with Koneksa. Please check your email to verify your account and complete the registration process.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#DC4E0C' } // Using brand color

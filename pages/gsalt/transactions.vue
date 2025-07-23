@@ -10,7 +10,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'GSalt Transactions - Konek',
+  title: 'GSalt Transactions - Koneksa',
 });
 
 // Composables

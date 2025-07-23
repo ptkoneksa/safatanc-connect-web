@@ -66,11 +66,6 @@ watch(() => route.path, (newPath) => {
 
       <!-- Auth form card -->
       <div class="w-full max-w-md mt-16 md:mt-0 pb-16">
-        <div class="md:hidden text-center mb-8 md:mb-0">
-          <NuxtImg src="/images/koneksa_logotype.png" alt="Koneksa" class="h-16 w-auto mx-auto" />
-          <h1 class="gradient-text text-2xl">Koneksa</h1>
-          <h3 class="text-sm text-white/80">Together, Made Simple</h3>
-        </div>
         <transition name="scale" mode="out-in">
           <div class="relative">
             <slot />

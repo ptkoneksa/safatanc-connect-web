@@ -7,7 +7,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'GSalt Payment - Konek',
+  title: 'GSalt Payment - Koneksa',
 });
 </script>
 

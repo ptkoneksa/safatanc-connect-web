@@ -11,18 +11,18 @@ definePageMeta({
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Reset Password - Konek',
-  description: 'Reset your Konek account password. We will send you instructions to regain access to your account.',
+  title: 'Reset Password - Koneksa',
+  description: 'Reset your Koneksa account password. We will send you instructions to regain access to your account.',
   // Open Graph
-  ogTitle: 'Reset Password - Konek',
-  ogDescription: 'Reset your Konek account password. We will send you instructions to regain access to your account.',
+  ogTitle: 'Reset Password - Koneksa',
+  ogDescription: 'Reset your Koneksa account password. We will send you instructions to regain access to your account.',
   ogImage: '/images/koneksa_logotype.png',
   ogUrl: 'https://connect.safatanc.com/auth/password-reset-request',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',
-  twitterTitle: 'Reset Password - Konek',
-  twitterDescription: 'Reset your Konek account password. We will send you instructions to regain access to your account.',
+  twitterTitle: 'Reset Password - Koneksa',
+  twitterDescription: 'Reset your Koneksa account password. We will send you instructions to regain access to your account.',
   twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
   themeColor: '#DC4E0C', // Using brand color

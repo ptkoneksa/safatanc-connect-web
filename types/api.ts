@@ -1,4 +1,4 @@
-// Common API response format for Konek API
+// Common API response format for Koneksa API
 export interface ApiResponse<T = any> {
   success: boolean;
   message?: string;

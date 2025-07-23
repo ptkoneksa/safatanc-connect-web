@@ -8,19 +8,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Authentication - Konek',
+  title: 'Authentication - Koneksa',
   meta: [
-    { name: 'description', content: 'Processing authentication for Konek.' },
+    { name: 'description', content: 'Processing authentication for Koneksa.' },
     // Open Graph
-    { property: 'og:title', content: 'Authentication - Konek' },
-    { property: 'og:description', content: 'Processing authentication for Konek.' },
+    { property: 'og:title', content: 'Authentication - Koneksa' },
+    { property: 'og:description', content: 'Processing authentication for Koneksa.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/auth/callback' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Authentication - Konek' },
-    { name: 'twitter:description', content: 'Processing authentication for Konek.' },
+    { name: 'twitter:title', content: 'Authentication - Koneksa' },
+    { name: 'twitter:description', content: 'Processing authentication for Koneksa.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#DC4E0C' } // Using brand color
@@ -72,7 +72,7 @@ const goToLogin = () => {
 <template>
   <div class="max-w-md mx-auto px-4 py-8 text-white">
     <div class="text-center mb-8">
-      <img src="/images/koneksa_logotype.png" alt="Konek Logo" class="h-16 mx-auto mb-4" />
+      <img src="/images/koneksa_logotype.png" alt="Koneksa Logo" class="h-16 mx-auto mb-4" />
       <h1 class="text-2xl font-bold mb-2">Authentication</h1>
     </div>
 

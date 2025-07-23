@@ -46,7 +46,7 @@ Base URL Production: `https://gsalt-core.safatanc.com`
 
 ### Authentication
 
-All endpoints requiring authentication use the `Authorization: Bearer <token>` header, where the token is provided by Konek.
+All endpoints requiring authentication use the `Authorization: Bearer <token>` header, where the token is provided by Koneksa.
 
 ---
 
@@ -67,7 +67,7 @@ Checks the application's health status.
 ### Account Management
 
 #### POST /accounts
-Creates a new GSALT account for an authenticated Konek user.
+Creates a new GSALT account for an authenticated Koneksa user.
 - **Middleware**: `AuthConnect`
 - **Request Body**: None
 - **Response (201 Created):**

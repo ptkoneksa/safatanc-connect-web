@@ -11,7 +11,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Top Up GSalt - Konek',
+  title: 'Top Up GSalt - Koneksa',
 });
 
 // Composables

@@ -10,19 +10,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Account Dashboard - Konek',
+  title: 'Account Dashboard - Koneksa',
   meta: [
-    { name: 'description', content: 'Manage your Konek account, view activity, and access all Koneksa services from your personalized dashboard.' },
+    { name: 'description', content: 'Manage your Koneksa account, view activity, and access all Koneksa services from your personalized dashboard.' },
     // Open Graph
-    { property: 'og:title', content: 'Account Dashboard - Konek' },
-    { property: 'og:description', content: 'Manage your Konek account, view activity, and access all Koneksa services from your personalized dashboard.' },
+    { property: 'og:title', content: 'Account Dashboard - Koneksa' },
+    { property: 'og:description', content: 'Manage your Koneksa account, view activity, and access all Koneksa services from your personalized dashboard.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/account' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Account Dashboard - Konek' },
-    { name: 'twitter:description', content: 'Manage your Konek account, view activity, and access all Koneksa services from your personalized dashboard.' },
+    { name: 'twitter:title', content: 'Account Dashboard - Koneksa' },
+    { name: 'twitter:description', content: 'Manage your Koneksa account, view activity, and access all Koneksa services from your personalized dashboard.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#DC4E0C' } // Using brand color

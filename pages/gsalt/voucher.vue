@@ -9,7 +9,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Redeem Voucher - Konek',
+  title: 'Redeem Voucher - Koneksa',
 });
 
 // Composables

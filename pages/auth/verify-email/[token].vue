@@ -9,19 +9,19 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'Email Verification - Konek',
+  title: 'Email Verification - Koneksa',
   meta: [
-    { name: 'description', content: 'Verify your email address to complete your Konek account registration.' },
+    { name: 'description', content: 'Verify your email address to complete your Koneksa account registration.' },
     // Open Graph
-    { property: 'og:title', content: 'Email Verification - Konek' },
-    { property: 'og:description', content: 'Verify your email address to complete your Konek account registration.' },
+    { property: 'og:title', content: 'Email Verification - Koneksa' },
+    { property: 'og:description', content: 'Verify your email address to complete your Koneksa account registration.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/auth/verify-email' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'Email Verification - Konek' },
-    { name: 'twitter:description', content: 'Verify your email address to complete your Konek account registration.' },
+    { name: 'twitter:title', content: 'Email Verification - Koneksa' },
+    { name: 'twitter:description', content: 'Verify your email address to complete your Koneksa account registration.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     // Theme Color
     { name: 'theme-color', content: '#DC4E0C' } // Using brand color

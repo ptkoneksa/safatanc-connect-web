@@ -12,17 +12,17 @@ definePageMeta({
 
 // SEO Meta Tags
 useHead({
-  title: 'GSalt Wallet - Konek',
+  title: 'GSalt Wallet - Koneksa',
   meta: [
-    { name: 'description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Konek.' },
-    { property: 'og:title', content: 'GSalt Wallet - Konek' },
-    { property: 'og:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Konek.' },
+    { name: 'description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Koneksa.' },
+    { property: 'og:title', content: 'GSalt Wallet - Koneksa' },
+    { property: 'og:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Koneksa.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
     { property: 'og:url', content: 'https://connect.safatanc.com/gsalt' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary' },
-    { name: 'twitter:title', content: 'GSalt Wallet - Konek' },
-    { name: 'twitter:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Konek.' },
+    { name: 'twitter:title', content: 'GSalt Wallet - Koneksa' },
+    { name: 'twitter:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Koneksa.' },
     { name: 'twitter:image', content: '/images/koneksa_logotype.png' },
     { name: 'theme-color', content: '#DC4E0C' }
   ],

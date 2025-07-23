@@ -13,18 +13,18 @@ definePageMeta({
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Create Account - Konek',
-  description: 'Register for a Konek account to access all Koneksa services in one place. Join our community today.',
+  title: 'Create Account - Koneksa',
+  description: 'Register for a Koneksa account to access all Koneksa services in one place. Join our community today.',
   // Open Graph
-  ogTitle: 'Create Account - Konek',
-  ogDescription: 'Register for a Konek account to access all Koneksa services in one place. Join our community today.',
+  ogTitle: 'Create Account - Koneksa',
+  ogDescription: 'Register for a Koneksa account to access all Koneksa services in one place. Join our community today.',
   ogImage: '/images/koneksa_logotype.png',
   ogUrl: 'https://connect.safatanc.com/auth/register',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',
-  twitterTitle: 'Create Account - Konek',
-  twitterDescription: 'Register for a Konek account to access all Koneksa services in one place. Join our community today.',
+  twitterTitle: 'Create Account - Koneksa',
+  twitterDescription: 'Register for a Koneksa account to access all Koneksa services in one place. Join our community today.',
   twitterImage: '/images/koneksa_logotype.png',
   // Theme Color
   themeColor: '#DC4E0C', // Using brand color
