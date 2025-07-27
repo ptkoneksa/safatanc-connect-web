@@ -19,7 +19,7 @@ useSeoMeta({
   ogTitle: 'Create Account - Koneksa',
   ogDescription: 'Register for a Koneksa account to access all Koneksa services in one place. Join our community today.',
   ogImage: '/images/koneksa_logotype.png',
-  ogUrl: 'https://connect.safatanc.com/auth/register',
+  ogUrl: 'https://koneksa.id/auth/register',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',

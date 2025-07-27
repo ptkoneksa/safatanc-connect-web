@@ -15,7 +15,7 @@ useHead({
     { property: 'og:title', content: 'Badges - Koneksa' },
     { property: 'og:description', content: 'Explore available badges on Koneksa.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com/badges' },
+    { property: 'og:url', content: 'https://koneksa.id/badges' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },

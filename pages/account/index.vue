@@ -17,7 +17,7 @@ useHead({
     { property: 'og:title', content: 'Account Dashboard - Koneksa' },
     { property: 'og:description', content: 'Manage your Koneksa account, view activity, and access all Koneksa services from your personalized dashboard.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com/account' },
+    { property: 'og:url', content: 'https://koneksa.id/account' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },

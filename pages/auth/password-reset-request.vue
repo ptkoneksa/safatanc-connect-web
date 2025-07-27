@@ -17,7 +17,7 @@ useSeoMeta({
   ogTitle: 'Reset Password - Koneksa',
   ogDescription: 'Reset your Koneksa account password. We will send you instructions to regain access to your account.',
   ogImage: '/images/koneksa_logotype.png',
-  ogUrl: 'https://connect.safatanc.com/auth/password-reset-request',
+  ogUrl: 'https://koneksa.id/auth/password-reset-request',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',

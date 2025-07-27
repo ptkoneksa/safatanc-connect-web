@@ -15,7 +15,7 @@ useHead({
     { property: 'og:title', content: 'Authentication - Koneksa' },
     { property: 'og:description', content: 'Processing authentication for Koneksa.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com/auth/callback' },
+    { property: 'og:url', content: 'https://koneksa.id/auth/callback' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },

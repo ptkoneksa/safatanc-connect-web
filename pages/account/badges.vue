@@ -17,7 +17,7 @@ useHead({
     { property: 'og:title', content: 'My Badges - Koneksa' },
     { property: 'og:description', content: 'View and manage your earned badges on Koneksa.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com/account/badges' },
+    { property: 'og:url', content: 'https://koneksa.id/account/badges' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
@@ -167,7 +167,7 @@ const closeBadgeDetails = () => {
             <h3 class="text-xl font-medium text-white text-center mb-2">{{ selectedBadge.name }}</h3>
             <p class="text-gray-300 text-center">{{ selectedBadge.description }}</p>
             <p class="text-gray-400 text-sm mt-4">Earned on: {{ new Date(selectedBadge.created_at).toLocaleDateString()
-              }}</p>
+            }}</p>
           </div>
 
           <div class="flex justify-end">

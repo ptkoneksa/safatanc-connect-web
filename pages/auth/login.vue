@@ -19,7 +19,7 @@ useSeoMeta({
   ogTitle: 'Login to Koneksa',
   ogDescription: 'Log in to Koneksa to access your account. Seamless connectivity for all your Koneksa services.',
   ogImage: '/images/koneksa_logotype.png',
-  ogUrl: 'https://connect.safatanc.com/auth/login',
+  ogUrl: 'https://koneksa.id/auth/login',
   ogType: 'website',
   // Twitter Card
   twitterCard: 'summary',

@@ -18,7 +18,7 @@ useHead({
     { property: 'og:title', content: 'GSalt Wallet - Koneksa' },
     { property: 'og:description', content: 'Manage your GSalt (Global Koneksa Loyalty Token) balance, transactions, and payments on Koneksa.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com/gsalt' },
+    { property: 'og:url', content: 'https://koneksa.id/gsalt' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary' },
     { name: 'twitter:title', content: 'GSalt Wallet - Koneksa' },

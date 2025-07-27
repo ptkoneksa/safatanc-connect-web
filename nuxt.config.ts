@@ -34,7 +34,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBaseUrl: "https://connect-core.safatanc.com",
+      apiBaseUrl: "https://api.koneksa.id",
       gsaltApiBaseUrl: "http://localhost:8080",
     },
   },

@@ -14,7 +14,7 @@ useHead({
     { property: 'og:title', content: 'Koneksa - Together, Made Simple' },
     { property: 'og:description', content: 'Koneksa is your all-in-one platform for Koneksa services. Connect, collaborate, and access a suite of tools designed for simplicity and efficiency.' },
     { property: 'og:image', content: '/images/koneksa_banner.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com' },
+    { property: 'og:url', content: 'https://koneksa.id' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },

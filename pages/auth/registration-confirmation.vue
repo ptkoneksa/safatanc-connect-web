@@ -14,7 +14,7 @@ useHead({
     { property: 'og:title', content: 'Registration Successful - Koneksa' },
     { property: 'og:description', content: 'Thank you for registering with Koneksa. Please check your email to verify your account and complete the registration process.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com/auth/registration-confirmation' },
+    { property: 'og:url', content: 'https://koneksa.id/auth/registration-confirmation' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },

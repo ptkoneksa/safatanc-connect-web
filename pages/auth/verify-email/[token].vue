@@ -16,7 +16,7 @@ useHead({
     { property: 'og:title', content: 'Email Verification - Koneksa' },
     { property: 'og:description', content: 'Verify your email address to complete your Koneksa account registration.' },
     { property: 'og:image', content: '/images/koneksa_logotype.png' },
-    { property: 'og:url', content: 'https://connect.safatanc.com/auth/verify-email' },
+    { property: 'og:url', content: 'https://koneksa.id/auth/verify-email' },
     { property: 'og:type', content: 'website' },
     // Twitter Card
     { name: 'twitter:card', content: 'summary' },
